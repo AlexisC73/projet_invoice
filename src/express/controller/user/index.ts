@@ -7,7 +7,7 @@ export const googleAuth = async (req, res) => {
     const { id: googleId, photos } = req.user
     let fundUser = await userModel.findUserByGoogleId(googleId)
     if (!fundUser) {
-      const mongoUser = await createMongoUser(googleId, photos[0].value)
+      const mongoUser = await createMongoUser(googleId)
       fundUser = await userModel.saveMongoUser(mongoUser)
     }
     const token = jwt.sign({ googleId: fundUser.googleId, role: fundUser.role }, process.env.JWT_SECRET, {

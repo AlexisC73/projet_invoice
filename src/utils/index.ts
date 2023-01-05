@@ -36,7 +36,7 @@ export const createMongoInvoice = (invoice: Omit<Invoice, 'id'>): MongoInvoice =
   return newInvoice
 }
 
-export const createMongoUser = (googleId: string, photoUrl: string): MongoUser => {
+export const createMongoUser = (googleId: string): MongoUser => {
   const newUser = new MongoUser()
   newUser.googleId = googleId
   newUser.role = ROLE.USER
