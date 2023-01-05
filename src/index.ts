@@ -21,7 +21,7 @@ AppDataSource.initialize()
 const PORT = process.env.PORT || 5500
 
 const corsOrigin = {
-  origin: ['http://localhost:3000', 'https://invoiceca.netlify.app'],
+  origin: ['http://localhost:3000', 'http://alexis-comte.com'],
   credentials: true,
 }
 
