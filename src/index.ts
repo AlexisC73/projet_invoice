@@ -24,7 +24,7 @@ AppDataSource.initialize()
 
 const PORT = process.env.PORT || 5500
 
-const option = {
+const option = process.env.NODE_ENV === 'production' && {
   key: fs.readFileSync('/etc/letsencrypt/live/alexis-comte.com/privkey.pem'),
   cert: fs.readFileSync('/etc/letsencrypt/live/alexis-comte.com/fullchain.pem'),
 }
@@ -53,8 +53,8 @@ app.use('/invoice', invoiceRoute)
 app.use('/user', userRoute)
 
 process.env.NODE_ENV === 'production'
-  ? createServer(option, app).listen(PORT, () => {
-      console.log('Server started on port =>', PORT)
+  ? createServer(option, app).listen(443, () => {
+      console.log('Server started on port =>', 443)
     })
   : app.listen(PORT, () => {
       console.log('Server started on port =>', PORT)
