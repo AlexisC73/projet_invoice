@@ -34,7 +34,7 @@ app.use(
   session({
     secret: 'cats',
     resave: false,
-    cookie: { secure: false },
+    cookie: { secure: true },
     saveUninitialized: true,
   })
 )
