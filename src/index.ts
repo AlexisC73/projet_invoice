@@ -53,8 +53,8 @@ app.use('/invoice', invoiceRoute)
 app.use('/user', userRoute)
 
 process.env.NODE_ENV === 'production'
-  ? createServer(option, app).listen(443, () => {
-      console.log('Server started on port =>', 443)
+  ? createServer(option, app).listen(PORT, () => {
+      console.log('Server started on port =>', PORT)
     })
   : app.listen(PORT, () => {
       console.log('Server started on port =>', PORT)
