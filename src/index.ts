@@ -21,7 +21,7 @@ AppDataSource.initialize()
 const PORT = process.env.PORT || 5500
 
 const corsOrigin = {
-  origin: ['http://localhost:3000', 'http://invoice.alexis-comte.com'],
+  origin: ['http://localhost:3000', 'https://invoice.alexis-comte.com'],
   credentials: true,
 }
 

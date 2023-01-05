@@ -8,7 +8,7 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL:
         process.env.NODE_ENV === 'production'
-          ? 'http://api.alexis-comte.com/user/auth/google/callback'
+          ? 'https://api.alexis-comte.com/user/auth/google/callback'
           : 'http://localhost:5500/user/auth/google/callback',
     },
     (accessToken, refreshToken, profile, done) => {
