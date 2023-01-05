@@ -43,7 +43,7 @@ app.use(
   session({
     secret: 'cats',
     resave: false,
-    cookie: { secure: true },
+    cookie: { secure: process.env.NODE_ENV === 'production' ? true : false },
     saveUninitialized: true,
   })
 )
