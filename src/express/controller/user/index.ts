@@ -15,7 +15,7 @@ export const googleAuth = async (req, res) => {
     })
     res.cookie('token', token, { httpOnly: true })
     const redirectLink =
-      process.env.NODE_ENV === 'production' ? 'https://invoiceca.netlify.app' : 'http://localhost:3000'
+      process.env.NODE_ENV === 'production' ? 'http://invoice.alexis-comte.com' : 'http://localhost:3000'
     res.redirect(redirectLink + '/login/?connected=true')
   } catch (error) {
     throw error
