@@ -6,7 +6,7 @@ export class MongoUser implements Omit<User, 'id'> {
   @ObjectIdColumn()
   _id: ObjectID
 
-  @Column({ unique: true })
+  @Column()
   googleId: string
 
   @Column()
