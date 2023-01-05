@@ -10,7 +10,7 @@ import { createServer } from 'https'
 
 import * as fs from 'fs'
 
-import * as session from 'express-session'
+import * as session from 'cookie-session'
 import * as passport from 'passport'
 
 import invoiceRoute from './express/route/invoice'
