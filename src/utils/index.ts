@@ -1,8 +1,9 @@
+import { Address, Invoice } from '../domain/invoice'
 import { MongoInvoice } from '../entity/Invoice'
 import { MongoUser } from '../entity/User'
 import * as bcrypt from 'bcrypt'
 
-export const returnInvoice = (invoice: MongoInvoice): Invoice => {
+export const returnInvoice = (invoice: MongoInvoice): Invoice['data'] => {
   const { _id, ...rest } = invoice
   return {
     id: _id.toHexString(),
@@ -10,18 +11,18 @@ export const returnInvoice = (invoice: MongoInvoice): Invoice => {
   }
 }
 
-export const verifyBuyer = (buyer: { name: string; address: Adress }): boolean => {
+export const verifyBuyer = (buyer: { name: string; address: Address['data'] }): boolean => {
   if (!buyer.name) return false
   if (verifyAdress(buyer.address)) return false
   return true
 }
 
-export const verifyAdress = (buyer: Adress): boolean => {
+export const verifyAdress = (buyer: Address['data']): boolean => {
   if (!buyer) return false
   return true
 }
 
-export const createMongoInvoice = (invoice: Omit<Invoice, 'id'>): MongoInvoice => {
+export const createMongoInvoice = (invoice: Omit<Invoice['data'], 'id'>): MongoInvoice => {
   const newInvoice = new MongoInvoice()
   newInvoice.date = invoice.date
   newInvoice.dueDate = invoice.dueDate

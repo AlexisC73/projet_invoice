@@ -2,6 +2,7 @@ import { FindOptionsWhere } from 'typeorm'
 import { ObjectId } from 'mongodb'
 import { AppDataSource } from '../../../data-source'
 import { MongoInvoice } from '../../../entity/Invoice'
+import { Invoice } from '../../../domain/invoice'
 
 const invoiceRepo = AppDataSource.getRepository(MongoInvoice)
 
@@ -14,7 +15,7 @@ export const updateStatus = async (invoiceToUpdate: MongoInvoice, status: string
   }
 }
 
-export const updateInvoice = async (invoiceToUpdate: MongoInvoice, invoice: Invoice): Promise<MongoInvoice> => {
+export const updateInvoice = async (invoiceToUpdate: MongoInvoice, invoice: Invoice['data']): Promise<MongoInvoice> => {
   try {
     invoiceToUpdate.updateInvoice(invoice)
     return await invoiceRepo.save(invoiceToUpdate)

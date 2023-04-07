@@ -1,7 +1,8 @@
 import { Entity, Column, ObjectIdColumn, ObjectID } from 'typeorm'
+import { Address, Invoice, Product } from '../domain/invoice'
 
 @Entity()
-export class MongoInvoice implements Omit<Invoice, 'id'> {
+export class MongoInvoice implements Omit<Invoice['data'], 'id'> {
   @ObjectIdColumn()
   _id: ObjectID
 
@@ -27,18 +28,18 @@ export class MongoInvoice implements Omit<Invoice, 'id'> {
   contact: string
 
   @Column()
-  sender: Adress
+  sender: Address['data']
 
   @Column()
   buyer: {
     name: string
-    address: Adress
+    address: Address['data']
   }
 
   @Column()
-  items: Product[]
+  items: Product['data'][]
 
-  updateInvoice(invoice: Invoice) {
+  updateInvoice(invoice: Invoice['data']) {
     this.date = invoice.date
     this.dueDate = invoice.dueDate
     this.description = invoice.description

@@ -5,7 +5,8 @@ module.exports = {
   apps: [
     {
       name: 'Invoice Backend',
-      script: './build/index.js',
+      script: 'npm',
+      args: 'run start:prod',
       restart: true,
     },
   ],
