@@ -26,9 +26,14 @@ describe('Post Invoice', () => {
   })
 
   describe('Rule: default currency must be USD', () => {
-    test('should post a new Invoice with usd when no currency provided', async () => {
+    test('should post a new invoice with USD when no currency provided', async () => {
       await fixture.whenUserPostInvoice(invoiceBuilder().buildWithoutCurrency().data)
       fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withCurrency('USD').build())
+    })
+
+    test('should use the EUR currency when provided', async () => {
+      await fixture.whenUserPostInvoice(invoiceBuilder().withCurrency('EUR').build().data)
+      fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withCurrency('EUR').build())
     })
   })
 
