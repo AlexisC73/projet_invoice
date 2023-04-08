@@ -44,9 +44,9 @@ export class CurrencyText {
     if (!_currency || _currency.trim().length <= 0) {
       throw new CurrencyError('Problem with currency, please try again later.')
     }
-    if (!available.includes(_currency)) {
+    if (!available.includes(_currency.trim().toUpperCase())) {
       throw new CurrencyError(`${_currency} is not available yet`)
     }
-    return new CurrencyText(_currency)
+    return new CurrencyText(_currency.trim().toUpperCase())
   }
 }
