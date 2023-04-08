@@ -57,7 +57,6 @@ describe('integration mongodb', () => {
       items: invoiceToSave.items,
       owner: invoiceToSave.owner,
       sender: invoiceToSave.sender,
-      status: invoiceToSave.status,
       currency: invoiceToSave.currency,
       date: invoiceToSave.date,
       dueDate: invoiceToSave.dueDate,

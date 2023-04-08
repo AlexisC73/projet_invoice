@@ -9,9 +9,9 @@ export class PostInvoiceUsecase {
       id: postInvoiceCommand.id,
       date: postInvoiceCommand.date,
       dueDate: postInvoiceCommand.dueDate,
-      description: postInvoiceCommand.description,
+      description: postInvoiceCommand.description || '',
       currency: postInvoiceCommand.currency,
-      status: postInvoiceCommand.status,
+      status: 'pending',
       contact: postInvoiceCommand.contact,
       owner: postInvoiceCommand.owner,
       sender: postInvoiceCommand.sender,
@@ -30,9 +30,8 @@ export type PostInvoiceCommand = {
   id: string
   date: string
   dueDate: string
-  description: string
+  description?: string
   currency: string
-  status: string
   contact: string
   owner: string
   sender: Address['data']
