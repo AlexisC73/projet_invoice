@@ -1,4 +1,3 @@
-import { DockerComposeEnvironment, StartedDockerComposeEnvironment } from 'testcontainers'
 import { DataSource } from 'typeorm'
 import { MongoInvoice } from '../../entity/Invoice'
 import * as path from 'path'
@@ -7,16 +6,15 @@ import { invoiceBuilder } from '../../application/invoice/usecase/tests/invoiceB
 import { ObjectId } from 'mongodb'
 import { MongoInvoiceRepository } from '../mongo.invoice.repository'
 import { mongoInvoiceToInvoice } from '../utils'
+import DockerCompose, { IDockerComposeOptions } from 'docker-compose'
 
 describe('integration mongodb', () => {
-  let mongoContainer: StartedDockerComposeEnvironment
+  let composeOptions: IDockerComposeOptions
   let dataSource: DataSource
 
   beforeAll(async () => {
-    mongoContainer = await new DockerComposeEnvironment(
-      path.join(__dirname + '../../../..'),
-      'docker-compose.yaml'
-    ).up()
+    composeOptions = { config: path.join(__dirname + '../../../../docker-compose.yaml') }
+    await DockerCompose.upOne('mongo')
   }, 10000)
 
   beforeEach(async () => {
@@ -39,7 +37,7 @@ describe('integration mongodb', () => {
   })
 
   afterAll(async () => {
-    await mongoContainer.down()
+    await DockerCompose.down(composeOptions)
   }, 10000)
 
   test('should save invoice', async () => {
