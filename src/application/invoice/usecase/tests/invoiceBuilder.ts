@@ -1,17 +1,20 @@
 import { Address, Invoice, Product } from '../../../../domain/invoice'
 
+const _date = new Date('2023-04-23T22:00:00.000Z').toISOString()
+const _dueDate = new Date('2023-06-15T22:00:00.000Z').toISOString()
+
 export const invoiceBuilder = ({
   id = 'id',
-  date = 'date',
-  dueDate = 'dueDate',
-  description = 'description',
-  currency = 'currency',
-  status = 'status',
-  contact = 'contact',
-  owner = 'owner',
+  date = _date,
+  dueDate = _dueDate,
+  description = 'testing description',
+  currency = 'USD',
+  status = 'pending',
+  contact = 'testing contact',
+  owner = 'testing owner',
   sender = adressBuilder().build(),
   buyer = {
-    name: 'name',
+    name: 'testing name',
     address: adressBuilder().build(),
   },
   items = [],

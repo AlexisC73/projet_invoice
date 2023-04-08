@@ -22,6 +22,7 @@ export class PostInvoiceUsecase {
       items: postInvoiceCommand.items,
     })
     await this.invoiceRepository.save(invoice)
+    return Promise.resolve()
   }
 }
 

@@ -6,6 +6,7 @@ export class InMemoryInvoiceRepository implements InvoiceRepository {
 
   async save(invoice: Invoice): Promise<void> {
     this.invoices.push(invoice)
+    return Promise.resolve()
   }
 
   find(id: string): Promise<Invoice> {

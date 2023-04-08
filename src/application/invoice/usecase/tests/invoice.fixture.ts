@@ -6,9 +6,15 @@ export const createInvoiceFixture = () => {
   const invoiceRepository = new InMemoryInvoiceRepository()
   const postInvoiceUsecase = new PostInvoiceUsecase(invoiceRepository)
 
+  let thrownError: Error
+
   return {
     whenUserPostInvoice: async (postInvoiceCommand: PostInvoiceCommand) => {
-      await postInvoiceUsecase.handle(postInvoiceCommand)
+      try {
+        return await postInvoiceUsecase.handle(postInvoiceCommand)
+      } catch (error) {
+        thrownError = error
+      }
     },
     thenInvoiceShouldBeSaved: async (expectedInvoice: Invoice) => {
       const savedInvoice = await invoiceRepository.find(expectedInvoice.id)
