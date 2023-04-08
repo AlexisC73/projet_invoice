@@ -47,8 +47,15 @@ export const invoiceBuilder = ({
     withSender: (sender: Address) => invoiceBuilder({ ...props, sender }),
     withBuyer: (buyer: { name: string; address: Address }) => invoiceBuilder({ ...props, buyer }),
     withItems: (items: Product[]) => invoiceBuilder({ ...props, items }),
-    buildWithoutCurrency: () => Invoice.fromData({ ...props, currency: undefined }),
-    buildWithoutDescription: () => Invoice.fromData({ ...props, description: undefined }),
+    getPropsWithoutCurrency: () => {
+      const { currency, ...rest } = props
+      return rest
+    },
+    getPropsWithoutDescription: () => {
+      const { description, ...rest } = props
+      return rest
+    },
+    getProps: () => props,
     build: () => Invoice.fromData(props),
   }
 }

@@ -1,10 +1,12 @@
+import { CurrencyText, DateText, DescriptionText } from './helper'
+
 export class Invoice {
   constructor(
     private readonly _id: string,
-    private readonly _date: string,
-    private readonly _dueDate: string,
-    private readonly _description: string,
-    private readonly _currency: string,
+    private readonly _date: DateText,
+    private readonly _dueDate: DateText,
+    private readonly _description: DescriptionText,
+    private readonly _currency: CurrencyText,
     private readonly _status: string,
     private readonly _contact: string,
     private readonly _owner: string,
@@ -21,19 +23,19 @@ export class Invoice {
   }
 
   get date(): string {
-    return this._date
+    return this._date.value
   }
 
   get dueDate(): string {
-    return this._dueDate
+    return this._dueDate.value
   }
 
   get description(): string {
-    return this._description
+    return this._description.value
   }
 
   get currency(): string {
-    return this._currency
+    return this._currency.value
   }
 
   get status(): string {
@@ -79,10 +81,10 @@ export class Invoice {
   static fromData(data: Invoice['data']) {
     return new Invoice(
       data.id,
-      data.date,
-      data.dueDate,
-      data.description,
-      data.currency,
+      DateText.fromString(data.date),
+      DateText.fromString(data.dueDate),
+      DescriptionText.fromString(data.description),
+      CurrencyText.fromString(data.currency),
       data.status,
       data.contact,
       data.owner,
