@@ -1,3 +1,5 @@
+import { Invoice } from '../../domain/invoice'
+
 const buyer = {
   name: 'name',
   address: {
@@ -16,7 +18,7 @@ const sender = {
   state: 'state',
 }
 
-export const fakeInvoice: Omit<Invoice, 'id'> = {
+export const fakeInvoice: Omit<Invoice['data'], 'id'> = {
   date: new Date(Date.now()).toISOString(),
   dueDate: new Date(Date.now()).toISOString(),
   description: 'Invoice description',
