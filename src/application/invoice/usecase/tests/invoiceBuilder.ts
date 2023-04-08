@@ -7,8 +7,8 @@ export const invoiceBuilder = ({
   id = 'id',
   date = _date,
   dueDate = _dueDate,
-  description = 'testing description',
   currency = 'USD',
+  description = 'testing description',
   status = 'pending',
   contact = 'testing contact',
   owner = 'testing owner',
@@ -34,7 +34,7 @@ export const invoiceBuilder = ({
   }
   items?: Product[]
 } = {}) => {
-  const props = { id, date, dueDate, description, currency, status, contact, owner, sender, buyer, items }
+  const props = { id, date, dueDate, description, status, contact, owner, sender, buyer, items, currency }
   return {
     withId: (id: string) => invoiceBuilder({ ...props, id }),
     withDate: (date: string) => invoiceBuilder({ ...props, date }),
@@ -47,6 +47,7 @@ export const invoiceBuilder = ({
     withSender: (sender: Address) => invoiceBuilder({ ...props, sender }),
     withBuyer: (buyer: { name: string; address: Address }) => invoiceBuilder({ ...props, buyer }),
     withItems: (items: Product[]) => invoiceBuilder({ ...props, items }),
+    buildWithoutCurrency: () => Invoice.fromData({ ...props, currency: undefined }),
     build: () => Invoice.fromData(props),
   }
 }
