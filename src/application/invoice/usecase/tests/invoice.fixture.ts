@@ -11,8 +11,8 @@ export const createInvoiceFixture = () => {
   return {
     whenUserPostInvoice: async (postInvoiceCommand: PostInvoiceCommand) => {
       try {
-        return await postInvoiceUsecase.handle(postInvoiceCommand)
-      } catch (error) {
+        await postInvoiceUsecase.handle(postInvoiceCommand)
+      } catch (error: any) {
         thrownError = error
       }
     },

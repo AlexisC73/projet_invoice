@@ -9,36 +9,32 @@ describe('Post Invoice', () => {
   })
 
   test('should post a new Invoice', async () => {
-    await fixture.whenUserPostInvoice(invoiceBuilder().withId('test-id').build())
-    fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withId('test-id').build())
+    await fixture.whenUserPostInvoice(invoiceBuilder().build().data)
+    fixture.thenInvoiceShouldBeSaved(invoiceBuilder().build())
   })
 
   describe('Rule: description is not required', () => {
     test('can post without description provided', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().withDescription(null).withId('test-id').build())
-      fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withDescription('').withId('test-id').build())
+      await fixture.whenUserPostInvoice(invoiceBuilder().buildWithoutDescription().data)
+      fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withDescription('').build())
     })
 
     test('description must be use when provided', async () => {
-      await fixture.whenUserPostInvoice(
-        invoiceBuilder().withDescription('test de description').withId('test-id').build()
-      )
-      fixture.thenInvoiceShouldBeSaved(
-        invoiceBuilder().withDescription('test de description').withId('test-id').build()
-      )
+      await fixture.whenUserPostInvoice(invoiceBuilder().withDescription('test de description').build().data)
+      fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withDescription('test de description').build())
     })
   })
 
   describe('Rule: default currency must be USD', () => {
     test('should post a new Invoice with usd when no currency provided', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().buildWithoutCurrency())
+      await fixture.whenUserPostInvoice(invoiceBuilder().buildWithoutCurrency().data)
       fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withCurrency('USD').build())
     })
   })
 
   describe('Rule: new invoice must have pending status', () => {
     test('should post a new Invoice with pending status', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().withStatus('paid').build())
+      await fixture.whenUserPostInvoice(invoiceBuilder().withStatus('paid').build().data)
       fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withStatus('pending').build())
     })
   })
