@@ -1,4 +1,4 @@
-import { CurrencyText, DateText, DescriptionText } from './helper'
+import { ContactName, CurrencyText, DateText, DescriptionText, StatusText } from './helper'
 
 export class Invoice {
   constructor(
@@ -7,8 +7,8 @@ export class Invoice {
     private readonly _dueDate: DateText,
     private readonly _description: DescriptionText,
     private readonly _currency: CurrencyText,
-    private readonly _status: string,
-    private readonly _contact: string,
+    private readonly _status: StatusText,
+    private readonly _contact: ContactName,
     private readonly _owner: string,
     private readonly _sender: Address,
     private readonly _buyer: {
@@ -39,11 +39,11 @@ export class Invoice {
   }
 
   get status(): string {
-    return this._status
+    return this._status.value
   }
 
   get contact(): string {
-    return this._contact
+    return this._contact.value
   }
 
   get owner(): string {
@@ -85,8 +85,8 @@ export class Invoice {
       DateText.fromString(data.dueDate),
       DescriptionText.fromString(data.description),
       CurrencyText.fromString(data.currency),
-      data.status,
-      data.contact,
+      StatusText.fromString(data.status),
+      ContactName.fromString(data.contact),
       data.owner,
       Address.fromData(data.sender),
       { name: data.buyer.name, address: Address.fromData(data.buyer.address) },

@@ -1,4 +1,4 @@
-import { CurrencyError, InvalidDateError, TooLongError } from '../../../errors'
+import { CurrencyError, EmptyError, InvalidDateError, TooLongError } from '../../../errors'
 import { InvoiceFixture, createInvoiceFixture } from './invoice.fixture'
 import { invoiceBuilder } from './invoiceBuilder'
 
@@ -75,6 +75,17 @@ describe('Post Invoice', () => {
     test('should throw if dueDate is not valid', async () => {
       await fixture.whenUserPostInvoice(invoiceBuilder().withDueDate('dadsad').getProps())
       fixture.thenErrorShouldBe(InvalidDateError)
+    })
+  })
+
+  describe('Rule: contact name is required', () => {
+    test('should throw if contact is empty', async () => {
+      await fixture.whenUserPostInvoice(invoiceBuilder().withContact('').getProps())
+      fixture.thenErrorShouldBe(EmptyError)
+    })
+    test('should throw if contact is only whitespaces', async () => {
+      await fixture.whenUserPostInvoice(invoiceBuilder().withContact('    ').getProps())
+      fixture.thenErrorShouldBe(EmptyError)
     })
   })
 })

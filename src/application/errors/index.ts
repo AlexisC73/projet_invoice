@@ -18,3 +18,17 @@ export class CurrencyError extends Error {
     this.name = 'CurrencyError'
   }
 }
+
+export class StatusError extends Error {
+  constructor(message?: string) {
+    super(message ?? 'Invalid status')
+    this.name = 'StatusError'
+  }
+}
+
+export class EmptyError extends Error {
+  constructor(message?: string) {
+    super(message ?? 'Empty value')
+    this.name = 'EmptyError'
+  }
+}

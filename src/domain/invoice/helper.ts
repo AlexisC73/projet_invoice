@@ -1,4 +1,4 @@
-import { CurrencyError, InvalidDateError, TooLongError } from '../../application/errors'
+import { CurrencyError, EmptyError, InvalidDateError, StatusError, TooLongError } from '../../application/errors'
 
 export class DateText {
   private constructor(private readonly _value: string) {}
@@ -47,6 +47,40 @@ export class CurrencyText {
     if (!available.includes(_currency.trim().toUpperCase())) {
       throw new CurrencyError(`${_currency} is not available yet`)
     }
-    return new CurrencyText(_currency.trim().toUpperCase())
+    return new CurrencyText(_currency.trim().toUpperCase() ?? 'USD')
+  }
+}
+
+export class StatusText {
+  private constructor(private readonly _value: string) {}
+
+  get value(): string {
+    return this._value
+  }
+
+  static fromString(_status: string) {
+    const available = ['pending', 'paid', 'draft']
+    if (!_status) {
+      throw new StatusError('Problem with status, please try again later.')
+    }
+    if (!available.includes(_status.trim().toLowerCase())) {
+      throw new StatusError(`${_status} is not available`)
+    }
+    return new StatusText(_status ? _status.trim().toLowerCase() : 'pending')
+  }
+}
+
+export class ContactName {
+  private constructor(private readonly _value: string) {}
+
+  get value(): string {
+    return this._value
+  }
+
+  static fromString(_name: string) {
+    if (!_name || _name.trim().length <= 0) {
+      throw new EmptyError('Contact name is required')
+    }
+    return new ContactName(_name.trim())
   }
 }
