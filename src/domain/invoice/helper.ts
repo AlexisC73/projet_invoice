@@ -1,5 +1,36 @@
 import { CurrencyError, EmptyError, InvalidDateError, StatusError, TooLongError } from '../../application/errors'
 
+export class StringText {
+  private constructor(private readonly _value: string) {}
+
+  get value(): string {
+    return this._value
+  }
+
+  static fromString({
+    _value,
+    propertyName,
+    maxLength,
+    required,
+  }: {
+    _value: string
+    propertyName: string
+    maxLength?: number
+    required?: boolean
+  }) {
+    if (!_value || _value.trim().length <= 0) {
+      if (required) {
+        throw new EmptyError(`${propertyName} is required`)
+      }
+      return new StringText('')
+    }
+    if (!!maxLength && _value.trim().length > maxLength) {
+      throw new TooLongError(`${propertyName} can not be longer than ${maxLength} characters`)
+    }
+    return new StringText(_value.trim())
+  }
+}
+
 export class DateText {
   private constructor(private readonly _value: string) {}
 
@@ -13,21 +44,6 @@ export class DateText {
       throw new InvalidDateError("Date can't be parsed, please use YYYY-MM-DD format")
     }
     return new DateText(date.toISOString())
-  }
-}
-
-export class DescriptionText {
-  private constructor(private readonly _value: string) {}
-
-  get value(): string {
-    return this._value
-  }
-
-  static fromString(_description: string) {
-    if (!!_description && _description.trim().length > 255) {
-      throw new TooLongError('Description can not be longer than 255 characters')
-    }
-    return new DescriptionText(_description ? _description.trim() : '')
   }
 }
 
@@ -67,20 +83,5 @@ export class StatusText {
       throw new StatusError(`${_status} is not available`)
     }
     return new StatusText(_status ? _status.trim().toLowerCase() : 'pending')
-  }
-}
-
-export class ContactName {
-  private constructor(private readonly _value: string) {}
-
-  get value(): string {
-    return this._value
-  }
-
-  static fromString(_name: string) {
-    if (!_name || _name.trim().length <= 0) {
-      throw new EmptyError('Contact name is required')
-    }
-    return new ContactName(_name.trim())
   }
 }

@@ -88,4 +88,19 @@ describe('Post Invoice', () => {
       fixture.thenErrorShouldBe(EmptyError)
     })
   })
+
+  describe('Rule: buyer name is required', () => {
+    test('should not throw if buyer is not empty', async () => {
+      await fixture.whenUserPostInvoice(invoiceBuilder().withBuyerName('').getProps())
+      fixture.thenErrorShouldBe(EmptyError)
+    })
+    test('should throw if buyer is empty', async () => {
+      await fixture.whenUserPostInvoice(invoiceBuilder().withBuyerName('').getProps())
+      fixture.thenErrorShouldBe(EmptyError)
+    })
+    test('should throw if contact is only whitespaces', async () => {
+      await fixture.whenUserPostInvoice(invoiceBuilder().withBuyerName('    ').getProps())
+      fixture.thenErrorShouldBe(EmptyError)
+    })
+  })
 })

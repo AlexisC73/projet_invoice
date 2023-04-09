@@ -1,18 +1,18 @@
-import { ContactName, CurrencyText, DateText, DescriptionText, StatusText } from './helper'
+import { CurrencyText, DateText, StatusText, StringText } from './helper'
 
 export class Invoice {
   constructor(
     private readonly _id: string,
     private readonly _date: DateText,
     private readonly _dueDate: DateText,
-    private readonly _description: DescriptionText,
+    private readonly _description: StringText,
     private readonly _currency: CurrencyText,
     private readonly _status: StatusText,
-    private readonly _contact: ContactName,
+    private readonly _contact: StringText,
     private readonly _owner: string,
     private readonly _sender: Address,
     private readonly _buyer: {
-      name: string
+      name: StringText
       address: Address
     },
     private readonly _items: Product[]
@@ -54,8 +54,8 @@ export class Invoice {
     return this._sender.data
   }
 
-  get buyer() {
-    return { name: this._buyer.name, address: this._buyer.address.data }
+  get buyer(): { name: string; address: Address['data'] } {
+    return { name: this._buyer.name.value, address: this._buyer.address.data }
   }
 
   get items() {
@@ -83,13 +83,21 @@ export class Invoice {
       data.id,
       DateText.fromString(data.date),
       DateText.fromString(data.dueDate),
-      DescriptionText.fromString(data.description),
+      StringText.fromString({ _value: data.description, propertyName: 'description', maxLength: 255, required: false }),
       CurrencyText.fromString(data.currency),
       StatusText.fromString(data.status),
-      ContactName.fromString(data.contact),
+      StringText.fromString({ _value: data.contact, propertyName: "contact's name", maxLength: 50, required: true }),
       data.owner,
       Address.fromData(data.sender),
-      { name: data.buyer.name, address: Address.fromData(data.buyer.address) },
+      {
+        name: StringText.fromString({
+          _value: data.buyer.name,
+          propertyName: 'buyer name',
+          maxLength: 50,
+          required: true,
+        }),
+        address: Address.fromData(data.buyer.address),
+      },
       Product.fromArray(data.items)
     )
   }
@@ -97,26 +105,26 @@ export class Invoice {
 
 export class Address {
   constructor(
-    private readonly _street: string,
-    private readonly _city: string,
-    private readonly _zip: string,
-    private readonly _country: string
+    private readonly _street: StringText,
+    private readonly _city: StringText,
+    private readonly _zip: StringText,
+    private readonly _country: StringText
   ) {}
 
   get street(): string {
-    return this._street
+    return this._street.value
   }
 
   get city(): string {
-    return this._city
+    return this._city.value
   }
 
   get zip(): string {
-    return this._zip
+    return this._zip.value
   }
 
   get country(): string {
-    return this._country
+    return this._country.value
   }
 
   get data() {
@@ -129,17 +137,22 @@ export class Address {
   }
 
   static fromData(data: Address['data']) {
-    return new Address(data.street, data.city, data.zip, data.country)
+    return new Address(
+      StringText.fromString({ _value: data.street, propertyName: 'seller street', maxLength: 100, required: true }),
+      StringText.fromString({ _value: data.city, propertyName: 'seller city', maxLength: 100, required: true }),
+      StringText.fromString({ _value: data.zip, propertyName: 'seller zip code', maxLength: 10, required: true }),
+      StringText.fromString({ _value: data.country, propertyName: 'seller country', maxLength: 50, required: true })
+    )
   }
 }
 
 export class Product {
   constructor(
     private readonly _id: string,
-    private readonly _name: string,
+    private readonly _name: StringText,
     private readonly _quantity: string,
     private readonly _unitPrice: string,
-    private readonly _description: string
+    private readonly _description: StringText
   ) {}
 
   get id(): string {
@@ -147,7 +160,7 @@ export class Product {
   }
 
   get name(): string {
-    return this._name
+    return this._name.value
   }
 
   get quantity(): string {
@@ -159,7 +172,7 @@ export class Product {
   }
 
   get description(): string {
-    return this._description
+    return this._description.value
   }
 
   get data() {
@@ -173,7 +186,18 @@ export class Product {
   }
 
   static fromData(data: Product['data']) {
-    return new Product(data.id, data.name, data.quantity, data.unitPrice, data.description)
+    return new Product(
+      data.id,
+      StringText.fromString({ _value: data.name, propertyName: 'product name', required: true, maxLength: 100 }),
+      data.quantity,
+      data.unitPrice,
+      StringText.fromString({
+        _value: data.description,
+        propertyName: 'product description',
+        required: false,
+        maxLength: 100,
+      })
+    )
   }
 
   static fromArray(data: Product['data'][]): Product[] {
