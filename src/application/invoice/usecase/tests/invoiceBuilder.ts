@@ -12,10 +12,10 @@ export const invoiceBuilder = ({
   status = 'pending',
   contact = 'testing contact',
   owner = 'testing owner',
-  sender = adressBuilder().build(),
+  sender = addressBuilder().getProps(),
   buyer = {
     name: 'testing name',
-    address: adressBuilder().build(),
+    address: addressBuilder().getProps(),
   },
   items = [],
 }: {
@@ -27,12 +27,12 @@ export const invoiceBuilder = ({
   status?: string
   contact?: string
   owner?: string
-  sender?: Address
+  sender?: Address['data']
   buyer?: {
     name: string
-    address: Address
+    address: Address['data']
   }
-  items?: Product[]
+  items?: Product['data'][]
 } = {}) => {
   const props = { id, date, dueDate, description, status, contact, owner, sender, buyer, items, currency }
   return {
@@ -45,10 +45,10 @@ export const invoiceBuilder = ({
     withContact: (contact: string) => invoiceBuilder({ ...props, contact }),
     withOwner: (owner: string) => invoiceBuilder({ ...props, owner }),
     withSender: (sender: Address) => invoiceBuilder({ ...props, sender }),
-    withBuyer: (buyer: { name: string; address: Address }) => invoiceBuilder({ ...props, buyer }),
+    withBuyer: (buyer: { name: string; address: Address['data'] }) => invoiceBuilder({ ...props, buyer }),
     withBuyerName: (name: string) => invoiceBuilder({ ...props, buyer: { ...props.buyer, name } }),
-    withBuyerAddress: (address: Address) => invoiceBuilder({ ...props, buyer: { ...props.buyer, address } }),
-    withItems: (items: Product[]) => invoiceBuilder({ ...props, items }),
+    withBuyerAddress: (address: Address['data']) => invoiceBuilder({ ...props, buyer: { ...props.buyer, address } }),
+    withItems: (items: Product['data'][]) => invoiceBuilder({ ...props, items }),
     getPropsWithoutCurrency: () => {
       const { currency, ...rest } = props
       return rest
@@ -62,7 +62,7 @@ export const invoiceBuilder = ({
   }
 }
 
-export const adressBuilder = ({
+export const addressBuilder = ({
   street = 'street',
   city = 'city',
   zip = 'zip',
@@ -70,10 +70,11 @@ export const adressBuilder = ({
 }: { street?: string; city?: string; zip?: string; country?: string } = {}) => {
   const props = { street, city, zip, country }
   return {
-    withStreet: (street: string) => adressBuilder({ ...props, street }),
-    withCity: (city: string) => adressBuilder({ ...props, city }),
-    withZip: (zip: string) => adressBuilder({ ...props, zip }),
-    withCountry: (country: string) => adressBuilder({ ...props, country }),
+    withStreet: (street: string) => addressBuilder({ ...props, street }),
+    withCity: (city: string) => addressBuilder({ ...props, city }),
+    withZip: (zip: string) => addressBuilder({ ...props, zip }),
+    withCountry: (country: string) => addressBuilder({ ...props, country }),
+    getProps: () => props,
     build: () => Address.fromData(props),
   }
 }
@@ -98,6 +99,7 @@ export const productBuilder = ({
     withQuantity: (quantity: string) => productBuilder({ ...props, quantity }),
     withUnitPrice: (unitPrice: string) => productBuilder({ ...props, unitPrice }),
     withDescription: (description: string) => productBuilder({ ...props, description }),
+    getProps: () => props,
     build: () => Product.fromData(props),
   }
 }

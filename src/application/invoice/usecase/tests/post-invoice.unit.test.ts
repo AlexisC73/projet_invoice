@@ -1,6 +1,6 @@
 import { CurrencyError, EmptyError, InvalidDateError, TooLongError } from '../../../errors'
 import { InvoiceFixture, createInvoiceFixture } from './invoice.fixture'
-import { invoiceBuilder } from './invoiceBuilder'
+import { addressBuilder, invoiceBuilder, productBuilder } from './invoiceBuilder'
 
 describe('Post Invoice', () => {
   let fixture: InvoiceFixture
@@ -9,9 +9,14 @@ describe('Post Invoice', () => {
     fixture = createInvoiceFixture()
   })
 
-  test('should post a new Invoice', async () => {
+  test('should post new Invoice', async () => {
     await fixture.whenUserPostInvoice(invoiceBuilder().build().data)
     fixture.thenInvoiceShouldBeSaved(invoiceBuilder().build())
+  })
+
+  test('should post new invoice with product', async () => {
+    await fixture.whenUserPostInvoice(invoiceBuilder().withItems([productBuilder().getProps()]).getProps())
+    fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withItems([productBuilder().getProps()]).build())
   })
 
   describe('Rule: description is not required, else must be less or equal to 255 characters', () => {
@@ -67,6 +72,7 @@ describe('Post Invoice', () => {
       fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withStatus('pending').build())
     })
   })
+
   describe('Rule: date must be valid', () => {
     test('should throw if date is not valid', async () => {
       await fixture.whenUserPostInvoice(invoiceBuilder().withDate('dadsad').getProps())
@@ -101,6 +107,57 @@ describe('Post Invoice', () => {
     test('should throw if contact is only whitespaces', async () => {
       await fixture.whenUserPostInvoice(invoiceBuilder().withBuyerName('    ').getProps())
       fixture.thenErrorShouldBe(EmptyError)
+    })
+  })
+
+  describe('Rule: buyer address is required', () => {
+    test('should throw if city is empty', async () => {
+      await fixture.whenUserPostInvoice(
+        invoiceBuilder().withBuyerAddress(addressBuilder().withCity('   ').getProps()).getProps()
+      )
+      fixture.thenErrorShouldBe(EmptyError)
+    })
+    test('should throw if country is empty', async () => {
+      await fixture.whenUserPostInvoice(
+        invoiceBuilder().withBuyerAddress(addressBuilder().withCountry('   ').getProps()).getProps()
+      )
+      fixture.thenErrorShouldBe(EmptyError)
+    })
+    test('should throw if zip is empty', async () => {
+      await fixture.whenUserPostInvoice(
+        invoiceBuilder().withBuyerAddress(addressBuilder().withZip('   ').getProps()).getProps()
+      )
+      fixture.thenErrorShouldBe(EmptyError)
+    })
+    test('should throw if street is empty', async () => {
+      await fixture.whenUserPostInvoice(
+        invoiceBuilder().withBuyerAddress(addressBuilder().withStreet('   ').getProps()).getProps()
+      )
+      fixture.thenErrorShouldBe(EmptyError)
+    })
+  })
+
+  describe('Rule: product must be valid if not empty', () => {
+    test('should throw if product name is empty', async () => {
+      await fixture.whenUserPostInvoice(
+        invoiceBuilder()
+          .withItems([productBuilder().withName(' ').getProps()])
+          .getProps()
+      )
+      fixture.thenErrorShouldBe(EmptyError)
+    })
+
+    test('should throw not if product description is empty', async () => {
+      await fixture.whenUserPostInvoice(
+        invoiceBuilder()
+          .withItems([productBuilder().withDescription(' ').getProps()])
+          .getProps()
+      )
+      fixture.thenInvoiceShouldBeSaved(
+        invoiceBuilder()
+          .withItems([productBuilder().withDescription('').getProps()])
+          .build()
+      )
     })
   })
 })

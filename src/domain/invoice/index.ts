@@ -50,7 +50,7 @@ export class Invoice {
     return this._owner
   }
 
-  get sender() {
+  get sender(): Address['data'] {
     return this._sender.data
   }
 
@@ -140,7 +140,7 @@ export class Address {
     return new Address(
       StringText.fromString({ _value: data.street, propertyName: 'seller street', maxLength: 100, required: true }),
       StringText.fromString({ _value: data.city, propertyName: 'seller city', maxLength: 100, required: true }),
-      StringText.fromString({ _value: data.zip, propertyName: 'seller zip code', maxLength: 10, required: true }),
+      StringText.fromString({ _value: data.zip, propertyName: 'seller zip code', maxLength: 50, required: true }),
       StringText.fromString({ _value: data.country, propertyName: 'seller country', maxLength: 50, required: true })
     )
   }
