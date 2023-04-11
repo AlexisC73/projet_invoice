@@ -10,29 +10,29 @@ describe('Post Invoice', () => {
 
   test('should post new Invoice', async () => {
     await fixture.whenUserPostInvoice(invoiceBuilder().getProps())
-    fixture.thenInvoiceShouldBeSaved(invoiceBuilder().build())
+    fixture.thenInvoiceShouldBe(invoiceBuilder().build())
   })
 
   test('should post new invoice with product', async () => {
     await fixture.whenUserPostInvoice(invoiceBuilder().withProducts([productBuilder().getProps()]).getProps())
-    fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withProducts([productBuilder().getProps()]).build())
+    fixture.thenInvoiceShouldBe(invoiceBuilder().withProducts([productBuilder().getProps()]).build())
   })
 
   describe('Rule: default currency must be USD', () => {
     test('should post a new invoice with USD when no currency provided', async () => {
       await fixture.whenUserPostInvoice(invoiceBuilder().getPropsWithoutCurrency())
-      fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withCurrency('USD').build())
+      fixture.thenInvoiceShouldBe(invoiceBuilder().withCurrency('USD').build())
     })
     test('should use the EUR currency when provided', async () => {
       await fixture.whenUserPostInvoice(invoiceBuilder().withCurrency('EUR').getProps())
-      fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withCurrency('EUR').build())
+      fixture.thenInvoiceShouldBe(invoiceBuilder().withCurrency('EUR').build())
     })
   })
 
   describe('Rule: new invoice must have pending status', () => {
     test('should post a new Invoice with pending status', async () => {
       await fixture.whenUserPostInvoice(invoiceBuilder().withStatus('paid').getProps())
-      fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withStatus('pending').build())
+      fixture.thenInvoiceShouldBe(invoiceBuilder().withStatus('pending').build())
     })
   })
 })
