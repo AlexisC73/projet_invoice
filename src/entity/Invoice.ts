@@ -37,7 +37,7 @@ export class MongoInvoice implements Omit<Invoice['data'], 'id'> {
   }
 
   @Column()
-  items: Product['data'][]
+  products: Product['data'][]
 
   updateInvoice(invoice: Invoice['data']) {
     this.date = invoice.date
@@ -46,7 +46,7 @@ export class MongoInvoice implements Omit<Invoice['data'], 'id'> {
     this.contact = invoice.contact
     this.sender = invoice.sender
     this.buyer = invoice.buyer
-    this.items = invoice.items
+    this.products = invoice.products
   }
 
   isOwner(id: string) {

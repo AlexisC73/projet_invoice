@@ -1,4 +1,4 @@
-import { Address, Invoice, Product } from '../../../../domain/invoice'
+import { Address, Invoice, Product } from '..'
 
 const _date = new Date('2023-04-23T22:00:00.000Z').toISOString()
 const _dueDate = new Date('2023-06-15T22:00:00.000Z').toISOString()
@@ -8,7 +8,7 @@ export const invoiceBuilder = ({
   date = _date,
   dueDate = _dueDate,
   currency = 'USD',
-  description = '',
+  description = 'test description',
   status = 'pending',
   contact = 'testing contact',
   owner = 'testing owner',
@@ -17,12 +17,12 @@ export const invoiceBuilder = ({
     name: 'testing name',
     address: addressBuilder().getProps(),
   },
-  items = [],
+  products = [],
 }: {
   id?: string
   date?: string
   dueDate?: string
-  description?: string
+  description?: string | null
   currency?: string
   status?: string
   contact?: string
@@ -32,9 +32,9 @@ export const invoiceBuilder = ({
     name: string
     address: Address['data']
   }
-  items?: Product['data'][]
+  products?: Product['data'][]
 } = {}) => {
-  const props = { id, date, dueDate, description, status, contact, owner, sender, buyer, items, currency }
+  const props = { id, date, dueDate, description, status, contact, owner, sender, buyer, products, currency }
   return {
     withId: (id: string) => invoiceBuilder({ ...props, id }),
     withDate: (date: string) => invoiceBuilder({ ...props, date }),
@@ -44,17 +44,13 @@ export const invoiceBuilder = ({
     withStatus: (status: string) => invoiceBuilder({ ...props, status }),
     withContact: (contact: string) => invoiceBuilder({ ...props, contact }),
     withOwner: (owner: string) => invoiceBuilder({ ...props, owner }),
-    withSender: (sender: Address) => invoiceBuilder({ ...props, sender }),
+    withSender: (sender: Address['data']) => invoiceBuilder({ ...props, sender }),
     withBuyer: (buyer: { name: string; address: Address['data'] }) => invoiceBuilder({ ...props, buyer }),
     withBuyerName: (name: string) => invoiceBuilder({ ...props, buyer: { ...props.buyer, name } }),
     withBuyerAddress: (address: Address['data']) => invoiceBuilder({ ...props, buyer: { ...props.buyer, address } }),
-    withItems: (items: Product['data'][]) => invoiceBuilder({ ...props, items }),
+    withProducts: (products: Product['data'][]) => invoiceBuilder({ ...props, products }),
     getPropsWithoutCurrency: () => {
       const { currency, ...rest } = props
-      return rest
-    },
-    getPropsWithoutDescription: () => {
-      const { description, ...rest } = props
       return rest
     },
     getProps: () => props,

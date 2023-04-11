@@ -8,7 +8,7 @@ export class MongoInvoiceRepository implements InvoiceRepository {
   constructor(private readonly mongoInvoiceRepository: Repository<MongoInvoice>) {}
 
   async save(invoice: Invoice): Promise<void> {
-    const { date, dueDate, description, currency, status, contact, owner, sender, buyer, items, id } = invoice.data
+    const { date, dueDate, description, currency, status, contact, owner, sender, buyer, products, id } = invoice.data
     const newInvoice = new MongoInvoice()
     newInvoice.date = date
     newInvoice.dueDate = dueDate
@@ -19,7 +19,7 @@ export class MongoInvoiceRepository implements InvoiceRepository {
     newInvoice.contact = contact
     newInvoice.sender = sender
     newInvoice.buyer = buyer
-    newInvoice.items = items
+    newInvoice.products = products
     newInvoice._id = new ObjectId(id) as any
 
     await this.mongoInvoiceRepository.save(newInvoice)

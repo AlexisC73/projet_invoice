@@ -1,6 +1,6 @@
 import { CurrencyError, EmptyError, InvalidDateError, TooLongError } from '../../../errors'
 import { InvoiceFixture, createInvoiceFixture } from './invoice.fixture'
-import { addressBuilder, invoiceBuilder, productBuilder } from './invoiceBuilder'
+import { addressBuilder, invoiceBuilder, productBuilder } from '../../../../domain/invoice/tests/invoiceBuilder'
 
 describe('Post Invoice', () => {
   let fixture: InvoiceFixture
@@ -15,36 +15,8 @@ describe('Post Invoice', () => {
   })
 
   test('should post new invoice with product', async () => {
-    await fixture.whenUserPostInvoice(invoiceBuilder().withItems([productBuilder().getProps()]).getProps())
-    fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withItems([productBuilder().getProps()]).build())
-  })
-
-  describe('Rule: description is not required, else must be less or equal to 255 characters', () => {
-    test('can post without description provided', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().getPropsWithoutDescription())
-      fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withDescription('').build())
-    })
-    test('description must be use when provided', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().withDescription('test de description').build().data)
-      fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withDescription('test de description').build())
-    })
-    test('description throw if 256 characters', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().withDescription('a'.repeat(256)).getProps())
-      fixture.thenErrorShouldBe(TooLongError)
-    })
-
-    test('description must not throw if 255 characters', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().withDescription('a'.repeat(255)).getProps())
-      fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withDescription('a'.repeat(255)).build())
-    })
-    test('description must not throw if trim result in 255 max characters', async () => {
-      await fixture.whenUserPostInvoice(
-        invoiceBuilder()
-          .withDescription(' ' + 'a'.repeat(255) + ' ')
-          .getProps()
-      )
-      fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withDescription('a'.repeat(255)).build())
-    })
+    await fixture.whenUserPostInvoice(invoiceBuilder().withProducts([productBuilder().getProps()]).getProps())
+    fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withProducts([productBuilder().getProps()]).build())
   })
 
   describe('Rule: default currency must be USD', () => {
@@ -53,16 +25,8 @@ describe('Post Invoice', () => {
       fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withCurrency('USD').build())
     })
     test('should use the EUR currency when provided', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().withCurrency('EUR').build().data)
+      await fixture.whenUserPostInvoice(invoiceBuilder().withCurrency('EUR').getProps())
       fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withCurrency('EUR').build())
-    })
-    test('should throw if the currency provided is not available or do not exists', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().withCurrency('RMP').getProps())
-      fixture.thenErrorShouldBe(CurrencyError)
-    })
-    test('should throw if the currency is still empty after usecase', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().withCurrency(' ').getProps())
-      fixture.thenErrorShouldBe(CurrencyError)
     })
   })
 
@@ -70,94 +34,6 @@ describe('Post Invoice', () => {
     test('should post a new Invoice with pending status', async () => {
       await fixture.whenUserPostInvoice(invoiceBuilder().withStatus('paid').build().data)
       fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withStatus('pending').build())
-    })
-  })
-
-  describe('Rule: date must be valid', () => {
-    test('should throw if date is not valid', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().withDate('dadsad').getProps())
-      fixture.thenErrorShouldBe(InvalidDateError)
-    })
-    test('should throw if dueDate is not valid', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().withDueDate('dadsad').getProps())
-      fixture.thenErrorShouldBe(InvalidDateError)
-    })
-  })
-
-  describe('Rule: contact name is required', () => {
-    test('should throw if contact is empty', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().withContact('').getProps())
-      fixture.thenErrorShouldBe(EmptyError)
-    })
-    test('should throw if contact is only whitespaces', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().withContact('    ').getProps())
-      fixture.thenErrorShouldBe(EmptyError)
-    })
-  })
-
-  describe('Rule: buyer name is required', () => {
-    test('should not throw if buyer is not empty', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().withBuyerName('').getProps())
-      fixture.thenErrorShouldBe(EmptyError)
-    })
-    test('should throw if buyer is empty', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().withBuyerName('').getProps())
-      fixture.thenErrorShouldBe(EmptyError)
-    })
-    test('should throw if contact is only whitespaces', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().withBuyerName('    ').getProps())
-      fixture.thenErrorShouldBe(EmptyError)
-    })
-  })
-
-  describe('Rule: buyer address is required', () => {
-    test('should throw if city is empty', async () => {
-      await fixture.whenUserPostInvoice(
-        invoiceBuilder().withBuyerAddress(addressBuilder().withCity('   ').getProps()).getProps()
-      )
-      fixture.thenErrorShouldBe(EmptyError)
-    })
-    test('should throw if country is empty', async () => {
-      await fixture.whenUserPostInvoice(
-        invoiceBuilder().withBuyerAddress(addressBuilder().withCountry('   ').getProps()).getProps()
-      )
-      fixture.thenErrorShouldBe(EmptyError)
-    })
-    test('should throw if zip is empty', async () => {
-      await fixture.whenUserPostInvoice(
-        invoiceBuilder().withBuyerAddress(addressBuilder().withZip('   ').getProps()).getProps()
-      )
-      fixture.thenErrorShouldBe(EmptyError)
-    })
-    test('should throw if street is empty', async () => {
-      await fixture.whenUserPostInvoice(
-        invoiceBuilder().withBuyerAddress(addressBuilder().withStreet('   ').getProps()).getProps()
-      )
-      fixture.thenErrorShouldBe(EmptyError)
-    })
-  })
-
-  describe('Rule: product must be valid if not empty', () => {
-    test('should throw if product name is empty', async () => {
-      await fixture.whenUserPostInvoice(
-        invoiceBuilder()
-          .withItems([productBuilder().withName(' ').getProps()])
-          .getProps()
-      )
-      fixture.thenErrorShouldBe(EmptyError)
-    })
-
-    test('should throw not if product description is empty', async () => {
-      await fixture.whenUserPostInvoice(
-        invoiceBuilder()
-          .withItems([productBuilder().withDescription(' ').getProps()])
-          .getProps()
-      )
-      fixture.thenInvoiceShouldBeSaved(
-        invoiceBuilder()
-          .withItems([productBuilder().withDescription('').getProps()])
-          .build()
-      )
     })
   })
 })

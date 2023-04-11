@@ -1,3 +1,4 @@
+import { EmptyError } from '../../application/errors'
 import { CurrencyText, DateText, StatusText, StringText } from './helper'
 
 export class Invoice {
@@ -15,7 +16,7 @@ export class Invoice {
       name: StringText
       address: Address
     },
-    private readonly _items: Product[]
+    private readonly _products: Product[]
   ) {}
 
   get id(): string {
@@ -58,8 +59,8 @@ export class Invoice {
     return { name: this._buyer.name.value, address: this._buyer.address.data }
   }
 
-  get items() {
-    return this._items.map(item => item.data)
+  get products() {
+    return this._products.map(item => item.data)
   }
 
   get data() {
@@ -74,11 +75,18 @@ export class Invoice {
       owner: this.owner,
       sender: this.sender,
       buyer: this.buyer,
-      items: this.items,
+      products: this.products,
     }
   }
 
   static fromData(data: Invoice['data']) {
+    if (!data.sender) {
+      throw new EmptyError("sender's address is required")
+    }
+    if (!data.buyer.address) {
+      throw new EmptyError("buyer's address is required")
+    }
+
     return new Invoice(
       data.id,
       DateText.fromString(data.date),
@@ -98,7 +106,7 @@ export class Invoice {
         }),
         address: Address.fromData(data.buyer.address),
       },
-      Product.fromArray(data.items)
+      Product.fromArray(data.products)
     )
   }
 }

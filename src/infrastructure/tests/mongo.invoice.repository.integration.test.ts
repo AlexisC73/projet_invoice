@@ -2,7 +2,7 @@ import { DataSource } from 'typeorm'
 import { MongoInvoice } from '../../entity/Invoice'
 import * as path from 'path'
 import { PostInvoiceCommand, PostInvoiceUsecase } from '../../application/invoice/usecase/post-invoice.usecase'
-import { invoiceBuilder } from '../../application/invoice/usecase/tests/invoiceBuilder'
+import { invoiceBuilder } from '../../domain/invoice/tests/invoiceBuilder'
 import { ObjectId } from 'mongodb'
 import { MongoInvoiceRepository } from '../mongo.invoice.repository'
 import { mongoInvoiceToInvoice } from '../utils'
@@ -52,7 +52,7 @@ describe('integration mongodb', () => {
       id: mongoInvoiceId,
       buyer: invoiceToSave.buyer,
       contact: invoiceToSave.contact,
-      items: invoiceToSave.items,
+      products: invoiceToSave.products,
       owner: invoiceToSave.owner,
       sender: invoiceToSave.sender,
       currency: invoiceToSave.currency,

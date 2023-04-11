@@ -1,9 +1,9 @@
 import { CurrencyError, EmptyError, InvalidDateError, StatusError, TooLongError } from '../../application/errors'
 
 export class StringText {
-  private constructor(private readonly _value: string) {}
+  private constructor(private readonly _value: string | null) {}
 
-  get value(): string {
+  get value(): string | null {
     return this._value
   }
 
@@ -22,7 +22,7 @@ export class StringText {
       if (required) {
         throw new EmptyError(`${propertyName} is required`)
       }
-      return new StringText('')
+      return new StringText(null)
     }
     if (!!maxLength && _value.trim().length > maxLength) {
       throw new TooLongError(`${propertyName} can not be longer than ${maxLength} characters`)
@@ -58,7 +58,7 @@ export class CurrencyText {
     const available = ['USD', 'EUR', 'GBP', 'CAD', 'AUD', 'CHF', 'JPY', 'CNY']
 
     if (!_currency || _currency.trim().length <= 0) {
-      throw new CurrencyError('Problem with currency, please try again later.')
+      throw new CurrencyError('Currency is required.')
     }
     if (!available.includes(_currency.trim().toUpperCase())) {
       throw new CurrencyError(`${_currency} is not available yet`)
@@ -82,6 +82,6 @@ export class StatusText {
     if (!available.includes(_status.trim().toLowerCase())) {
       throw new StatusError(`${_status} is not available`)
     }
-    return new StatusText(_status ? _status.trim().toLowerCase() : 'pending')
+    return new StatusText(_status.trim().toLowerCase())
   }
 }

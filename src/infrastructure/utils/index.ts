@@ -13,6 +13,6 @@ export const mongoInvoiceToInvoice = (mongoInvoice: MongoInvoice): Invoice => {
     owner: mongoInvoice.owner,
     sender: mongoInvoice.sender,
     buyer: mongoInvoice.buyer,
-    items: mongoInvoice.items,
+    products: mongoInvoice.products,
   })
 }

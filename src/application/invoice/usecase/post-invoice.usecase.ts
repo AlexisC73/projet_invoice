@@ -19,7 +19,7 @@ export class PostInvoiceUsecase {
         name: postInvoiceCommand.buyer.name,
         address: postInvoiceCommand.buyer.address,
       },
-      items: postInvoiceCommand.items,
+      products: postInvoiceCommand.products,
     })
     await this.invoiceRepository.save(invoice)
     return Promise.resolve()
@@ -39,5 +39,5 @@ export type PostInvoiceCommand = {
     name: string
     address: Address['data']
   }
-  items: Product['data'][]
+  products: Product['data'][]
 }
