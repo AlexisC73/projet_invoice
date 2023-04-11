@@ -147,7 +147,7 @@ export class Address {
   static fromData(data: Address['data']) {
     return new Address(
       StringText.fromString({ _value: data.street, propertyName: 'seller street', maxLength: 100, required: true }),
-      StringText.fromString({ _value: data.city, propertyName: 'seller city', maxLength: 100, required: true }),
+      StringText.fromString({ _value: data.city, propertyName: 'seller city', maxLength: 50, required: true }),
       StringText.fromString({ _value: data.zip, propertyName: 'seller zip code', maxLength: 50, required: true }),
       StringText.fromString({ _value: data.country, propertyName: 'seller country', maxLength: 50, required: true })
     )
