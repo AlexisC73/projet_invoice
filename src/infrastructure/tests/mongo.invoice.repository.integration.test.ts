@@ -5,8 +5,9 @@ import { PostInvoiceCommand, PostInvoiceUsecase } from '../../application/invoic
 import { invoiceBuilder } from '../../domain/invoice/tests/invoiceBuilder'
 import { ObjectId } from 'mongodb'
 import { MongoInvoiceRepository } from '../mongo.invoice.repository'
-import { mongoInvoiceToInvoice } from '../utils'
+import { invoiceToMongoInvoice, mongoInvoiceToInvoice } from '../utils'
 import DockerCompose, { IDockerComposeOptions } from 'docker-compose'
+import { UpdateInvoiceUsecase } from '../../application/invoice/usecase/update-invoice.usecase'
 
 describe('integration mongodb', () => {
   let composeOptions: IDockerComposeOptions
@@ -63,7 +64,29 @@ describe('integration mongodb', () => {
     await postInvoiceUsecase.handle(postInvoiceCommand)
 
     const inDbInvoice = await invoiceRepository.findOne({ where: { _id: new ObjectId(mongoInvoiceId) as any } })
-
     expect(invoiceToSave.data).toEqual(mongoInvoiceToInvoice(inDbInvoice).data)
+
+    const inDbInvoices = await invoiceRepository.find()
+    expect(inDbInvoices.length).toEqual(1)
+  })
+
+  test('should update invoice', async () => {
+    const invoiceRepository = dataSource.getRepository(MongoInvoice)
+    const mongoInvoiceRepository = new MongoInvoiceRepository(invoiceRepository)
+    const updateInvoiceUsecase = new UpdateInvoiceUsecase(mongoInvoiceRepository)
+
+    const mongoInvoiceId = new ObjectId().toString() as any
+    const existingInvoice = invoiceBuilder().withId(mongoInvoiceId).withContact('paul')
+
+    await invoiceRepository.save(invoiceToMongoInvoice(existingInvoice.build()))
+
+    const updatedInvoice = existingInvoice.withContact('jean').getProps()
+    await updateInvoiceUsecase.handle(updatedInvoice)
+
+    const inDbInvoice = await invoiceRepository.findOne({ where: { _id: new ObjectId(mongoInvoiceId) as any } })
+    expect(updatedInvoice).toEqual(mongoInvoiceToInvoice(inDbInvoice).data)
+
+    const inDbInvoices = await invoiceRepository.find()
+    expect(inDbInvoices.length).toEqual(1)
   })
 })

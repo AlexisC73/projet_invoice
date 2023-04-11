@@ -3,9 +3,21 @@ import { InvoiceRepository } from '../application/invoice.repository'
 import { Invoice } from '../domain/invoice'
 import { MongoInvoice } from '../entity/Invoice'
 import { ObjectId } from 'mongodb'
+import { mongoInvoiceToInvoice } from './utils'
+import { NotFoundError } from '../application/errors'
 
 export class MongoInvoiceRepository implements InvoiceRepository {
   constructor(private readonly mongoInvoiceRepository: Repository<MongoInvoice>) {}
+
+  async find(id: string): Promise<Invoice> {
+    const inDbInvoice = await this.mongoInvoiceRepository.findOne({
+      where: { _id: new ObjectId(id) as any },
+    })
+    if (!inDbInvoice) {
+      throw new NotFoundError('Invoice not found')
+    }
+    return mongoInvoiceToInvoice(inDbInvoice)
+  }
 
   async save(invoice: Invoice): Promise<void> {
     const { date, dueDate, description, currency, status, contact, owner, sender, buyer, products, id } = invoice.data
