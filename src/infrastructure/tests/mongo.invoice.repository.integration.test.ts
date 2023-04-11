@@ -49,13 +49,12 @@ describe('integration mongodb', () => {
     const invoiceToSave = invoiceBuilder().withId(mongoInvoiceId).build()
 
     const postInvoiceCommand: PostInvoiceCommand = {
-      id: mongoInvoiceId,
+      id: invoiceToSave.id,
       buyer: invoiceToSave.buyer,
       contact: invoiceToSave.contact,
       products: invoiceToSave.products,
       owner: invoiceToSave.owner,
       sender: invoiceToSave.sender,
-      currency: invoiceToSave.currency,
       date: invoiceToSave.date,
       dueDate: invoiceToSave.dueDate,
       description: invoiceToSave.description,

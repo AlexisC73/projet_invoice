@@ -1,6 +1,5 @@
-import { CurrencyError, EmptyError, InvalidDateError, TooLongError } from '../../../errors'
 import { InvoiceFixture, createInvoiceFixture } from './invoice.fixture'
-import { addressBuilder, invoiceBuilder, productBuilder } from '../../../../domain/invoice/tests/invoiceBuilder'
+import { invoiceBuilder, productBuilder } from '../../../../domain/invoice/tests/invoiceBuilder'
 
 describe('Post Invoice', () => {
   let fixture: InvoiceFixture
@@ -10,7 +9,7 @@ describe('Post Invoice', () => {
   })
 
   test('should post new Invoice', async () => {
-    await fixture.whenUserPostInvoice(invoiceBuilder().build().data)
+    await fixture.whenUserPostInvoice(invoiceBuilder().getProps())
     fixture.thenInvoiceShouldBeSaved(invoiceBuilder().build())
   })
 
@@ -32,7 +31,7 @@ describe('Post Invoice', () => {
 
   describe('Rule: new invoice must have pending status', () => {
     test('should post a new Invoice with pending status', async () => {
-      await fixture.whenUserPostInvoice(invoiceBuilder().withStatus('paid').build().data)
+      await fixture.whenUserPostInvoice(invoiceBuilder().withStatus('paid').getProps())
       fixture.thenInvoiceShouldBeSaved(invoiceBuilder().withStatus('pending').build())
     })
   })
