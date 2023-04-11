@@ -28,7 +28,7 @@ export const fakeInvoice: Omit<Invoice['data'], 'id'> = {
   sender: sender,
   buyer: buyer,
   owner: '234JFIH3',
-  items: [
+  products: [
     {
       id: 'id',
       name: 'name',

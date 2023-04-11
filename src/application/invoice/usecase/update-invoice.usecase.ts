@@ -6,7 +6,7 @@ export class UpdateInvoiceUsecase {
   constructor(private invoiceRepository: InvoiceRepository) {}
 
   async handle(updateInvoiceCommand: UpdateInvoiceCommand): Promise<void> {
-    const invoice = await this.invoiceRepository.find(updateInvoiceCommand.id)
+    const invoice = await this.invoiceRepository.findById(updateInvoiceCommand.id)
     if (!invoice) throw new NotFoundError('Invoice does not exists')
     const { date, dueDate, description, currency, contact, owner, sender, buyer, products } = updateInvoiceCommand
     const updatedInvoice = Invoice.fromData({

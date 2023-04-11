@@ -29,7 +29,7 @@ export const createInvoiceFixture = () => {
       }
     },
     thenInvoiceShouldBe: async (expectedInvoice: Invoice) => {
-      const savedInvoice = await invoiceRepository.find(expectedInvoice.id)
+      const savedInvoice = await invoiceRepository.findById(expectedInvoice.id)
       expect(savedInvoice.data).toEqual(expectedInvoice.data)
     },
     thenErrorShouldBe: (expectedError: new () => Error) => {

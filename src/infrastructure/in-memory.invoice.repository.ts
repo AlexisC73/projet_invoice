@@ -21,7 +21,7 @@ export class InMemoryInvoiceRepository implements InvoiceRepository {
     this.invoices.push(invoice)
   }
 
-  async find(id: string): Promise<Invoice> {
+  async findById(id: string): Promise<Invoice> {
     return Promise.resolve(this.invoices.find(invoice => invoice.id === id))
   }
 }

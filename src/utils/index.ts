@@ -33,7 +33,7 @@ export const createMongoInvoice = (invoice: Omit<Invoice['data'], 'id'>): MongoI
   newInvoice.contact = invoice.contact
   newInvoice.sender = invoice.sender
   newInvoice.buyer = invoice.buyer
-  newInvoice.items = invoice.items
+  newInvoice.products = invoice.products
   return newInvoice
 }
 

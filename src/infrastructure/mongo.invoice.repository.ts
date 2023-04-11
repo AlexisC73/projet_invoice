@@ -9,7 +9,7 @@ import { NotFoundError } from '../application/errors'
 export class MongoInvoiceRepository implements InvoiceRepository {
   constructor(private readonly mongoInvoiceRepository: Repository<MongoInvoice>) {}
 
-  async find(id: string): Promise<Invoice> {
+  async findById(id: string): Promise<Invoice> {
     const inDbInvoice = await this.mongoInvoiceRepository.findOne({
       where: { _id: new ObjectId(id) as any },
     })
