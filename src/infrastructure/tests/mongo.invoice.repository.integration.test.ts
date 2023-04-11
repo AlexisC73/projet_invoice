@@ -8,6 +8,7 @@ import { MongoInvoiceRepository } from '../mongo.invoice.repository'
 import { invoiceToMongoInvoice, mongoInvoiceToInvoice } from '../utils'
 import DockerCompose, { IDockerComposeOptions } from 'docker-compose'
 import { UpdateInvoiceUsecase } from '../../application/invoice/usecase/update-invoice.usecase'
+import { DeleteInvoiceUsecase } from '../../application/invoice/usecase/delete-invoice.usecase'
 
 describe('integration mongodb', () => {
   let composeOptions: IDockerComposeOptions
@@ -88,5 +89,21 @@ describe('integration mongodb', () => {
 
     const inDbInvoices = await invoiceRepository.find()
     expect(inDbInvoices.length).toEqual(1)
+  })
+
+  test('should delete invoice', async () => {
+    const invoiceRepository = dataSource.getRepository(MongoInvoice)
+    const mongoInvoiceRepository = new MongoInvoiceRepository(invoiceRepository)
+    const deleteInvoiceUsecase = new DeleteInvoiceUsecase(mongoInvoiceRepository)
+
+    const mongoInvoiceId = new ObjectId().toString() as any
+    const existingInvoice = invoiceBuilder().withId(mongoInvoiceId)
+
+    await invoiceRepository.save(invoiceToMongoInvoice(existingInvoice.build()))
+
+    await deleteInvoiceUsecase.handle({ id: mongoInvoiceId })
+
+    const inDbInvoices = await invoiceRepository.find()
+    expect(inDbInvoices.length).toEqual(0)
   })
 })
