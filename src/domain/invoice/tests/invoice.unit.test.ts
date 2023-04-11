@@ -53,7 +53,7 @@ describe('Invoice', () => {
 
     test("create invoice with description if it's not null", () => {
       const data = invoiceBuilder().withDescription('a'.repeat(255)).getProps()
-      expect(Invoice.fromData(data).data.description).toBe('a'.repeat(255))
+      expect(Invoice.fromData(data).description).toBe('a'.repeat(255))
     })
   })
 
@@ -82,12 +82,12 @@ describe('Invoice', () => {
   describe("Rule: 'status' is required and must be a valid status", () => {
     test("should create invoice with 'pendind' status", () => {
       const data = invoiceBuilder().withStatus('pending').getProps()
-      expect(Invoice.fromData(data).data.status).toEqual('pending')
+      expect(Invoice.fromData(data).status).toEqual('pending')
     })
 
     test("should create invoice with 'pendind' status when status is uppercase", () => {
       const data = invoiceBuilder().withStatus('Pending').getProps()
-      expect(Invoice.fromData(data).data.status).toEqual('pending')
+      expect(Invoice.fromData(data).status).toEqual('pending')
     })
 
     test("should throw if 'status' is not accepted yet", () => {
@@ -109,7 +109,7 @@ describe('Invoice', () => {
 
     test("create invoice with contact name if it's not null", () => {
       const data = invoiceBuilder().withContact('jean').getProps()
-      expect(Invoice.fromData(data).data.contact).toEqual('jean')
+      expect(Invoice.fromData(data).contact).toEqual('jean')
     })
   })
 
@@ -121,7 +121,7 @@ describe('Invoice', () => {
 
     test('should not throw if contact is equal to 50 characters', () => {
       const data = invoiceBuilder().withContact('a'.repeat(50)).getProps()
-      expect(Invoice.fromData(data).data.contact).toBe('a'.repeat(50))
+      expect(Invoice.fromData(data).contact).toBe('a'.repeat(50))
     })
   })
 
@@ -133,7 +133,7 @@ describe('Invoice', () => {
 
     test("create invoice with buyer name if it's not null", () => {
       const data = invoiceBuilder().withBuyerName('jean').getProps()
-      expect(Invoice.fromData(data).data.buyer.name).toEqual('jean')
+      expect(Invoice.fromData(data).buyer.name).toEqual('jean')
     })
   })
 
@@ -145,7 +145,7 @@ describe('Invoice', () => {
 
     test('should not throw if buyer name is equal to 50 characters', () => {
       const data = invoiceBuilder().withBuyerName('a'.repeat(50)).getProps()
-      expect(Invoice.fromData(data).data.buyer.name).toBe('a'.repeat(50))
+      expect(Invoice.fromData(data).buyer.name).toBe('a'.repeat(50))
     })
   })
 
@@ -176,12 +176,12 @@ describe('Invoice', () => {
   describe("Rule: 'products' can be empty array", () => {
     test('should create invoice with empty products', () => {
       const data = invoiceBuilder().withProducts([]).getProps()
-      expect(Invoice.fromData(data).data.products).toEqual([])
+      expect(Invoice.fromData(data).products).toEqual([])
     })
 
     test('should create invoice with products', () => {
       const data = invoiceBuilder().withProducts([productBuilder().getProps()]).getProps()
-      expect(Invoice.fromData(data).data.products).toEqual([productBuilder().getProps()])
+      expect(Invoice.fromData(data).products).toEqual([productBuilder().getProps()])
     })
   })
 })
