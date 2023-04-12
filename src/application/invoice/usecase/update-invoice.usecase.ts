@@ -8,15 +8,14 @@ export class UpdateInvoiceUsecase {
   async handle(updateInvoiceCommand: UpdateInvoiceCommand): Promise<void> {
     const invoice = await this.invoiceRepository.findById(updateInvoiceCommand.id)
     if (!invoice) throw new NotFoundError('Invoice does not exists')
-    const { date, dueDate, description, currency, contact, owner, sender, buyer, products } = updateInvoiceCommand
+    const { date, dueDate, description, currency, contact, sender, buyer, products } = updateInvoiceCommand
     const updatedInvoice = Invoice.fromData({
       ...invoice.data,
       date,
       dueDate,
       description,
-      currency: currency || invoice.currency,
+      currency: currency || invoice.data.currency,
       contact,
-      owner,
       sender,
       buyer,
       products,
@@ -32,7 +31,6 @@ export type UpdateInvoiceCommand = {
   description: string
   currency?: string
   contact: string
-  owner: string
   sender: Address['data']
   buyer: {
     name: string

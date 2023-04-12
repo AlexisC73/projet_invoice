@@ -7,14 +7,14 @@ import { mongoInvoiceToInvoice } from './utils'
 import { NotFoundError } from '../application/errors'
 
 export class MongoInvoiceRepository implements InvoiceRepository {
-  constructor(private readonly mongoInvoiceRepository: Repository<MongoInvoice>) {}
+  constructor(private readonly mongoRepository: Repository<MongoInvoice>) {}
   async delete(id: string): Promise<void> {
-    await this.mongoInvoiceRepository.delete({ _id: new ObjectId(id) as any })
+    await this.mongoRepository.delete({ _id: new ObjectId(id) as any })
     return Promise.resolve()
   }
 
   async findById(id: string): Promise<Invoice> {
-    const inDbInvoice = await this.mongoInvoiceRepository.findOne({
+    const inDbInvoice = await this.mongoRepository.findOne({
       where: { _id: new ObjectId(id) as any },
     })
     if (!inDbInvoice) {
@@ -38,12 +38,12 @@ export class MongoInvoiceRepository implements InvoiceRepository {
     newInvoice.products = products
     newInvoice._id = new ObjectId(id) as any
 
-    await this.mongoInvoiceRepository.save(newInvoice)
+    await this.mongoRepository.save(newInvoice)
     return Promise.resolve()
   }
 
   async getAll(): Promise<Invoice[]> {
-    const invoices = await this.mongoInvoiceRepository.find()
+    const invoices = await this.mongoRepository.find()
     return invoices.map(invoice => mongoInvoiceToInvoice(invoice))
   }
 }

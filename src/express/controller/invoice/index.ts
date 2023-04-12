@@ -1,19 +1,11 @@
-import { invoiceSchema } from '../../../joi/schema/invoice'
-import { createMongoInvoice, returnInvoice } from '../../../utils'
 import * as invoiceModel from '../../model/invoice'
 
 export const updateStatus = async (req, res) => {
   try {
     const { id } = req.params
     const { status } = req.body
-    if (!id) throw new Error('No id provided')
-    const fundInvoice = await invoiceModel.getOneById(id)
-    if (!fundInvoice) throw new Error('No invoice found with id => ' + id)
-    if (!fundInvoice.isOwner(req.user.id)) {
-      throw new Error('You are not the owner of this invoice')
-    }
-    const result = await invoiceModel.updateStatus(fundInvoice, status)
-    res.send('Invoice status updated with id => ' + result._id)
+    await invoiceModel.updateStatus(id, status)
+    res.status(200).send()
   } catch (error) {
     res.status(401).send(error.message)
   }
@@ -22,16 +14,10 @@ export const updateStatus = async (req, res) => {
 export const updateInvoice = async (req, res) => {
   try {
     const { id } = req.params
-    const { invoice } = req.body
-    if (!id) throw new Error('No id provided')
-    await invoiceSchema.validateAsync(invoice)
-    const fundInvoice = await invoiceModel.getOneById(id)
-    if (!fundInvoice) throw new Error('No invoice found with id => ' + id)
-    if (!fundInvoice.isOwner(req.user.id)) {
-      throw new Error('You are not the owner of this invoice')
-    }
-    const result = await invoiceModel.updateInvoice(fundInvoice, invoice)
-    res.send('Invoice updated with id => ' + result._id)
+    const { invoice: updateInvoiceCommand } = req.body
+
+    await invoiceModel.updateInvoice(id, updateInvoiceCommand)
+    res.status(200).send()
   } catch (error) {
     res.status(401).send(error.message)
   }
@@ -40,14 +26,9 @@ export const updateInvoice = async (req, res) => {
 export const removeInvoice = async (req, res) => {
   try {
     const { id } = req.params
-    if (!id) throw new Error('No id provided')
-    const fundInvoice = await invoiceModel.getOneById(id)
-    if (!fundInvoice) throw new Error('No invoice found with id => ' + id)
-    if (!fundInvoice.isOwner(req.user.id)) {
-      throw new Error('You are not the owner of this invoice')
-    }
-    const result = await invoiceModel.removeInvoice(fundInvoice)
-    res.send('Invoice removed with id => ' + result._id)
+
+    await invoiceModel.removeInvoice(id)
+    res.status(200).send()
   } catch (error) {
     res.status(401).send(error.message)
   }
@@ -56,34 +37,28 @@ export const removeInvoice = async (req, res) => {
 export const getAll = async (req, res) => {
   try {
     const result = await invoiceModel.getAll()
-    const jsonResult = result
-      .filter(mongoInvoice => mongoInvoice.isOwner(req.user.id))
-      .map(invoice => returnInvoice(invoice))
-    res.json(jsonResult)
+    res.status(200).send(result)
   } catch (error) {
-    res.status(500).send('Une erreur est survenue sur le server.')
+    console.log(error)
+    res.status(500).send(error)
   }
 }
 
 export const getOneById = async (req, res) => {
   try {
     const { id } = req.params
-    if (!id) throw new Error('No id provided')
     let result = await invoiceModel.getOneById(id)
-    res.json(returnInvoice(result))
+    res.status(201).json(result)
   } catch (error) {
-    res.status(500).send('Une erreur est survenue sur le server.')
+    res.status(500).send(error.message)
   }
 }
 
 export const add = async (req, res) => {
   try {
     const { invoice } = req.body
-    invoice.owner = req.user.id
-    await invoiceSchema.validateAsync(invoice)
-    const mongoInvoice = createMongoInvoice(invoice)
-    const savedInvoice = await invoiceModel.addNewInvoice(mongoInvoice)
-    res.send('Invoice save with id => ' + savedInvoice._id)
+    await invoiceModel.addNewInvoice({ ...invoice, owner: req.user.id })
+    res.status(201).send()
   } catch (error) {
     res.status(500).send('Une erreur est survenue sur le server.' + error.message)
   }
