@@ -2,6 +2,7 @@ import { Invoice } from '../../../../domain/invoice'
 import { InMemoryInvoiceRepository } from '../../../../infrastructure/in-memory.invoice.repository'
 import { DeleteInvoiceCommand, DeleteInvoiceUsecase } from '../delete-invoice.usecase'
 import { GetAllInvoicesUsecase } from '../get-all-invoices.usecase'
+import { GetOneInvoiceUsecase } from '../get-one-usecase'
 import { PostInvoiceCommand, PostInvoiceUsecase } from '../post-invoice.usecase'
 import { UpdateInvoiceCommand, UpdateInvoiceUsecase } from '../update-invoice.usecase'
 import { UpdateInvoiceStatusUsecase } from '../update-status.usecase'
@@ -14,6 +15,7 @@ export const createInvoiceFixture = () => {
   const updateInvoiceStatusUsecase = new UpdateInvoiceStatusUsecase(invoiceRepository)
 
   const getAllInvoicesUsecase = new GetAllInvoicesUsecase(invoiceRepository)
+  const getOneInvoiceUsecase = new GetOneInvoiceUsecase(invoiceRepository)
 
   let thrownError: Error
 
@@ -54,6 +56,13 @@ export const createInvoiceFixture = () => {
         return await getAllInvoicesUsecase.handle()
       } catch (error: any) {
         thrownError = error
+      }
+    },
+    whenGetOneInvoice: async (id: string) => {
+      try {
+        return await getOneInvoiceUsecase.handle(id)
+      } catch (err: any) {
+        thrownError = err
       }
     },
     thenInvoiceShouldBe: async (expectedInvoice: Invoice) => {

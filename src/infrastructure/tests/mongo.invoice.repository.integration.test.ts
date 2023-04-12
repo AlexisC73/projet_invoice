@@ -11,6 +11,7 @@ import { UpdateInvoiceUsecase } from '../../application/invoice/usecase/update-i
 import { DeleteInvoiceUsecase } from '../../application/invoice/usecase/delete-invoice.usecase'
 import { UpdateInvoiceStatusUsecase } from '../../application/invoice/usecase/update-status.usecase'
 import { GetAllInvoicesUsecase } from '../../application/invoice/usecase/get-all-invoices.usecase'
+import { GetOneInvoiceUsecase } from '../../application/invoice/usecase/get-one-usecase'
 
 describe('integration mongodb', () => {
   let composeOptions: IDockerComposeOptions
@@ -162,5 +163,26 @@ describe('integration mongodb', () => {
     const allInvoices = await getAllInvoicesUsecase.handle()
 
     expect(allInvoices).toEqual(existingInvoices)
+  })
+
+  test('should return expected invoice when multiple invoices in db', async () => {
+    const invoiceRepository = dataSource.getRepository(MongoInvoice)
+    const mongoInvoiceRepository = new MongoInvoiceRepository(invoiceRepository)
+    const getOneInvoiceUsecase = new GetOneInvoiceUsecase(mongoInvoiceRepository)
+
+    const idToFind = new ObjectId().toString() as any
+
+    const existingInvoices = [
+      invoiceBuilder().withId(idToFind).build(),
+      invoiceBuilder()
+        .withId(new ObjectId().toString() as any)
+        .build(),
+    ]
+
+    await Promise.all(existingInvoices.map(invoice => invoiceRepository.save(invoiceToMongoInvoice(invoice))))
+
+    const fundInvoice = await getOneInvoiceUsecase.handle(idToFind)
+
+    expect(fundInvoice).toEqual(invoiceBuilder().withId(idToFind).build())
   })
 })
