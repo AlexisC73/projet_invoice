@@ -41,4 +41,9 @@ export class MongoInvoiceRepository implements InvoiceRepository {
     await this.mongoInvoiceRepository.save(newInvoice)
     return Promise.resolve()
   }
+
+  async getAll(): Promise<Invoice[]> {
+    const invoices = await this.mongoInvoiceRepository.find()
+    return invoices.map(invoice => mongoInvoiceToInvoice(invoice))
+  }
 }

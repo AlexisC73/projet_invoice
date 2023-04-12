@@ -13,6 +13,10 @@ export class InMemoryInvoiceRepository implements InvoiceRepository {
     return Promise.resolve()
   }
 
+  async getAll() {
+    return Promise.resolve(this.invoices)
+  }
+
   setInvoices(invoice: Invoice | Invoice[]): void {
     if (Array.isArray(invoice)) {
       this.invoices = invoice

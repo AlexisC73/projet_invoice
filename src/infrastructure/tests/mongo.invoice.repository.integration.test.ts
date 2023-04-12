@@ -10,6 +10,7 @@ import DockerCompose, { IDockerComposeOptions } from 'docker-compose'
 import { UpdateInvoiceUsecase } from '../../application/invoice/usecase/update-invoice.usecase'
 import { DeleteInvoiceUsecase } from '../../application/invoice/usecase/delete-invoice.usecase'
 import { UpdateInvoiceStatusUsecase } from '../../application/invoice/usecase/update-status.usecase'
+import { GetAllInvoicesUsecase } from '../../application/invoice/usecase/get-all-invoices.usecase'
 
 describe('integration mongodb', () => {
   let composeOptions: IDockerComposeOptions
@@ -125,5 +126,41 @@ describe('integration mongodb', () => {
 
     const inDbInvoices = await invoiceRepository.find()
     expect(inDbInvoices.length).toEqual(1)
+  })
+
+  test('should return all invoices', async () => {
+    const invoiceRepository = dataSource.getRepository(MongoInvoice)
+    const mongoInvoiceRepository = new MongoInvoiceRepository(invoiceRepository)
+    const getAllInvoicesUsecase = new GetAllInvoicesUsecase(mongoInvoiceRepository)
+
+    const mongoInvoiceId = new ObjectId().toString() as any
+    const existingInvoice = invoiceBuilder().withId(mongoInvoiceId)
+
+    await invoiceRepository.save(invoiceToMongoInvoice(existingInvoice.build()))
+
+    const allInvoices = await getAllInvoicesUsecase.handle()
+
+    expect(allInvoices).toEqual([existingInvoice.build()])
+  })
+
+  test('should return all invoices when 2 invoices in db', async () => {
+    const invoiceRepository = dataSource.getRepository(MongoInvoice)
+    const mongoInvoiceRepository = new MongoInvoiceRepository(invoiceRepository)
+    const getAllInvoicesUsecase = new GetAllInvoicesUsecase(mongoInvoiceRepository)
+
+    const existingInvoices = [
+      invoiceBuilder()
+        .withId(new ObjectId().toString() as any)
+        .build(),
+      invoiceBuilder()
+        .withId(new ObjectId().toString() as any)
+        .build(),
+    ]
+
+    await Promise.all(existingInvoices.map(invoice => invoiceRepository.save(invoiceToMongoInvoice(invoice))))
+
+    const allInvoices = await getAllInvoicesUsecase.handle()
+
+    expect(allInvoices).toEqual(existingInvoices)
   })
 })

@@ -1,6 +1,7 @@
 import { Invoice } from '../../../../domain/invoice'
 import { InMemoryInvoiceRepository } from '../../../../infrastructure/in-memory.invoice.repository'
 import { DeleteInvoiceCommand, DeleteInvoiceUsecase } from '../delete-invoice.usecase'
+import { GetAllInvoicesUsecase } from '../get-all-invoices.usecase'
 import { PostInvoiceCommand, PostInvoiceUsecase } from '../post-invoice.usecase'
 import { UpdateInvoiceCommand, UpdateInvoiceUsecase } from '../update-invoice.usecase'
 import { UpdateInvoiceStatusUsecase } from '../update-status.usecase'
@@ -12,10 +13,12 @@ export const createInvoiceFixture = () => {
   const deleteInvoiceUsecase = new DeleteInvoiceUsecase(invoiceRepository)
   const updateInvoiceStatusUsecase = new UpdateInvoiceStatusUsecase(invoiceRepository)
 
+  const getAllInvoicesUsecase = new GetAllInvoicesUsecase(invoiceRepository)
+
   let thrownError: Error
 
   return {
-    givenInvoiceExists: (invoice: Invoice) => {
+    givenInvoiceExists: (invoice: Invoice | Invoice[]) => {
       invoiceRepository.setInvoices(invoice)
     },
     whenUserPostInvoice: async (postInvoiceCommand: PostInvoiceCommand) => {
@@ -42,6 +45,13 @@ export const createInvoiceFixture = () => {
     whenUpdateStatus: async (id: string, status: string) => {
       try {
         await updateInvoiceStatusUsecase.handle(id, status)
+      } catch (error: any) {
+        thrownError = error
+      }
+    },
+    whenGetAllInvoices: async () => {
+      try {
+        return await getAllInvoicesUsecase.handle()
       } catch (error: any) {
         thrownError = error
       }
