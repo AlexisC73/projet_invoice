@@ -1,28 +1,20 @@
 import { Entity, Column, ObjectIdColumn, ObjectID } from 'typeorm'
-import { ROLE } from '../utils'
+import { User } from '../domain/user'
 
 @Entity()
-export class MongoUser implements Omit<User, 'id'> {
+export class MongoUser implements Omit<User['data'], 'id'> {
   @ObjectIdColumn()
   _id: ObjectID
 
+  @Column({ nullable: true })
+  email: string
+
+  @Column({ nullable: true })
+  password: string
+
+  @Column({ default: {} })
+  linkedAccounts: User['data']['linkedAccounts']
+
   @Column()
   googleId: string
-
-  @Column()
-  role: number
-
-  @Column()
-  createdAt: string
-
-  @Column()
-  updatedAt: string
-
-  isModerator(): boolean {
-    return this.role >= ROLE.MODERATOR
-  }
-
-  isAdmin(): boolean {
-    return this.role >= ROLE.ADMIN
-  }
 }

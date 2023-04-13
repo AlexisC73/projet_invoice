@@ -36,7 +36,7 @@
     "start:dev": "nodemon",
     "test:unit": "jest",
     "test": "jest --testMatch=\"**/*.test.ts\"",
-    "test:integration": "jest --testMatch=\"**/*.integration.test.ts\"",
+    "test:integration": "jest --testMatch=\"**/*.integration.test.ts\" --runInBand",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "start": "ts-node src/index.ts",

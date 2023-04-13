@@ -5,6 +5,7 @@ import * as jwt from 'jsonwebtoken'
 export const googleAuth = async (req, res) => {
   try {
     const { id: googleId } = req.user
+    console.log(req.user)
     let fundUser = await userModel.findUserByGoogleId(googleId)
     if (!fundUser) {
       const mongoUser = await createMongoUser(googleId)

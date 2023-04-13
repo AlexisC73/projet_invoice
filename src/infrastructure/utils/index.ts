@@ -1,6 +1,8 @@
 import { ObjectId } from 'mongodb'
 import { Invoice } from '../../domain/invoice'
 import { MongoInvoice } from '../../entity/Invoice'
+import { User } from '../../domain/user'
+import { MongoUser } from '../../entity/User'
 
 export const mongoInvoiceToInvoice = (mongoInvoice: MongoInvoice): Invoice => {
   return Invoice.fromData({
@@ -32,4 +34,22 @@ export const invoiceToMongoInvoice = (invoice: Invoice): MongoInvoice => {
   mongoInvoice.products = invoice.data.products
   mongoInvoice._id = new ObjectId(invoice.data.id) as any
   return mongoInvoice
+}
+
+export const mongoUserToUser = (mongoUser: MongoUser): User => {
+  return User.fromData({
+    id: mongoUser._id.toString(),
+    email: mongoUser.email,
+    password: mongoUser.password,
+    linkedAccounts: mongoUser.linkedAccounts,
+  })
+}
+
+export const userToMongoUser = (user: User): MongoUser => {
+  const mongoUser = new MongoUser()
+  mongoUser.email = user.data.email
+  mongoUser.password = user.data.password
+  mongoUser.linkedAccounts = user.data.linkedAccounts
+  mongoUser._id = new ObjectId(user.data.id) as any
+  return mongoUser
 }
