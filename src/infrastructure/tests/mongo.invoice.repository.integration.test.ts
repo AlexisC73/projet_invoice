@@ -5,7 +5,7 @@ import { PostInvoiceCommand, PostInvoiceUsecase } from '../../application/invoic
 import { invoiceBuilder } from '../../domain/invoice/tests/invoiceBuilder'
 import { ObjectId } from 'mongodb'
 import { MongoInvoiceRepository } from '../mongo.invoice.repository'
-import { invoiceToMongoInvoice, mongoInvoiceToInvoice } from '../utils'
+import { invoiceToMongoInvoice, mongoInvoiceToInvoice, userToMongoUser } from '../utils'
 import DockerCompose, { IDockerComposeOptions } from 'docker-compose'
 import { UpdateInvoiceUsecase } from '../../application/invoice/usecase/update-invoice.usecase'
 import { DeleteInvoiceUsecase } from '../../application/invoice/usecase/delete-invoice.usecase'
@@ -14,6 +14,9 @@ import { GetAllInvoicesUsecase } from '../../application/invoice/usecase/get-all
 import { GetOneInvoiceUsecase } from '../../application/invoice/usecase/get-one-usecase'
 import { JWTTokenService } from '../jwt-token-service'
 import { Token } from '../../application/token-service'
+import { MongoUserRepository } from '../mongo-user.repository'
+import { MongoUser } from '../../entity/User'
+import { userBuilder } from '../../domain/user/tests/userBuilder'
 
 describe('integration mongodb', () => {
   let composeOptions: IDockerComposeOptions
@@ -32,7 +35,7 @@ describe('integration mongodb', () => {
       database: 'invoice',
       synchronize: true,
       logging: true,
-      entities: [MongoInvoice],
+      entities: [MongoInvoice, MongoUser],
       useUnifiedTopology: true,
       dropSchema: true,
     })
@@ -59,7 +62,7 @@ describe('integration mongodb', () => {
 
     const invoiceToSave = invoiceBuilder().withId(mongoInvoiceId).build()
 
-    const fakeToken: Token = { id: 'fake-user-token' }
+    const fakeToken: Token = { id: 'fake-user-token', role: 300 }
 
     const postInvoiceCommand: PostInvoiceCommand = {
       id: invoiceToSave.id,
@@ -139,14 +142,21 @@ describe('integration mongodb', () => {
   test('should return all invoices', async () => {
     const invoiceRepository = dataSource.getRepository(MongoInvoice)
     const mongoInvoiceRepository = new MongoInvoiceRepository(invoiceRepository)
-    const getAllInvoicesUsecase = new GetAllInvoicesUsecase(mongoInvoiceRepository)
+    const tokenService = new JWTTokenService('secret')
+    const userRepository = dataSource.getRepository(MongoUser)
+    const mongoUserRepository = new MongoUserRepository(userRepository)
+    const getAllInvoicesUsecase = new GetAllInvoicesUsecase(mongoInvoiceRepository, tokenService, mongoUserRepository)
+
+    const userId = new ObjectId().toString() as any
+    const user = userBuilder().withId(userId).withRole(300).buildGoogleUser()
+    await userRepository.save(userToMongoUser(user))
 
     const mongoInvoiceId = new ObjectId().toString() as any
-    const existingInvoice = invoiceBuilder().withId(mongoInvoiceId)
+    const existingInvoice = invoiceBuilder().withId(mongoInvoiceId).withOwner(userId)
 
     await invoiceRepository.save(invoiceToMongoInvoice(existingInvoice.build()))
 
-    const allInvoices = await getAllInvoicesUsecase.handle()
+    const allInvoices = await getAllInvoicesUsecase.handle(tokenService.createConnectToken({ id: userId, role: 300 }))
 
     expect(allInvoices).toEqual([existingInvoice.build()].map(invoice => invoice.data))
   })
@@ -154,22 +164,61 @@ describe('integration mongodb', () => {
   test('should return all invoices when 2 invoices in db', async () => {
     const invoiceRepository = dataSource.getRepository(MongoInvoice)
     const mongoInvoiceRepository = new MongoInvoiceRepository(invoiceRepository)
-    const getAllInvoicesUsecase = new GetAllInvoicesUsecase(mongoInvoiceRepository)
+    const tokenService = new JWTTokenService('secret')
+    const userRepository = dataSource.getRepository(MongoUser)
+    const mongoUserRepository = new MongoUserRepository(userRepository)
+    const getAllInvoicesUsecase = new GetAllInvoicesUsecase(mongoInvoiceRepository, tokenService, mongoUserRepository)
+
+    const userId = new ObjectId().toString() as any
+    const user = userBuilder().withId(userId).withRole(300).buildGoogleUser()
+    await userRepository.save(userToMongoUser(user))
 
     const existingInvoices = [
       invoiceBuilder()
         .withId(new ObjectId().toString() as any)
+        .withOwner(userId)
         .build(),
       invoiceBuilder()
         .withId(new ObjectId().toString() as any)
+        .withOwner(userId)
         .build(),
     ]
 
     await Promise.all(existingInvoices.map(invoice => invoiceRepository.save(invoiceToMongoInvoice(invoice))))
 
-    const allInvoices = await getAllInvoicesUsecase.handle()
+    const allInvoices = await getAllInvoicesUsecase.handle(tokenService.createConnectToken({ id: userId, role: 300 }))
 
     expect(allInvoices).toEqual(existingInvoices.map(invoice => invoice.data))
+  })
+
+  test('should thrown if user do not have moderator role (200 or more)', async () => {
+    const invoiceRepository = dataSource.getRepository(MongoInvoice)
+    const mongoInvoiceRepository = new MongoInvoiceRepository(invoiceRepository)
+    const tokenService = new JWTTokenService('secret')
+    const userRepository = dataSource.getRepository(MongoUser)
+    const mongoUserRepository = new MongoUserRepository(userRepository)
+    const getAllInvoicesUsecase = new GetAllInvoicesUsecase(mongoInvoiceRepository, tokenService, mongoUserRepository)
+
+    const userId = new ObjectId().toString() as any
+    const user = userBuilder().withId(userId).withRole(100).buildGoogleUser()
+    await userRepository.save(userToMongoUser(user))
+
+    const existingInvoices = [
+      invoiceBuilder()
+        .withId(new ObjectId().toString() as any)
+        .withOwner(userId)
+        .build(),
+      invoiceBuilder()
+        .withId(new ObjectId().toString() as any)
+        .withOwner(userId)
+        .build(),
+    ]
+
+    await Promise.all(existingInvoices.map(invoice => invoiceRepository.save(invoiceToMongoInvoice(invoice))))
+
+    const allInvoices = getAllInvoicesUsecase.handle(tokenService.createConnectToken({ id: userId, role: 100 }))
+
+    await expect(allInvoices).rejects.toThrow('Unauthorized')
   })
 
   test('should return expected invoice when multiple invoices in db', async () => {

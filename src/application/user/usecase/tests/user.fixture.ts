@@ -19,8 +19,8 @@ export const createUserFixture = () => {
     givenUserExist: (user: User[]) => {
       userRepository.setUser(user)
     },
-    givenUserIsLoggedIn: (id: string) => {
-      connectToken = tokenService.createConnectToken({ id })
+    givenUserIsLoggedIn: ({ id, role }: { id: string; role: number }) => {
+      connectToken = tokenService.createConnectToken({ id, role })
     },
     whenUserSignupWithGoogle: async (params: { id: string; googleId: string }) => {
       try {
@@ -41,13 +41,15 @@ export const createUserFixture = () => {
         thrownError = err
       }
     },
-    thenUserShouldBe: (expected: User) => {
-      expect(userRepository.findOneById(expected.id).data).toEqual(expected.data)
+    thenUserShouldBe: async (expected: User) => {
+      expect((await userRepository.findOneById(expected.id)).data).toEqual(expected.data)
     },
     thenConnectedTokenShouldBe: (expected: Token) => {
       expect(tokenService.decode(connectToken)).toEqual(expect.objectContaining(expected))
     },
     getToken: () => connectToken,
+    getUserRepository: () => userRepository,
+    getInvoiceRepository: () => userRepository,
   }
 }
 

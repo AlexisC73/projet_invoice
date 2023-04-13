@@ -5,4 +5,5 @@ export interface TokenService {
 
 export type Token = {
   id: string
+  role: number
 }

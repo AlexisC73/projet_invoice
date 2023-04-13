@@ -16,6 +16,6 @@ describe('user connect with google account', () => {
         .buildGoogleUser(),
     ])
     await fixture.whenUserConnectWithGoogle({ googleId: 'google-id' })
-    fixture.thenConnectedTokenShouldBe({ id: 'test-id' })
+    fixture.thenConnectedTokenShouldBe({ id: 'test-id', role: 100 })
   })
 })

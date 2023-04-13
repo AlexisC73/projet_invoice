@@ -1,10 +1,21 @@
 import { Invoice } from '../../../domain/invoice'
 import { InvoiceRepository } from '../../invoice.repository'
+import { Token, TokenService } from '../../token-service'
+import { UserRepository } from '../../user.repository'
 
 export class GetAllInvoicesUsecase {
-  constructor(private invoiceRepository: InvoiceRepository) {}
+  constructor(
+    private readonly invoiceRepository: InvoiceRepository,
+    private readonly tokenService: TokenService,
+    private readonly userRepository: UserRepository
+  ) {}
 
-  async handle(): Promise<Invoice['data'][]> {
+  async handle(userToken: string): Promise<Invoice['data'][]> {
+    const token: Token = this.tokenService.decode(userToken)
+    const user = await this.userRepository.findOneById(token.id)
+    if (!user || user.role < 200) {
+      throw new Error('Unauthorized')
+    }
     const invoices = await this.invoiceRepository.getAll()
     return invoices.map(invoice => invoice.data)
   }

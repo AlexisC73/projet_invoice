@@ -15,6 +15,9 @@ export class MongoUser implements Omit<User['data'], 'id'> {
   @Column({ default: {} })
   linkedAccounts: User['data']['linkedAccounts']
 
+  @Column({ default: 100 })
+  role: number
+
   @Column()
   googleId: string
 }

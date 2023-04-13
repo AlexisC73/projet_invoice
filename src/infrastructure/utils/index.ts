@@ -41,6 +41,7 @@ export const mongoUserToUser = (mongoUser: MongoUser): User => {
     id: mongoUser._id.toString(),
     email: mongoUser.email,
     password: mongoUser.password,
+    role: mongoUser.role,
     linkedAccounts: mongoUser.linkedAccounts,
   })
 }
@@ -50,6 +51,7 @@ export const userToMongoUser = (user: User): MongoUser => {
   mongoUser.email = user.data.email
   mongoUser.password = user.data.password
   mongoUser.linkedAccounts = user.data.linkedAccounts
+  mongoUser.role = user.data.role
   mongoUser._id = new ObjectId(user.data.id) as any
   return mongoUser
 }

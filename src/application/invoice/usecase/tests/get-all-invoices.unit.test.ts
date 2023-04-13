@@ -1,11 +1,17 @@
 import { invoiceBuilder } from '../../../../domain/invoice/tests/invoiceBuilder'
+import { userBuilder } from '../../../../domain/user/tests/userBuilder'
+import { UserFixture, createUserFixture } from '../../../user/usecase/tests/user.fixture'
 import { InvoiceFixture, createInvoiceFixture } from './invoice.fixture'
 
 describe('get all invoices', () => {
-  let fixture: InvoiceFixture
+  let invoiceFixture: InvoiceFixture
+  let userFixture: UserFixture
 
   beforeEach(() => {
-    fixture = createInvoiceFixture()
+    userFixture = createUserFixture()
+    invoiceFixture = createInvoiceFixture({
+      userRepository: userFixture.getUserRepository(),
+    })
   })
 
   test('should return all invoices', async () => {
@@ -15,9 +21,13 @@ describe('get all invoices', () => {
       invoiceBuilder().withId('test-3').build(),
     ]
 
-    fixture.givenInvoiceExists(invoices)
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(200).buildGoogleUser()])
 
-    const allInvoices = await fixture.whenGetAllInvoices()
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 200 })
+
+    invoiceFixture.givenInvoiceExists(invoices)
+
+    const allInvoices = await invoiceFixture.whenGetAllInvoices(userFixture.getToken())
 
     expect(allInvoices).toEqual(invoices.map(invoice => invoice.data))
   })

@@ -9,6 +9,7 @@ export class User {
     private readonly _id: string,
     private readonly _email: string,
     private readonly _password: string,
+    private readonly _role: number,
     private readonly _linkedAccounts: LinkedAccounts
   ) {}
 
@@ -24,6 +25,10 @@ export class User {
     return this._password
   }
 
+  get role() {
+    return this._role
+  }
+
   get linkedAccounts() {
     return this._linkedAccounts
   }
@@ -33,19 +38,20 @@ export class User {
       id: this.id,
       email: this.email,
       password: this.password,
+      role: this.role,
       linkedAccounts: this.linkedAccounts,
     }
   }
 
-  static fromEmailPassword(id: string, email: string, password: string) {
-    return new User(id, email, password, {})
+  static fromEmailPassword(id: string, email: string, password: string, role: number) {
+    return new User(id, email, password, role, {})
   }
 
-  static fromGoogle(id: string, googleId: string) {
-    return new User(id, null, null, { google: { id: googleId } })
+  static fromGoogle(id: string, googleId: string, role: number) {
+    return new User(id, null, null, role, { google: { id: googleId } })
   }
 
   static fromData(data: User['data']) {
-    return new User(data.id, data.email, data.password, data.linkedAccounts)
+    return new User(data.id, data.email, data.password, data.role, data.linkedAccounts)
   }
 }

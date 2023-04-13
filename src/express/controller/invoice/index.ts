@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 import { PostInvoiceUsecase } from '../../../application/invoice/usecase/post-invoice.usecase'
-import { invoiceRepository, tokenService } from '../../../config'
+import { invoiceRepository, tokenService, userRepository } from '../../../config'
 import { UpdateInvoiceStatusUsecase } from '../../../application/invoice/usecase/update-status.usecase'
 import { UpdateInvoiceUsecase } from '../../../application/invoice/usecase/update-invoice.usecase'
 import { DeleteInvoiceUsecase } from '../../../application/invoice/usecase/delete-invoice.usecase'
@@ -46,13 +46,13 @@ export const removeInvoice = async (req, res) => {
 }
 
 export const getAll = async (req, res) => {
-  const getAllInvoiceUsecase = new GetAllInvoicesUsecase(invoiceRepository)
+  const getAllInvoiceUsecase = new GetAllInvoicesUsecase(invoiceRepository, tokenService, userRepository)
   try {
-    const result = await getAllInvoiceUsecase.handle()
+    const result = await getAllInvoiceUsecase.handle(req.token)
     res.status(200).send(result)
   } catch (error) {
     console.log(error)
-    res.status(500).send(error)
+    res.status(500).send(error.message)
   }
 }
 

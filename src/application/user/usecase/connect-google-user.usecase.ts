@@ -9,7 +9,7 @@ export class ConnectGoogleUserUsecase {
     if (!user) {
       throw new Error("User don't exist")
     }
-    const token = this.tokenService.createConnectToken({ id: user.id })
+    const token = this.tokenService.createConnectToken({ id: user.id, role: user.role })
     return token
   }
 }
