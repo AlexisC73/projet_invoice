@@ -1,5 +1,6 @@
 import { invoiceBuilder } from '../../../../domain/invoice/tests/invoiceBuilder'
 import { userBuilder } from '../../../../domain/user/tests/userBuilder'
+import { RoleError } from '../../../errors'
 import { UserFixture, createUserFixture } from '../../../user/usecase/tests/user.fixture'
 import { InvoiceFixture, createInvoiceFixture } from './invoice.fixture'
 
@@ -30,5 +31,23 @@ describe('get all invoices', () => {
     const allInvoices = await invoiceFixture.whenGetAllInvoices(userFixture.getToken())
 
     expect(allInvoices).toEqual(invoices.map(invoice => invoice.data))
+  })
+
+  test('should return all invoices', async () => {
+    const invoices = [
+      invoiceBuilder().build(),
+      invoiceBuilder().withId('test-2').build(),
+      invoiceBuilder().withId('test-3').build(),
+    ]
+
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(100).buildGoogleUser()])
+
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 100 })
+
+    invoiceFixture.givenInvoiceExists(invoices)
+
+    const allInvoices = await invoiceFixture.whenGetAllInvoices(userFixture.getToken())
+
+    invoiceFixture.thenErrorShouldBe(RoleError)
   })
 })

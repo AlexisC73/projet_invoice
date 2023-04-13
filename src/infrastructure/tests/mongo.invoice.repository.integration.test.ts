@@ -17,6 +17,7 @@ import { Token } from '../../application/token-service'
 import { MongoUserRepository } from '../mongo-user.repository'
 import { MongoUser } from '../../entity/User'
 import { userBuilder } from '../../domain/user/tests/userBuilder'
+import { RoleError, TooLongError } from '../../application/errors'
 
 describe('integration mongodb', () => {
   let composeOptions: IDockerComposeOptions
@@ -189,36 +190,6 @@ describe('integration mongodb', () => {
     const allInvoices = await getAllInvoicesUsecase.handle(tokenService.createConnectToken({ id: userId, role: 300 }))
 
     expect(allInvoices).toEqual(existingInvoices.map(invoice => invoice.data))
-  })
-
-  test('should thrown if user do not have moderator role (200 or more)', async () => {
-    const invoiceRepository = dataSource.getRepository(MongoInvoice)
-    const mongoInvoiceRepository = new MongoInvoiceRepository(invoiceRepository)
-    const tokenService = new JWTTokenService('secret')
-    const userRepository = dataSource.getRepository(MongoUser)
-    const mongoUserRepository = new MongoUserRepository(userRepository)
-    const getAllInvoicesUsecase = new GetAllInvoicesUsecase(mongoInvoiceRepository, tokenService, mongoUserRepository)
-
-    const userId = new ObjectId().toString() as any
-    const user = userBuilder().withId(userId).withRole(100).buildGoogleUser()
-    await userRepository.save(userToMongoUser(user))
-
-    const existingInvoices = [
-      invoiceBuilder()
-        .withId(new ObjectId().toString() as any)
-        .withOwner(userId)
-        .build(),
-      invoiceBuilder()
-        .withId(new ObjectId().toString() as any)
-        .withOwner(userId)
-        .build(),
-    ]
-
-    await Promise.all(existingInvoices.map(invoice => invoiceRepository.save(invoiceToMongoInvoice(invoice))))
-
-    const allInvoices = getAllInvoicesUsecase.handle(tokenService.createConnectToken({ id: userId, role: 100 }))
-
-    await expect(allInvoices).rejects.toThrow('Unauthorized')
   })
 
   test('should return expected invoice when multiple invoices in db', async () => {

@@ -39,3 +39,10 @@ export class NotFoundError extends Error {
     this.name = 'NotFoundError'
   }
 }
+
+export class RoleError extends Error {
+  constructor(message?: string) {
+    super(message ?? 'Invalid persmission')
+    this.name = 'RoleError'
+  }
+}
