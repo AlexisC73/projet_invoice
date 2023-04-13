@@ -83,7 +83,7 @@ describe('integration mongodb', () => {
       googleId: 'google-id',
     })
 
-    expect(tokenService.decodeConnectToken(token)).toEqual(expect.objectContaining({ id: userId }))
+    expect(tokenService.decode(token)).toEqual(expect.objectContaining({ id: userId }))
 
     const inDbInvoices = await userRepository.find()
     expect(inDbInvoices.length).toEqual(1)

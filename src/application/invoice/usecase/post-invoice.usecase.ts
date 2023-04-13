@@ -7,7 +7,6 @@ export class PostInvoiceUsecase {
 
   async handle(postInvoiceCommand: PostInvoiceCommand, token: string): Promise<void> {
     const currentUser: Token = this.tokenService.decode(token)
-    console.log(currentUser)
     const invoice: Invoice = Invoice.fromData({
       id: postInvoiceCommand.id,
       date: postInvoiceCommand.date,

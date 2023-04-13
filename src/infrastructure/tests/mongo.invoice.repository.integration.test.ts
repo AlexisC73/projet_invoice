@@ -12,6 +12,8 @@ import { DeleteInvoiceUsecase } from '../../application/invoice/usecase/delete-i
 import { UpdateInvoiceStatusUsecase } from '../../application/invoice/usecase/update-status.usecase'
 import { GetAllInvoicesUsecase } from '../../application/invoice/usecase/get-all-invoices.usecase'
 import { GetOneInvoiceUsecase } from '../../application/invoice/usecase/get-one-usecase'
+import { JWTTokenService } from '../jwt-token-service'
+import { Token } from '../../application/token-service'
 
 describe('integration mongodb', () => {
   let composeOptions: IDockerComposeOptions
@@ -47,28 +49,33 @@ describe('integration mongodb', () => {
 
   test('should save invoice', async () => {
     const invoiceRepository = dataSource.getRepository(MongoInvoice)
+    const tokenService = new JWTTokenService('secret')
     const mongoInvoiceRepository = new MongoInvoiceRepository(invoiceRepository)
-    const postInvoiceUsecase = new PostInvoiceUsecase(mongoInvoiceRepository)
+    const postInvoiceUsecase = new PostInvoiceUsecase(mongoInvoiceRepository, tokenService)
 
     const mongoInvoiceId = new ObjectId().toString() as any
+
+    const fakeInvoice = invoiceBuilder().withId(mongoInvoiceId)
+
     const invoiceToSave = invoiceBuilder().withId(mongoInvoiceId).build()
+
+    const fakeToken: Token = { id: 'fake-user-token' }
 
     const postInvoiceCommand: PostInvoiceCommand = {
       id: invoiceToSave.id,
       buyer: invoiceToSave.buyer,
       contact: invoiceToSave.contact,
       products: invoiceToSave.products,
-      owner: invoiceToSave.owner,
       sender: invoiceToSave.sender,
       date: invoiceToSave.date,
       dueDate: invoiceToSave.dueDate,
       description: invoiceToSave.description,
     }
 
-    await postInvoiceUsecase.handle(postInvoiceCommand)
+    await postInvoiceUsecase.handle(postInvoiceCommand, tokenService.createConnectToken(fakeToken))
 
     const inDbInvoice = await invoiceRepository.findOne({ where: { _id: new ObjectId(mongoInvoiceId) as any } })
-    expect(invoiceToSave.data).toEqual(mongoInvoiceToInvoice(inDbInvoice).data)
+    expect(mongoInvoiceToInvoice(inDbInvoice).data).toEqual(fakeInvoice.withOwner('fake-user-token').build().data)
 
     const inDbInvoices = await invoiceRepository.find()
     expect(inDbInvoices.length).toEqual(1)
@@ -141,7 +148,7 @@ describe('integration mongodb', () => {
 
     const allInvoices = await getAllInvoicesUsecase.handle()
 
-    expect(allInvoices).toEqual([existingInvoice.build()])
+    expect(allInvoices).toEqual([existingInvoice.build()].map(invoice => invoice.data))
   })
 
   test('should return all invoices when 2 invoices in db', async () => {
@@ -162,7 +169,7 @@ describe('integration mongodb', () => {
 
     const allInvoices = await getAllInvoicesUsecase.handle()
 
-    expect(allInvoices).toEqual(existingInvoices)
+    expect(allInvoices).toEqual(existingInvoices.map(invoice => invoice.data))
   })
 
   test('should return expected invoice when multiple invoices in db', async () => {
@@ -183,6 +190,6 @@ describe('integration mongodb', () => {
 
     const fundInvoice = await getOneInvoiceUsecase.handle(idToFind)
 
-    expect(fundInvoice).toEqual(invoiceBuilder().withId(idToFind).build())
+    expect(fundInvoice).toEqual(invoiceBuilder().withId(idToFind).build().data)
   })
 })
