@@ -10,6 +10,7 @@ export const isLoggedIn = async (req, res, next) => {
     const token = req.cookies.token
     const decoded = tokenService.verifyConnectToken(token)
     req.currentUser = decoded
+    req.token = req.cookies.token
     next()
   } catch (error) {
     res.status(401).json({ error: error.message })
