@@ -12,7 +12,7 @@ export class JWTTokenService implements TokenService {
     return decoded
   }
 
-  decodeConnectToken(token: string): Token {
+  decode(token: string): Token {
     const decoded = jwt.decode(token) as Token
     return decoded
   }

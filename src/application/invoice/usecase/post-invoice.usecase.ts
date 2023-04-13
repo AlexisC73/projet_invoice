@@ -1,10 +1,13 @@
 import { Address, Invoice, Product } from '../../../domain/invoice'
 import { InvoiceRepository } from '../../invoice.repository'
+import { Token, TokenService } from '../../token-service'
 
 export class PostInvoiceUsecase {
-  constructor(private invoiceRepository: InvoiceRepository) {}
+  constructor(private invoiceRepository: InvoiceRepository, private readonly tokenService: TokenService) {}
 
-  async handle(postInvoiceCommand: PostInvoiceCommand): Promise<void> {
+  async handle(postInvoiceCommand: PostInvoiceCommand, token: string): Promise<void> {
+    const currentUser: Token = this.tokenService.decode(token)
+    console.log(currentUser)
     const invoice: Invoice = Invoice.fromData({
       id: postInvoiceCommand.id,
       date: postInvoiceCommand.date,
@@ -13,7 +16,7 @@ export class PostInvoiceUsecase {
       currency: postInvoiceCommand.currency ?? 'USD',
       status: 'pending',
       contact: postInvoiceCommand.contact,
-      owner: postInvoiceCommand.owner,
+      owner: currentUser.id,
       sender: postInvoiceCommand.sender,
       buyer: {
         name: postInvoiceCommand.buyer.name,
@@ -33,7 +36,6 @@ export type PostInvoiceCommand = {
   description: string
   currency?: string
   contact: string
-  owner: string
   sender: Address['data']
   buyer: {
     name: string

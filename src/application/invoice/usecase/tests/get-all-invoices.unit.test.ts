@@ -19,6 +19,6 @@ describe('get all invoices', () => {
 
     const allInvoices = await fixture.whenGetAllInvoices()
 
-    expect(allInvoices).toEqual(invoices)
+    expect(allInvoices).toEqual(invoices.map(invoice => invoice.data))
   })
 })

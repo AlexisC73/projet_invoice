@@ -1,20 +1,31 @@
-import * as userModel from '../../model/user'
-import { createMongoUser } from '../../../utils'
-import * as jwt from 'jsonwebtoken'
+import { ConnectGoogleUserUsecase } from '../../../application/user/usecase/connect-google-user.usecase'
+import { MongoUserRepository } from '../../../infrastructure/mongo-user.repository'
+import { MongoUser } from '../../../entity/User'
+import { AppDataSource } from '../../../data-source'
+import { JWTTokenService } from '../../../infrastructure/jwt-token-service'
+import { CreateGoogleUserUsecase } from '../../../application/user/usecase/create-google-user.usecase'
+import { ObjectId } from 'mongodb'
+import { User } from '../../../domain/user'
 
 export const googleAuth = async (req, res) => {
+  const typeormUserRepository = AppDataSource.getRepository(MongoUser)
+  const userRepository = new MongoUserRepository(typeormUserRepository)
+  const jwtTokenService = new JWTTokenService(process.env.JWT_SECRET)
+  const createGoogleUser = new CreateGoogleUserUsecase(userRepository)
+  const connectGoogleUserUsecase = new ConnectGoogleUserUsecase(userRepository, jwtTokenService)
+
   try {
     const { id: googleId } = req.user
-    console.log(req.user)
-    let fundUser = await userModel.findUserByGoogleId(googleId)
-    if (!fundUser) {
-      const mongoUser = await createMongoUser(googleId)
-      fundUser = await userModel.saveMongoUser(mongoUser)
+    const existUser = await userRepository.findOneByGoogleId(googleId)
+
+    if (!existUser) {
+      await createGoogleUser.handle({
+        googleId,
+        id: new ObjectId().toString() as any,
+      })
     }
-    const token = jwt.sign({ googleId: fundUser.googleId, role: fundUser.role }, process.env.JWT_SECRET, {
-      expiresIn: '1d',
-    })
-    res.cookie('token', token, { httpOnly: true })
+    const token = await connectGoogleUserUsecase.handle({ googleId })
+    await res.cookie('token', token, { httpOnly: true })
     const redirectLink =
       process.env.NODE_ENV === 'production' ? 'https://invoice.alexis-comte.com' : 'http://localhost:3000'
     res.redirect(redirectLink + '/login/?connected=true')
@@ -25,9 +36,11 @@ export const googleAuth = async (req, res) => {
 
 export const getMe = async (req, res) => {
   try {
-    const { googleId } = req.user
-    const fundUser = await userModel.findUserByGoogleId(googleId)
-    res.status(200).json({ googleId: fundUser.googleId, role: fundUser.role, photo: req.user.photos[0].value })
+    if (!req.currentUser) {
+      throw new Error("You're not logged in")
+    }
+    const { id } = req.currentUser as User['data']
+    res.status(200).json({ id })
   } catch (error) {
     throw error
   }

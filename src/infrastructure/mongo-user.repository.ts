@@ -21,7 +21,7 @@ export class MongoUserRepository implements UserRepository {
       },
     })
     if (!user) {
-      throw new Error("User don't exist")
+      return null
     }
     return User.fromData({ ...user, id: user._id.toString() })
   }

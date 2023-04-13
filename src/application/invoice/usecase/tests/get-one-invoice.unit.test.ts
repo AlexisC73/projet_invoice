@@ -19,6 +19,6 @@ describe('get all invoices', () => {
 
     const fundInvoice = await fixture.whenGetOneInvoice('test-2')
 
-    expect(fundInvoice).toEqual(invoiceBuilder().withId('test-2').build())
+    expect(fundInvoice).toEqual(invoiceBuilder().withId('test-2').build().data)
   })
 })

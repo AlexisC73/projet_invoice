@@ -4,11 +4,11 @@ import { isLoggedIn } from '../../middleware/auth'
 
 const router = Router()
 
-router.post('/', invoiceCtrl.add)
-router.delete('/:id', invoiceCtrl.removeInvoice)
-router.get('/:id', invoiceCtrl.getOneById)
-router.put('/:id', invoiceCtrl.updateInvoice)
-router.put('/status/:id', invoiceCtrl.updateStatus)
-router.get('/', invoiceCtrl.getAll)
+router.post('/', isLoggedIn, invoiceCtrl.add)
+router.delete('/:id', isLoggedIn, invoiceCtrl.removeInvoice)
+router.get('/:id', isLoggedIn, invoiceCtrl.getOneById)
+router.put('/:id', isLoggedIn, invoiceCtrl.updateInvoice)
+router.put('/status/:id', isLoggedIn, invoiceCtrl.updateStatus)
+router.get('/', isLoggedIn, invoiceCtrl.getAll)
 
 export default router

@@ -19,6 +19,9 @@ export const createUserFixture = () => {
     givenUserExist: (user: User[]) => {
       userRepository.setUser(user)
     },
+    givenUserIsLoggedIn: (id: string) => {
+      connectToken = tokenService.createConnectToken({ id })
+    },
     whenUserSignupWithGoogle: async (params: { id: string; googleId: string }) => {
       try {
         await createGoogleUserUsecase.handle({
@@ -42,8 +45,9 @@ export const createUserFixture = () => {
       expect(userRepository.findOneById(expected.id).data).toEqual(expected.data)
     },
     thenConnectedTokenShouldBe: (expected: Token) => {
-      expect(tokenService.decodeConnectToken(connectToken)).toEqual(expect.objectContaining(expected))
+      expect(tokenService.decode(connectToken)).toEqual(expect.objectContaining(expected))
     },
+    getToken: () => connectToken,
   }
 }
 

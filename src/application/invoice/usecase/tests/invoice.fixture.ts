@@ -1,5 +1,6 @@
 import { Invoice } from '../../../../domain/invoice'
 import { InMemoryInvoiceRepository } from '../../../../infrastructure/in-memory.invoice.repository'
+import { JWTTokenService } from '../../../../infrastructure/jwt-token-service'
 import { DeleteInvoiceCommand, DeleteInvoiceUsecase } from '../delete-invoice.usecase'
 import { GetAllInvoicesUsecase } from '../get-all-invoices.usecase'
 import { GetOneInvoiceUsecase } from '../get-one-usecase'
@@ -9,7 +10,8 @@ import { UpdateInvoiceStatusUsecase } from '../update-status.usecase'
 
 export const createInvoiceFixture = () => {
   const invoiceRepository = new InMemoryInvoiceRepository()
-  const postInvoiceUsecase = new PostInvoiceUsecase(invoiceRepository)
+  const tokenService = new JWTTokenService('secret')
+  const postInvoiceUsecase = new PostInvoiceUsecase(invoiceRepository, tokenService)
   const updateInvoiceUsecase = new UpdateInvoiceUsecase(invoiceRepository)
   const deleteInvoiceUsecase = new DeleteInvoiceUsecase(invoiceRepository)
   const updateInvoiceStatusUsecase = new UpdateInvoiceStatusUsecase(invoiceRepository)
@@ -23,9 +25,9 @@ export const createInvoiceFixture = () => {
     givenInvoiceExists: (invoice: Invoice | Invoice[]) => {
       invoiceRepository.setInvoices(invoice)
     },
-    whenUserPostInvoice: async (postInvoiceCommand: PostInvoiceCommand) => {
+    whenUserPostInvoice: async (postInvoiceCommand: PostInvoiceCommand, token: string) => {
       try {
-        await postInvoiceUsecase.handle(postInvoiceCommand)
+        await postInvoiceUsecase.handle(postInvoiceCommand, token)
       } catch (error: any) {
         thrownError = error
       }
@@ -67,6 +69,7 @@ export const createInvoiceFixture = () => {
     },
     thenInvoiceShouldBe: async (expectedInvoice: Invoice) => {
       const savedInvoice = await invoiceRepository.findById(expectedInvoice.id)
+      expect(true).toBe(true)
       expect(savedInvoice.data).toEqual(expectedInvoice.data)
     },
     thenErrorShouldBe: (expectedError: new () => Error) => {

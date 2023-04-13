@@ -1,22 +1,16 @@
-import * as jwt from 'jsonwebtoken'
-import { findUserByGoogleId } from '../../model/user'
-import { mongoUserToUser } from '../../../utils'
+import { JWTTokenService } from '../../../infrastructure/jwt-token-service'
 
 export const isLoggedIn = async (req, res, next) => {
+  const tokenService = new JWTTokenService(process.env.JWT_SECRET)
+
   try {
     if (!req.cookies.token || !req.user || !req.user.id) {
       throw new Error("You're not logged in")
     }
     const token = req.cookies.token
-    const { id } = req.user
-    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-      if (err || decoded.googleId !== id) {
-        throw new Error("You're not logged in")
-      }
-      const user = mongoUserToUser(await findUserByGoogleId(id))
-      req.user = { ...req.user, ...user }
-      next()
-    })
+    const decoded = tokenService.verifyConnectToken(token)
+    req.currentUser = decoded
+    next()
   } catch (error) {
     res.status(401).json({ error: error.message })
   }
