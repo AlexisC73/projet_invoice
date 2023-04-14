@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { PostInvoiceUsecase } from '../../../application/invoice/usecase/post-invoice.usecase'
+import { PostInvoiceCommand, PostInvoiceUsecase } from '../../../application/invoice/usecase/post-invoice.usecase'
 import { invoiceRepository, tokenService, userRepository } from '../../../config'
 import { UpdateInvoiceStatusUsecase } from '../../../application/invoice/usecase/update-status.usecase'
 import { UpdateInvoiceUsecase } from '../../../application/invoice/usecase/update-invoice.usecase'
@@ -80,7 +80,14 @@ export const add = async (req, res) => {
   const postInvoiceUsecase = new PostInvoiceUsecase(invoiceRepository, tokenService)
   try {
     const { invoice }: { invoice: Invoice['data'] } = req.body
-    await postInvoiceUsecase.handle({ ...invoice, id: new ObjectId().toString() as any }, req.token)
+    const postInvoiceCommand: PostInvoiceCommand = {
+      ...invoice,
+      id: new ObjectId().toString() as any,
+    }
+    if (!!invoice.status && invoice.status === 'draft') {
+      postInvoiceCommand.saveAsDraft = true
+    }
+    await postInvoiceUsecase.handle(postInvoiceCommand, req.token)
     res.status(201).send()
   } catch (error) {
     res.status(500).send('Une erreur est survenue sur le server.' + error.message)

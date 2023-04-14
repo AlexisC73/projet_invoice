@@ -22,6 +22,17 @@ describe('Post Invoice', () => {
     invoiceFixture.thenInvoiceShouldBe(invoiceBuilder().withOwner('user-id').build())
   })
 
+  test('should post new Invoice with draft status', async () => {
+    userFixture.givenUserIsLoggedIn({ id: 'user-id', role: ROLE.USER })
+
+    await invoiceFixture.whenUserPostInvoice(
+      { ...invoiceBuilder().getProps(), saveAsDraft: true },
+      userFixture.getToken()
+    )
+
+    invoiceFixture.thenInvoiceShouldBe(invoiceBuilder().withStatus('draft').withOwner('user-id').build())
+  })
+
   test('should post new invoice with product', async () => {
     userFixture.givenUserIsLoggedIn({ id: 'user-id', role: ROLE.USER })
 

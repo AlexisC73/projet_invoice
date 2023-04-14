@@ -13,7 +13,7 @@ export class PostInvoiceUsecase {
       dueDate: postInvoiceCommand.dueDate,
       description: postInvoiceCommand.description,
       currency: postInvoiceCommand.currency ?? 'USD',
-      status: 'pending',
+      status: postInvoiceCommand.saveAsDraft ? 'draft' : 'pending',
       contact: postInvoiceCommand.contact,
       owner: currentUser.id,
       sender: postInvoiceCommand.sender,
@@ -41,4 +41,5 @@ export type PostInvoiceCommand = {
     address: Address['data']
   }
   products: Product['data'][]
+  saveAsDraft?: boolean
 }
