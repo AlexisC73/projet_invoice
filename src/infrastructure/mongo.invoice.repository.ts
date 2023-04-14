@@ -8,6 +8,7 @@ import { NotFoundError } from '../application/errors'
 
 export class MongoInvoiceRepository implements InvoiceRepository {
   constructor(private readonly mongoRepository: Repository<MongoInvoice>) {}
+
   async delete(id: string): Promise<void> {
     await this.mongoRepository.delete({ _id: new ObjectId(id) as any })
     return Promise.resolve()
@@ -45,5 +46,10 @@ export class MongoInvoiceRepository implements InvoiceRepository {
   async getAll(): Promise<Invoice[]> {
     const invoices = await this.mongoRepository.find()
     return invoices.map(invoice => mongoInvoiceToInvoice(invoice))
+  }
+
+  getAllByUserId(userId: string): Promise<Invoice[]> {
+    const invoices = this.mongoRepository.find({ where: { owner: userId } })
+    return invoices.then(invoices => invoices.map(invoice => mongoInvoiceToInvoice(invoice)))
   }
 }

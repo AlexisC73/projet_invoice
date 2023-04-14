@@ -156,7 +156,9 @@ describe('integration mongodb', () => {
 
     await invoiceRepository.save(invoiceToMongoInvoice(existingInvoice.build()))
 
-    const allInvoices = await getAllInvoicesUsecase.handle(tokenService.createConnectToken({ id: userId, role: 300 }))
+    const allInvoices = await getAllInvoicesUsecase.handle({
+      token: tokenService.createConnectToken({ id: userId, role: 300 }),
+    })
 
     expect(allInvoices).toEqual([existingInvoice.build()].map(invoice => invoice.data))
   })
@@ -186,9 +188,50 @@ describe('integration mongodb', () => {
 
     await Promise.all(existingInvoices.map(invoice => invoiceRepository.save(invoiceToMongoInvoice(invoice))))
 
-    const allInvoices = await getAllInvoicesUsecase.handle(tokenService.createConnectToken({ id: userId, role: 300 }))
+    const allInvoices = await getAllInvoicesUsecase.handle({
+      token: tokenService.createConnectToken({ id: userId, role: 300 }),
+    })
 
     expect(allInvoices).toEqual(existingInvoices.map(invoice => invoice.data))
+  })
+
+  test('should return owned invoices', async () => {
+    const invoiceRepository = dataSource.getRepository(MongoInvoice)
+    const mongoInvoiceRepository = new MongoInvoiceRepository(invoiceRepository)
+    const tokenService = new JWTTokenService('secret')
+    const userRepository = dataSource.getRepository(MongoUser)
+    const mongoUserRepository = new MongoUserRepository(userRepository)
+    const getAllInvoicesUsecase = new GetAllInvoicesUsecase(mongoInvoiceRepository, tokenService, mongoUserRepository)
+
+    const userId = new ObjectId().toString() as any
+    const user = userBuilder().withId(userId).withRole(300).buildGoogleUser()
+    await userRepository.save(userToMongoUser(user))
+
+    const existingInvoices = [
+      invoiceBuilder()
+        .withId(new ObjectId().toString() as any)
+        .withOwner(userId)
+        .build(),
+      invoiceBuilder()
+        .withId(new ObjectId().toString() as any)
+        .withOwner(new ObjectId() as any)
+        .build(),
+      invoiceBuilder()
+        .withId(new ObjectId().toString() as any)
+        .withOwner(userId)
+        .build(),
+    ]
+
+    await Promise.all(existingInvoices.map(invoice => invoiceRepository.save(invoiceToMongoInvoice(invoice))))
+
+    const allInvoices = await getAllInvoicesUsecase.handle({
+      token: tokenService.createConnectToken({ id: userId, role: 300 }),
+      onlyOwned: true,
+    })
+
+    expect(allInvoices).toEqual(
+      existingInvoices.filter(invoice => invoice.owner === userId).map(invoice => invoice.data)
+    )
   })
 
   test('should return expected invoice when multiple invoices in db', async () => {
