@@ -21,7 +21,7 @@ export class GetAllInvoicesUsecase {
       const invoices = await this.invoiceRepository.getAllByUserId(user.id)
       return invoices.map(invoice => invoice.data)
     }
-    if (user.role < 200) {
+    if (!user.haveModeratorRole) {
       throw new RoleError('You do not have permission to access this resource.')
     }
     const invoices = await this.invoiceRepository.getAll()

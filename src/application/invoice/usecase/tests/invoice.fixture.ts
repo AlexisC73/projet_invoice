@@ -4,7 +4,7 @@ import { InMemoryUserRepository } from '../../../../infrastructure/in-memory.use
 import { JWTTokenService } from '../../../../infrastructure/jwt-token-service'
 import { DeleteInvoiceCommand, DeleteInvoiceUsecase } from '../delete-invoice.usecase'
 import { GetAllInvoicesCommand, GetAllInvoicesUsecase } from '../get-all-invoices.usecase'
-import { GetOneInvoiceUsecase } from '../get-one-usecase'
+import { GetOneInvoiceCommand, GetOneInvoiceUsecase } from '../get-one-usecase'
 import { PostInvoiceCommand, PostInvoiceUsecase } from '../post-invoice.usecase'
 import { UpdateInvoiceCommand, UpdateInvoiceUsecase } from '../update-invoice.usecase'
 import { UpdateInvoiceStatusUsecase } from '../update-status.usecase'
@@ -24,7 +24,7 @@ export const createInvoiceFixture = ({
   const updateInvoiceStatusUsecase = new UpdateInvoiceStatusUsecase(invoiceRepository)
 
   const getAllInvoicesUsecase = new GetAllInvoicesUsecase(invoiceRepository, tokenService, userRepository)
-  const getOneInvoiceUsecase = new GetOneInvoiceUsecase(invoiceRepository)
+  const getOneInvoiceUsecase = new GetOneInvoiceUsecase(invoiceRepository, userRepository, tokenService)
 
   let thrownError: Error
 
@@ -67,9 +67,9 @@ export const createInvoiceFixture = ({
         thrownError = error
       }
     },
-    whenGetOneInvoice: async (id: string) => {
+    whenGetOneInvoice: async (arg: GetOneInvoiceCommand) => {
       try {
-        return await getOneInvoiceUsecase.handle(id)
+        return await getOneInvoiceUsecase.handle(arg)
       } catch (err: any) {
         thrownError = err
       }
@@ -92,6 +92,7 @@ export const createInvoiceFixture = ({
       const savedInvoice = await invoiceRepository.findById(id) //?
       expect(savedInvoice).toBeUndefined()
     },
+    getError: () => thrownError,
   }
 }
 

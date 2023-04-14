@@ -29,6 +29,18 @@ export class User {
     return this._role
   }
 
+  get IsBanned() {
+    return this.role === ROLE.BAN
+  }
+
+  get haveModeratorRole() {
+    return this.role >= ROLE.MODERATOR
+  }
+
+  get haveAdminRole() {
+    return this.role >= ROLE.ADMIN
+  }
+
   get linkedAccounts() {
     return this._linkedAccounts
   }
@@ -54,4 +66,11 @@ export class User {
   static fromData(data: User['data']) {
     return new User(data.id, data.email, data.password, data.role, data.linkedAccounts)
   }
+}
+
+const ROLE = {
+  BAN: 0,
+  USER: 100,
+  MODERATOR: 200,
+  ADMIN: 300,
 }

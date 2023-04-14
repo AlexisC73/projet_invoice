@@ -237,12 +237,19 @@ describe('integration mongodb', () => {
   test('should return expected invoice when multiple invoices in db', async () => {
     const invoiceRepository = dataSource.getRepository(MongoInvoice)
     const mongoInvoiceRepository = new MongoInvoiceRepository(invoiceRepository)
-    const getOneInvoiceUsecase = new GetOneInvoiceUsecase(mongoInvoiceRepository)
+    const tokenService = new JWTTokenService('secret')
+    const userRepository = dataSource.getRepository(MongoUser)
+    const mongoUserRepository = new MongoUserRepository(userRepository)
+    const getOneInvoiceUsecase = new GetOneInvoiceUsecase(mongoInvoiceRepository, mongoUserRepository, tokenService)
+
+    const userId = new ObjectId().toString() as any
+    const user = userBuilder().withId(userId).withRole(100).buildGoogleUser()
+    await userRepository.save(userToMongoUser(user))
 
     const idToFind = new ObjectId().toString() as any
 
     const existingInvoices = [
-      invoiceBuilder().withId(idToFind).build(),
+      invoiceBuilder().withOwner(userId).withId(idToFind).build(),
       invoiceBuilder()
         .withId(new ObjectId().toString() as any)
         .build(),
@@ -250,8 +257,11 @@ describe('integration mongodb', () => {
 
     await Promise.all(existingInvoices.map(invoice => invoiceRepository.save(invoiceToMongoInvoice(invoice))))
 
-    const fundInvoice = await getOneInvoiceUsecase.handle(idToFind)
+    const fundInvoice = await getOneInvoiceUsecase.handle({
+      token: tokenService.createConnectToken({ id: userId, role: 100 }),
+      id: idToFind,
+    })
 
-    expect(fundInvoice).toEqual(invoiceBuilder().withId(idToFind).build().data)
+    expect(fundInvoice).toEqual(invoiceBuilder().withOwner(userId).withId(idToFind).build().data)
   })
 })
