@@ -1,3 +1,4 @@
+import { NotFoundError } from '../../errors'
 import { TokenService } from '../../token-service'
 import { UserRepository } from '../../user.repository'
 
@@ -7,7 +8,7 @@ export class ConnectGoogleUserUsecase {
   async handle(command: ConnectGoogleUserCommand): Promise<string> {
     const user = await this.userRepository.findOneByGoogleId(command.googleId)
     if (!user) {
-      throw new Error("User don't exist")
+      throw new NotFoundError("User don't exist")
     }
     const token = this.tokenService.createConnectToken({ id: user.id, role: user.role })
     return token

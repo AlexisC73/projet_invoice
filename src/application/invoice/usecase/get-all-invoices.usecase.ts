@@ -1,5 +1,5 @@
 import { Invoice } from '../../../domain/invoice'
-import { RoleError } from '../../errors'
+import { NotFoundError, RoleError } from '../../errors'
 import { InvoiceRepository } from '../../invoice.repository'
 import { Token, TokenService } from '../../token-service'
 import { UserRepository } from '../../user.repository'
@@ -15,7 +15,7 @@ export class GetAllInvoicesUsecase {
     const userToken: Token = this.tokenService.decode(token)
     const user = await this.userRepository.findOneById(userToken.id)
     if (!user) {
-      throw new RoleError('There is a problem with your token. Please log in again.')
+      throw new NotFoundError('There is a problem with your token. Please log in again.')
     }
     if (onlyOwned) {
       const invoices = await this.invoiceRepository.getAllByUserId(user.id)

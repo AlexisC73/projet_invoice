@@ -1,3 +1,4 @@
+import { NotFoundError } from '../../../application/errors'
 import { JWTTokenService } from '../../../infrastructure/jwt-token-service'
 
 export const isLoggedIn = async (req, res, next) => {
@@ -5,7 +6,7 @@ export const isLoggedIn = async (req, res, next) => {
 
   try {
     if (!req.cookies.token || !req.user || !req.user.id) {
-      throw new Error("You're not logged in")
+      throw new NotFoundError("You're not logged in")
     }
     const token = req.cookies.token
     const decoded = tokenService.verifyConnectToken(token)

@@ -6,6 +6,7 @@ import { JWTTokenService } from '../../../infrastructure/jwt-token-service'
 import { CreateGoogleUserUsecase } from '../../../application/user/usecase/create-google-user.usecase'
 import { ObjectId } from 'mongodb'
 import { User } from '../../../domain/user'
+import { NotFoundError } from '../../../application/errors'
 
 export const googleAuth = async (req, res) => {
   const typeormUserRepository = AppDataSource.getRepository(MongoUser)
@@ -37,7 +38,7 @@ export const googleAuth = async (req, res) => {
 export const getMe = async (req, res) => {
   try {
     if (!req.currentUser) {
-      throw new Error("You're not logged in")
+      throw new NotFoundError("You're not logged in")
     }
     const { id } = req.currentUser as User['data']
     res.status(200).json({ id })
