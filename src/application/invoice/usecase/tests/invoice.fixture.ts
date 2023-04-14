@@ -19,7 +19,7 @@ export const createInvoiceFixture = ({
   invoiceRepository?: any
 } = {}) => {
   const postInvoiceUsecase = new PostInvoiceUsecase(invoiceRepository, tokenService)
-  const updateInvoiceUsecase = new UpdateInvoiceUsecase(invoiceRepository)
+  const updateInvoiceUsecase = new UpdateInvoiceUsecase(invoiceRepository, userRepository, tokenService)
   const deleteInvoiceUsecase = new DeleteInvoiceUsecase(invoiceRepository)
   const updateInvoiceStatusUsecase = new UpdateInvoiceStatusUsecase(invoiceRepository)
 

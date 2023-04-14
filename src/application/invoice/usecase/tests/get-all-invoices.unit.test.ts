@@ -26,7 +26,11 @@ describe('get all invoices', () => {
 
     userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 200 })
 
-    invoiceFixture.givenInvoiceExists(invoices)
+    invoiceFixture.givenInvoiceExists([
+      invoiceBuilder().build(),
+      invoiceBuilder().withId('test-2').build(),
+      invoiceBuilder().withId('test-3').build(),
+    ])
 
     const allInvoices = await invoiceFixture.whenGetAllInvoices({ token: userFixture.getToken() })
 

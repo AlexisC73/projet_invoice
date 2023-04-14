@@ -1,65 +1,201 @@
+import { tokenService } from '../../../../config'
 import { Invoice } from '../../../../domain/invoice'
 import { invoiceBuilder } from '../../../../domain/invoice/tests/invoiceBuilder'
-import { NotFoundError } from '../../../errors'
+import { userBuilder } from '../../../../domain/user/tests/userBuilder'
+import { NotFoundError, RoleError } from '../../../errors'
+import { UserFixture, createUserFixture } from '../../../user/usecase/tests/user.fixture'
 import { InvoiceFixture, createInvoiceFixture } from './invoice.fixture'
 
 describe('Update Invoice', () => {
-  let fixture: InvoiceFixture
+  let invoiceFixture: InvoiceFixture
+  let userFixture: UserFixture
 
   beforeEach(() => {
-    fixture = createInvoiceFixture()
+    userFixture = createUserFixture()
+    invoiceFixture = createInvoiceFixture({
+      userRepository: userFixture.getUserRepository(),
+    })
   })
 
   test('should update an existing invoice', async () => {
-    const existingInvoice = invoiceBuilder().withId('test-id').getProps()
+    const invoices = [
+      invoiceBuilder().build(),
+      invoiceBuilder().withOwner('test-id').withDescription('desc-test').withId('invoice-test').build(),
+      invoiceBuilder().withId('test-3').build(),
+    ]
 
-    fixture.givenInvoiceExists(Invoice.fromData(existingInvoice))
+    const invoiceToUpdate = invoices.find(invoice => invoice.id === 'invoice-test').data
 
-    await fixture.whenUserUpdateInvoice({
-      ...existingInvoice,
-      contact: 'new contact',
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(100).buildGoogleUser()])
+
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 100 })
+
+    invoiceFixture.givenInvoiceExists(invoices)
+
+    await invoiceFixture.whenUserUpdateInvoice({
+      invoiceToUpdate: {
+        ...invoiceToUpdate,
+        contact: 'new contact',
+      },
+      token: userFixture.getToken(),
     })
 
-    fixture.thenInvoiceShouldBe(Invoice.fromData({ ...existingInvoice, contact: 'new contact' }))
+    invoiceFixture.thenInvoiceShouldBe(Invoice.fromData({ ...invoiceToUpdate, contact: 'new contact' }))
   })
 
   test('should keep current currency if not defined in command', async () => {
-    const data = invoiceBuilder().withId('test-id').getProps()
+    const invoices = [
+      invoiceBuilder().build(),
+      invoiceBuilder().withOwner('test-id').withDescription('desc-test').withId('invoice-test').build(),
+      invoiceBuilder().withId('test-3').build(),
+    ]
 
-    fixture.givenInvoiceExists(Invoice.fromData(data))
+    const invoiceToUpdate = invoices.find(invoice => invoice.id === 'invoice-test').data
 
-    await fixture.whenUserUpdateInvoice({
-      ...data,
-      currency: undefined,
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(100).buildGoogleUser()])
+
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 100 })
+
+    invoiceFixture.givenInvoiceExists(invoices)
+
+    await invoiceFixture.whenUserUpdateInvoice({
+      invoiceToUpdate: {
+        ...invoiceToUpdate,
+        currency: undefined,
+      },
+      token: userFixture.getToken(),
     })
 
-    fixture.thenInvoiceShouldBe(Invoice.fromData(data))
+    invoiceFixture.thenInvoiceShouldBe(Invoice.fromData(invoiceToUpdate))
   })
 
   test('should update usd to eur', async () => {
-    const data = invoiceBuilder().withId('test-id').withCurrency('USD').getProps()
+    const invoices = [
+      invoiceBuilder().build(),
+      invoiceBuilder().withOwner('test-id').withDescription('desc-test').withId('invoice-test').build(),
+      invoiceBuilder().withId('test-3').build(),
+    ]
 
-    fixture.givenInvoiceExists(Invoice.fromData(data))
+    const invoiceToUpdate = invoices.find(invoice => invoice.id === 'invoice-test').data
 
-    await fixture.whenUserUpdateInvoice({
-      ...data,
-      currency: 'EUR',
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(100).buildGoogleUser()])
+
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 100 })
+
+    invoiceFixture.givenInvoiceExists(invoices)
+
+    await invoiceFixture.whenUserUpdateInvoice({
+      invoiceToUpdate: {
+        ...invoiceToUpdate,
+        currency: 'EUR',
+      },
+      token: userFixture.getToken(),
     })
 
-    fixture.thenInvoiceShouldBe(Invoice.fromData({ ...data, currency: 'EUR' }))
+    invoiceFixture.thenInvoiceShouldBe(Invoice.fromData({ ...invoiceToUpdate, currency: 'EUR' }))
   })
 
   test('should throw if invoice not exists', async () => {
-    const data = invoiceBuilder().withId('test-id').getProps()
+    const invoices = [
+      invoiceBuilder().build(),
+      invoiceBuilder().withOwner('test-id').withDescription('desc-test').withId('invoice-test').build(),
+      invoiceBuilder().withId('test-3').build(),
+    ]
 
-    fixture.givenInvoiceExists(Invoice.fromData(data))
+    const invoiceToUpdate = invoiceBuilder().withId('not-exists').getProps()
 
-    await fixture.whenUserUpdateInvoice({
-      ...data,
-      currency: 'EUR',
-      id: 'not-exists',
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(100).buildGoogleUser()])
+
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 100 })
+
+    invoiceFixture.givenInvoiceExists(invoices)
+
+    await invoiceFixture.whenUserUpdateInvoice({
+      invoiceToUpdate: {
+        ...invoiceToUpdate,
+        contact: 'new contact',
+      },
+      token: userFixture.getToken(),
     })
 
-    fixture.thenErrorShouldBe(NotFoundError)
+    invoiceFixture.thenErrorShouldBe(NotFoundError)
+  })
+
+  test('should throw if user not owner', async () => {
+    const invoices = [
+      invoiceBuilder().build(),
+      invoiceBuilder().withOwner('not-owner').withDescription('desc-test').withId('invoice-test').build(),
+      invoiceBuilder().withId('test-3').build(),
+    ]
+
+    const invoiceToUpdate = invoices.find(invoice => invoice.id === 'invoice-test').data
+
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(100).buildGoogleUser()])
+
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 100 })
+
+    invoiceFixture.givenInvoiceExists(invoices)
+
+    await invoiceFixture.whenUserUpdateInvoice({
+      invoiceToUpdate: {
+        ...invoiceToUpdate,
+        contact: 'new contact',
+      },
+      token: userFixture.getToken(),
+    })
+
+    invoiceFixture.thenErrorShouldBe(RoleError)
+  })
+
+  test('should not throw if moderator not owner', async () => {
+    const invoices = [
+      invoiceBuilder().build(),
+      invoiceBuilder().withOwner('not-owner').withDescription('desc-test').withId('invoice-test').build(),
+      invoiceBuilder().withId('test-3').build(),
+    ]
+
+    const invoiceToUpdate = invoices.find(invoice => invoice.id === 'invoice-test').data
+
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(200).buildGoogleUser()])
+
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 200 })
+
+    invoiceFixture.givenInvoiceExists(invoices)
+
+    await invoiceFixture.whenUserUpdateInvoice({
+      invoiceToUpdate: {
+        ...invoiceToUpdate,
+        contact: 'new contact',
+      },
+      token: userFixture.getToken(),
+    })
+
+    invoiceFixture.thenInvoiceShouldBe(Invoice.fromData({ ...invoiceToUpdate, contact: 'new contact' }))
+  })
+
+  test('should not throw if admin not owner', async () => {
+    const invoices = [
+      invoiceBuilder().build(),
+      invoiceBuilder().withOwner('not-owner').withDescription('desc-test').withId('invoice-test').build(),
+      invoiceBuilder().withId('test-3').build(),
+    ]
+
+    const invoiceToUpdate = invoices.find(invoice => invoice.id === 'invoice-test').data
+
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(300).buildGoogleUser()])
+
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 300 })
+
+    invoiceFixture.givenInvoiceExists(invoices)
+
+    await invoiceFixture.whenUserUpdateInvoice({
+      invoiceToUpdate: {
+        ...invoiceToUpdate,
+        contact: 'new contact',
+      },
+      token: userFixture.getToken(),
+    })
+
+    invoiceFixture.thenInvoiceShouldBe(Invoice.fromData({ ...invoiceToUpdate, contact: 'new contact' }))
   })
 })

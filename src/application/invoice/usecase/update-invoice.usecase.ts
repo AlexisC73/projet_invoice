@@ -1,20 +1,34 @@
 import { Address, Invoice, Product } from '../../../domain/invoice'
-import { NotFoundError } from '../../errors'
+import { NotFoundError, RoleError } from '../../errors'
 import { InvoiceRepository } from '../../invoice.repository'
+import { TokenService } from '../../token-service'
+import { UserRepository } from '../../user.repository'
 
 export class UpdateInvoiceUsecase {
-  constructor(private invoiceRepository: InvoiceRepository) {}
+  constructor(
+    private invoiceRepository: InvoiceRepository,
+    private readonly userRepository: UserRepository,
+    private readonly tokenService: TokenService
+  ) {}
 
-  async handle(updateInvoiceCommand: UpdateInvoiceCommand): Promise<void> {
-    const invoice = await this.invoiceRepository.findById(updateInvoiceCommand.id)
+  async handle({ invoiceToUpdate, token }: UpdateInvoiceCommand): Promise<void> {
+    const currentUser = this.tokenService.decode(token)
+    const user = await this.userRepository.findOneById(currentUser.id)
+
+    if (!user) throw new NotFoundError('User does not exists')
+    const invoice = await this.invoiceRepository.findById(invoiceToUpdate.id)
     if (!invoice) throw new NotFoundError('Invoice does not exists')
-    const { date, dueDate, description, currency, contact, sender, buyer, products } = updateInvoiceCommand
+
+    if (invoice.owner !== user.id && !user.haveModeratorRole)
+      throw new RoleError('You do not have permission to access this resource.')
+
+    const { date, dueDate, description, currency, contact, sender, buyer, products } = invoiceToUpdate
     const updatedInvoice = Invoice.fromData({
       ...invoice.data,
       date,
       dueDate,
       description,
-      currency: currency || invoice.data.currency,
+      currency: currency || invoice.currency,
       contact,
       sender,
       buyer,
@@ -25,16 +39,19 @@ export class UpdateInvoiceUsecase {
 }
 
 export type UpdateInvoiceCommand = {
-  id: string
-  date: string
-  dueDate: string
-  description: string
-  currency?: string
-  contact: string
-  sender: Address['data']
-  buyer: {
-    name: string
-    address: Address['data']
+  invoiceToUpdate: {
+    id: string
+    date: string
+    dueDate: string
+    description: string
+    currency?: string
+    contact: string
+    sender: Address['data']
+    buyer: {
+      name: string
+      address: Address['data']
+    }
+    products: Product['data'][]
   }
-  products: Product['data'][]
+  token: string
 }
