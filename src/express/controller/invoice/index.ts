@@ -9,11 +9,11 @@ import { GetOneInvoiceUsecase } from '../../../application/invoice/usecase/get-o
 import { Invoice } from '../../../domain/invoice'
 
 export const updateStatus = async (req, res) => {
-  const updateInvoiceStatusUsecase = new UpdateInvoiceStatusUsecase(invoiceRepository)
+  const updateInvoiceStatusUsecase = new UpdateInvoiceStatusUsecase(invoiceRepository, userRepository, tokenService)
   try {
     const { id } = req.params
     const { status } = req.body
-    await updateInvoiceStatusUsecase.handle(id, status)
+    await updateInvoiceStatusUsecase.handle({ invoiceToUpdate: { id, status }, token: req.token })
     res.status(200).send()
   } catch (error) {
     res.status(401).send(error.message)
@@ -21,12 +21,12 @@ export const updateStatus = async (req, res) => {
 }
 
 export const updateInvoice = async (req, res) => {
-  const updateInvoiceUsecase = new UpdateInvoiceUsecase(invoiceRepository)
+  const updateInvoiceUsecase = new UpdateInvoiceUsecase(invoiceRepository, userRepository, tokenService)
   try {
     const { id } = req.params
-    const { invoice: updateInvoiceCommand } = req.body
+    const { invoice: invoiceToUpdate } = req.body
 
-    await updateInvoiceUsecase.handle(updateInvoiceCommand)
+    await updateInvoiceUsecase.handle({ invoiceToUpdate, token: req.token })
     res.status(200).send()
   } catch (error) {
     res.status(401).send(error.message)
@@ -66,10 +66,10 @@ export const getAllOwned = async (req, res) => {
 }
 
 export const getOneById = async (req, res) => {
-  const getOneInvoiceUsecase = new GetOneInvoiceUsecase(invoiceRepository)
+  const getOneInvoiceUsecase = new GetOneInvoiceUsecase(invoiceRepository, userRepository, tokenService)
   try {
     const { id } = req.params
-    let result = await getOneInvoiceUsecase.handle(id)
+    let result = await getOneInvoiceUsecase.handle({ id, token: req.token })
     res.status(201).json(result)
   } catch (error) {
     res.status(500).send(error.message)
