@@ -89,10 +89,9 @@ export const createInvoiceFixture = ({
       expect(thrownError).toBeInstanceOf(expectedError)
     },
     thenUserShouldNotExists: async (id: string) => {
-      const savedInvoice = await invoiceRepository.findById(id) //?
+      const savedInvoice = await invoiceRepository.findById(id)
       expect(savedInvoice).toBeUndefined()
     },
-    getError: () => thrownError,
   }
 }
 
