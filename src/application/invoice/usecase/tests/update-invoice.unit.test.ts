@@ -1,4 +1,3 @@
-import { tokenService } from '../../../../config'
 import { Invoice } from '../../../../domain/invoice'
 import { invoiceBuilder } from '../../../../domain/invoice/tests/invoiceBuilder'
 import { ROLE } from '../../../../domain/user'
