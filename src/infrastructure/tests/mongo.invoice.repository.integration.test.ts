@@ -117,14 +117,23 @@ describe('integration mongodb', () => {
   test('should delete invoice', async () => {
     const invoiceRepository = dataSource.getRepository(MongoInvoice)
     const mongoInvoiceRepository = new MongoInvoiceRepository(invoiceRepository)
-    const deleteInvoiceUsecase = new DeleteInvoiceUsecase(mongoInvoiceRepository)
+    const tokenService = new JWTTokenService('secret')
+    const userRepository = dataSource.getRepository(MongoUser)
+    const mongoUserRepository = new MongoUserRepository(userRepository)
+    const deleteInvoiceUsecase = new DeleteInvoiceUsecase(mongoInvoiceRepository, mongoUserRepository, tokenService)
+
+    const mongoUserId = new ObjectId().toString() as any
+    const existingUser = userBuilder().withId(mongoUserId).withRole(ROLE.USER)
+    await userRepository.save(userToMongoUser(existingUser.buildGoogleUser()))
 
     const mongoInvoiceId = new ObjectId().toString() as any
-    const existingInvoice = invoiceBuilder().withId(mongoInvoiceId)
-
+    const existingInvoice = invoiceBuilder().withOwner(mongoUserId).withId(mongoInvoiceId)
     await invoiceRepository.save(invoiceToMongoInvoice(existingInvoice.build()))
 
-    await deleteInvoiceUsecase.handle({ id: mongoInvoiceId })
+    await deleteInvoiceUsecase.handle({
+      id: mongoInvoiceId,
+      token: tokenService.createConnectToken({ id: mongoUserId, role: ROLE.USER }),
+    })
 
     const inDbInvoices = await invoiceRepository.find()
     expect(inDbInvoices.length).toEqual(0)

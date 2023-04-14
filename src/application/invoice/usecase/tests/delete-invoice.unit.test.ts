@@ -1,24 +1,76 @@
 import { invoiceBuilder } from '../../../../domain/invoice/tests/invoiceBuilder'
-import { NotFoundError } from '../../../errors'
+import { ROLE } from '../../../../domain/user'
+import { userBuilder } from '../../../../domain/user/tests/userBuilder'
+import { NotFoundError, RoleError } from '../../../errors'
+import { UserFixture, createUserFixture } from '../../../user/usecase/tests/user.fixture'
 import { InvoiceFixture, createInvoiceFixture } from './invoice.fixture'
 
 describe('Delete invoice', () => {
-  let fixture: InvoiceFixture
+  let invoiceFixture: InvoiceFixture
+  let userFixture: UserFixture
 
   beforeEach(() => {
-    fixture = createInvoiceFixture()
+    userFixture = createUserFixture()
+    invoiceFixture = createInvoiceFixture({
+      userRepository: userFixture.getUserRepository(),
+    })
   })
-  it('should delete invoice with specified id', async () => {
-    fixture.givenInvoiceExists(invoiceBuilder().withId('test-id').build())
+  it('should delete invoice with specified id if owner', async () => {
+    userFixture.givenUserExist([userBuilder().withId('1').withRole(ROLE.USER).buildGoogleUser()])
+    userFixture.givenUserIsLoggedIn({ id: '1', role: ROLE.USER })
 
-    await fixture.whenUserDeleteInvoice({ id: 'test-id' })
+    invoiceFixture.givenInvoiceExists([
+      invoiceBuilder().withOwner('1').withId('test-id').build(),
+      invoiceBuilder().withOwner('1').withId('test-id-2').build(),
+    ])
 
-    await fixture.thenUserShouldNotExists('test-id')
+    await invoiceFixture.whenUserDeleteInvoice({ id: 'test-id', token: userFixture.getToken() })
+
+    await invoiceFixture.thenInvoiceShouldNotExist('test-id')
+    await invoiceFixture.thenInvoiceShouldBe(invoiceBuilder().withOwner('1').withId('test-id-2').build())
   })
 
-  it('should throw if invoice not exist', async () => {
-    await fixture.whenUserDeleteInvoice({ id: 'test-id' })
+  it('should delete invoice with specified id if moderator', async () => {
+    userFixture.givenUserExist([userBuilder().withId('1').withRole(ROLE.MODERATOR).buildGoogleUser()])
+    userFixture.givenUserIsLoggedIn({ id: '1', role: ROLE.MODERATOR })
 
-    fixture.thenErrorShouldBe(NotFoundError)
+    invoiceFixture.givenInvoiceExists([
+      invoiceBuilder().withOwner('2').withId('test-id').build(),
+      invoiceBuilder().withOwner('2').withId('test-id-2').build(),
+    ])
+
+    await invoiceFixture.whenUserDeleteInvoice({ id: 'test-id', token: userFixture.getToken() })
+
+    await invoiceFixture.thenInvoiceShouldNotExist('test-id')
+    await invoiceFixture.thenInvoiceShouldBe(invoiceBuilder().withOwner('2').withId('test-id-2').build())
+  })
+
+  it('should delete invoice with specified id if admin', async () => {
+    userFixture.givenUserExist([userBuilder().withId('1').withRole(ROLE.ADMIN).buildGoogleUser()])
+    userFixture.givenUserIsLoggedIn({ id: '1', role: ROLE.ADMIN })
+
+    invoiceFixture.givenInvoiceExists([
+      invoiceBuilder().withOwner('2').withId('test-id').build(),
+      invoiceBuilder().withOwner('2').withId('test-id-2').build(),
+    ])
+
+    await invoiceFixture.whenUserDeleteInvoice({ id: 'test-id', token: userFixture.getToken() })
+
+    await invoiceFixture.thenInvoiceShouldNotExist('test-id')
+    await invoiceFixture.thenInvoiceShouldBe(invoiceBuilder().withOwner('2').withId('test-id-2').build())
+  })
+
+  it('should throw if not owner and role user', async () => {
+    userFixture.givenUserExist([userBuilder().withId('1').withRole(ROLE.USER).buildGoogleUser()])
+    userFixture.givenUserIsLoggedIn({ id: '1', role: ROLE.USER })
+
+    invoiceFixture.givenInvoiceExists([
+      invoiceBuilder().withOwner('2').withId('test-id').build(),
+      invoiceBuilder().withOwner('2').withId('test-id-2').build(),
+    ])
+
+    await invoiceFixture.whenUserDeleteInvoice({ id: 'test-id', token: userFixture.getToken() })
+
+    await invoiceFixture.thenErrorShouldBe(RoleError)
   })
 })

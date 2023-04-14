@@ -20,7 +20,7 @@ export const createInvoiceFixture = ({
 } = {}) => {
   const postInvoiceUsecase = new PostInvoiceUsecase(invoiceRepository, tokenService)
   const updateInvoiceUsecase = new UpdateInvoiceUsecase(invoiceRepository, userRepository, tokenService)
-  const deleteInvoiceUsecase = new DeleteInvoiceUsecase(invoiceRepository)
+  const deleteInvoiceUsecase = new DeleteInvoiceUsecase(invoiceRepository, userRepository, tokenService)
   const updateInvoiceStatusUsecase = new UpdateInvoiceStatusUsecase(invoiceRepository, userRepository, tokenService)
 
   const getAllInvoicesUsecase = new GetAllInvoicesUsecase(invoiceRepository, tokenService, userRepository)
@@ -88,7 +88,7 @@ export const createInvoiceFixture = ({
     thenErrorShouldBe: (expectedError: new () => Error) => {
       expect(thrownError).toBeInstanceOf(expectedError)
     },
-    thenUserShouldNotExists: async (id: string) => {
+    thenInvoiceShouldNotExist: async (id: string) => {
       const savedInvoice = await invoiceRepository.findById(id)
       expect(savedInvoice).toBeUndefined()
     },

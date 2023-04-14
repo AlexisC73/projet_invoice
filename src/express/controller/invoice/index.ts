@@ -34,11 +34,11 @@ export const updateInvoice = async (req, res) => {
 }
 
 export const removeInvoice = async (req, res) => {
-  const deleteInvoiceUsecase = new DeleteInvoiceUsecase(invoiceRepository)
+  const deleteInvoiceUsecase = new DeleteInvoiceUsecase(invoiceRepository, userRepository, tokenService)
   try {
     const { id } = req.params
 
-    await deleteInvoiceUsecase.handle({ id })
+    await deleteInvoiceUsecase.handle({ id, token: req.token })
     res.status(200).send()
   } catch (error) {
     res.status(401).send(error.message)
