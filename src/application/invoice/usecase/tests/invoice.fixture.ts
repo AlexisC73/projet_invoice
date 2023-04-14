@@ -7,7 +7,7 @@ import { GetAllInvoicesCommand, GetAllInvoicesUsecase } from '../get-all-invoice
 import { GetOneInvoiceCommand, GetOneInvoiceUsecase } from '../get-one-usecase'
 import { PostInvoiceCommand, PostInvoiceUsecase } from '../post-invoice.usecase'
 import { UpdateInvoiceCommand, UpdateInvoiceUsecase } from '../update-invoice.usecase'
-import { UpdateInvoiceStatusUsecase } from '../update-status.usecase'
+import { UpdateInvoiceStatusUsecase, UpdateStatusCommand } from '../update-status.usecase'
 
 export const createInvoiceFixture = ({
   userRepository = new InMemoryUserRepository(),
@@ -21,7 +21,7 @@ export const createInvoiceFixture = ({
   const postInvoiceUsecase = new PostInvoiceUsecase(invoiceRepository, tokenService)
   const updateInvoiceUsecase = new UpdateInvoiceUsecase(invoiceRepository, userRepository, tokenService)
   const deleteInvoiceUsecase = new DeleteInvoiceUsecase(invoiceRepository)
-  const updateInvoiceStatusUsecase = new UpdateInvoiceStatusUsecase(invoiceRepository)
+  const updateInvoiceStatusUsecase = new UpdateInvoiceStatusUsecase(invoiceRepository, userRepository, tokenService)
 
   const getAllInvoicesUsecase = new GetAllInvoicesUsecase(invoiceRepository, tokenService, userRepository)
   const getOneInvoiceUsecase = new GetOneInvoiceUsecase(invoiceRepository, userRepository, tokenService)
@@ -53,9 +53,9 @@ export const createInvoiceFixture = ({
         thrownError = error
       }
     },
-    whenUpdateStatus: async (id: string, status: string) => {
+    whenUpdateStatus: async (arg: UpdateStatusCommand) => {
       try {
-        await updateInvoiceStatusUsecase.handle(id, status)
+        await updateInvoiceStatusUsecase.handle(arg)
       } catch (error: any) {
         thrownError = error
       }

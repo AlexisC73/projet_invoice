@@ -17,6 +17,7 @@ import { Token } from '../../application/token-service'
 import { MongoUserRepository } from '../mongo-user.repository'
 import { MongoUser } from '../../entity/User'
 import { userBuilder } from '../../domain/user/tests/userBuilder'
+import { ROLE } from '../../domain/user'
 
 describe('integration mongodb', () => {
   let composeOptions: IDockerComposeOptions
@@ -87,15 +88,24 @@ describe('integration mongodb', () => {
   test('should update invoice', async () => {
     const invoiceRepository = dataSource.getRepository(MongoInvoice)
     const mongoInvoiceRepository = new MongoInvoiceRepository(invoiceRepository)
-    const updateInvoiceUsecase = new UpdateInvoiceUsecase(mongoInvoiceRepository)
+    const tokenService = new JWTTokenService('secret')
+    const userRepository = dataSource.getRepository(MongoUser)
+    const mongoUserRepository = new MongoUserRepository(userRepository)
+    const updateInvoiceUsecase = new UpdateInvoiceUsecase(mongoInvoiceRepository, mongoUserRepository, tokenService)
+
+    const mongoUserId = new ObjectId().toString() as any
+    const existingUser = userBuilder().withId(mongoUserId).withRole(ROLE.USER)
+    await userRepository.save(userToMongoUser(existingUser.buildGoogleUser()))
 
     const mongoInvoiceId = new ObjectId().toString() as any
-    const existingInvoice = invoiceBuilder().withId(mongoInvoiceId).withContact('paul')
-
+    const existingInvoice = invoiceBuilder().withId(mongoInvoiceId).withOwner(mongoUserId).withDescription('test-1')
     await invoiceRepository.save(invoiceToMongoInvoice(existingInvoice.build()))
 
-    const updatedInvoice = existingInvoice.withContact('jean').getProps()
-    await updateInvoiceUsecase.handle(updatedInvoice)
+    const updatedInvoice = existingInvoice.withDescription('test-2').getProps()
+    await updateInvoiceUsecase.handle({
+      invoiceToUpdate: updatedInvoice,
+      token: tokenService.createConnectToken({ id: mongoUserId, role: ROLE.USER }),
+    })
 
     const inDbInvoice = await invoiceRepository.findOne({ where: { _id: new ObjectId(mongoInvoiceId) as any } })
     expect(updatedInvoice).toEqual(mongoInvoiceToInvoice(inDbInvoice).data)
@@ -123,14 +133,27 @@ describe('integration mongodb', () => {
   test('should update invoice status', async () => {
     const invoiceRepository = dataSource.getRepository(MongoInvoice)
     const mongoInvoiceRepository = new MongoInvoiceRepository(invoiceRepository)
-    const updateInvoiceStatusUsecase = new UpdateInvoiceStatusUsecase(mongoInvoiceRepository)
+    const tokenService = new JWTTokenService('secret')
+    const userRepository = dataSource.getRepository(MongoUser)
+    const mongoUserRepository = new MongoUserRepository(userRepository)
+    const updateInvoiceStatusUsecase = new UpdateInvoiceStatusUsecase(
+      mongoInvoiceRepository,
+      mongoUserRepository,
+      tokenService
+    )
+
+    const mongoUserId = new ObjectId().toString() as any
+    const existingUser = userBuilder().withId(mongoUserId).withRole(ROLE.USER)
+    await userRepository.save(userToMongoUser(existingUser.buildGoogleUser()))
 
     const mongoInvoiceId = new ObjectId().toString() as any
-    const existingInvoice = invoiceBuilder().withId(mongoInvoiceId).withStatus('draft')
-
+    const existingInvoice = invoiceBuilder().withId(mongoInvoiceId).withOwner(mongoUserId).withStatus('draft')
     await invoiceRepository.save(invoiceToMongoInvoice(existingInvoice.build()))
 
-    await updateInvoiceStatusUsecase.handle(existingInvoice.getProps().id, 'paid')
+    await updateInvoiceStatusUsecase.handle({
+      invoiceToUpdate: { id: existingInvoice.getProps().id, status: 'paid' },
+      token: tokenService.createConnectToken({ id: mongoUserId, role: ROLE.USER }),
+    })
 
     const inDbInvoice = await invoiceRepository.findOne({ where: { _id: new ObjectId(mongoInvoiceId) as any } })
     expect(mongoInvoiceToInvoice(inDbInvoice).status).toEqual('paid')
