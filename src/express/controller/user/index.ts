@@ -6,7 +6,7 @@ import { JWTTokenService } from '../../../infrastructure/jwt-token-service'
 import { CreateGoogleUserUsecase } from '../../../application/user/usecase/create-google-user.usecase'
 import { ObjectId } from 'mongodb'
 import { User } from '../../../domain/user'
-import { NotFoundError } from '../../../application/errors'
+import { AuthError, NotFoundError } from '../../../application/errors'
 
 export const googleAuth = async (req, res) => {
   const typeormUserRepository = AppDataSource.getRepository(MongoUser)
@@ -25,13 +25,18 @@ export const googleAuth = async (req, res) => {
         id: new ObjectId().toString() as any,
       })
     }
+    if (existUser.IsBanned) {
+      throw new AuthError("You're banned")
+    }
     const token = await connectGoogleUserUsecase.handle({ googleId })
     await res.cookie('token', token, { httpOnly: true })
     const redirectLink =
       process.env.NODE_ENV === 'production' ? 'https://invoice.alexis-comte.com' : 'http://localhost:3000'
     res.redirect(redirectLink + '/login/?connected=true')
   } catch (error) {
-    throw error
+    const redirectLink =
+      process.env.NODE_ENV === 'production' ? 'https://invoice.alexis-comte.com' : 'http://localhost:3000'
+    res.redirect(redirectLink + '/login/?connected=false&error=' + error.message)
   }
 }
 

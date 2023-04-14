@@ -46,3 +46,10 @@ export class RoleError extends Error {
     this.name = 'RoleError'
   }
 }
+
+export class AuthError extends Error {
+  constructor(message?: string) {
+    super(message ?? 'Authentification error')
+    this.name = 'AuthError'
+  }
+}
