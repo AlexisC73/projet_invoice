@@ -48,10 +48,19 @@ export const removeInvoice = async (req, res) => {
 export const getAll = async (req, res) => {
   const getAllInvoiceUsecase = new GetAllInvoicesUsecase(invoiceRepository, tokenService, userRepository)
   try {
-    const result = await getAllInvoiceUsecase.handle(req.token)
+    const result = await getAllInvoiceUsecase.handle({ token: req.token })
     res.status(200).send(result)
   } catch (error) {
-    console.log(error)
+    res.status(500).send(error.message)
+  }
+}
+
+export const getAllOwned = async (req, res) => {
+  const getAllInvoiceUsecase = new GetAllInvoicesUsecase(invoiceRepository, tokenService, userRepository)
+  try {
+    const result = await getAllInvoiceUsecase.handle({ token: req.token, onlyOwned: true })
+    res.status(200).send(result)
+  } catch (error) {
     res.status(500).send(error.message)
   }
 }
