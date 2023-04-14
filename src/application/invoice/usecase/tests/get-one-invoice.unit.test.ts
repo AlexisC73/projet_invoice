@@ -1,4 +1,5 @@
 import { invoiceBuilder } from '../../../../domain/invoice/tests/invoiceBuilder'
+import { ROLE } from '../../../../domain/user'
 import { userBuilder } from '../../../../domain/user/tests/userBuilder'
 import { RoleError } from '../../../errors'
 import { UserFixture, createUserFixture } from '../../../user/usecase/tests/user.fixture'
@@ -16,9 +17,9 @@ describe('get all invoices', () => {
   })
 
   test('should return invoices if user own her', async () => {
-    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(100).buildGoogleUser()])
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(ROLE.USER).buildGoogleUser()])
 
-    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 100 })
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: ROLE.USER })
 
     invoiceFixture.givenInvoiceExists([
       invoiceBuilder().withId('test-invoice-1').build(),
@@ -32,9 +33,9 @@ describe('get all invoices', () => {
   })
 
   test('should thrown error if user do not own this invoice and is not moderator', async () => {
-    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(100).buildGoogleUser()])
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(ROLE.USER).buildGoogleUser()])
 
-    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 100 })
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: ROLE.USER })
 
     invoiceFixture.givenInvoiceExists([
       invoiceBuilder().withId('test-invoice-1').build(),
@@ -48,9 +49,9 @@ describe('get all invoices', () => {
   })
 
   test('should return invoices if moderator try access not own invoice', async () => {
-    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(200).buildGoogleUser()])
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(ROLE.MODERATOR).buildGoogleUser()])
 
-    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 200 })
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: ROLE.MODERATOR })
 
     invoiceFixture.givenInvoiceExists([
       invoiceBuilder().withOwner('not me').withId('test-invoice-1').build(),
@@ -64,9 +65,9 @@ describe('get all invoices', () => {
   })
 
   test('should return invoices if admin try access not own invoice', async () => {
-    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(300).buildGoogleUser()])
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(ROLE.ADMIN).buildGoogleUser()])
 
-    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 300 })
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: ROLE.ADMIN })
 
     invoiceFixture.givenInvoiceExists([
       invoiceBuilder().withOwner('not me').withId('test-invoice-1').build(),

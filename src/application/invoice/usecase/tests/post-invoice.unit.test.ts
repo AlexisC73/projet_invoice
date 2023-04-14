@@ -1,6 +1,7 @@
 import { InvoiceFixture, createInvoiceFixture } from './invoice.fixture'
 import { invoiceBuilder, productBuilder } from '../../../../domain/invoice/tests/invoiceBuilder'
 import { UserFixture, createUserFixture } from '../../../user/usecase/tests/user.fixture'
+import { ROLE } from '../../../../domain/user'
 
 describe('Post Invoice', () => {
   let invoiceFixture: InvoiceFixture
@@ -14,7 +15,7 @@ describe('Post Invoice', () => {
   })
 
   test('should post new Invoice', async () => {
-    userFixture.givenUserIsLoggedIn({ id: 'user-id', role: 100 })
+    userFixture.givenUserIsLoggedIn({ id: 'user-id', role: ROLE.USER })
 
     await invoiceFixture.whenUserPostInvoice(invoiceBuilder().getProps(), userFixture.getToken())
 
@@ -22,7 +23,7 @@ describe('Post Invoice', () => {
   })
 
   test('should post new invoice with product', async () => {
-    userFixture.givenUserIsLoggedIn({ id: 'user-id', role: 100 })
+    userFixture.givenUserIsLoggedIn({ id: 'user-id', role: ROLE.USER })
 
     await invoiceFixture.whenUserPostInvoice(
       invoiceBuilder().withProducts([productBuilder().getProps()]).getProps(),
@@ -36,14 +37,14 @@ describe('Post Invoice', () => {
 
   describe('Rule: default currency must be USD', () => {
     test('should post a new invoice with USD when no currency provided', async () => {
-      userFixture.givenUserIsLoggedIn({ id: 'user-id', role: 100 })
+      userFixture.givenUserIsLoggedIn({ id: 'user-id', role: ROLE.USER })
 
       await invoiceFixture.whenUserPostInvoice(invoiceBuilder().getPropsWithoutCurrency(), userFixture.getToken())
 
       invoiceFixture.thenInvoiceShouldBe(invoiceBuilder().withOwner('user-id').withCurrency('USD').build())
     })
     test('should use the EUR currency when provided', async () => {
-      userFixture.givenUserIsLoggedIn({ id: 'user-id', role: 100 })
+      userFixture.givenUserIsLoggedIn({ id: 'user-id', role: ROLE.USER })
 
       await invoiceFixture.whenUserPostInvoice(invoiceBuilder().withCurrency('EUR').getProps(), userFixture.getToken())
 
@@ -53,7 +54,7 @@ describe('Post Invoice', () => {
 
   describe('Rule: new invoice must have pending status', () => {
     test('should post a new Invoice with pending status', async () => {
-      userFixture.givenUserIsLoggedIn({ id: 'user-id', role: 100 })
+      userFixture.givenUserIsLoggedIn({ id: 'user-id', role: ROLE.USER })
 
       await invoiceFixture.whenUserPostInvoice(invoiceBuilder().withStatus('paid').getProps(), userFixture.getToken())
 

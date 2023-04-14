@@ -1,6 +1,7 @@
 import { tokenService } from '../../../../config'
 import { Invoice } from '../../../../domain/invoice'
 import { invoiceBuilder } from '../../../../domain/invoice/tests/invoiceBuilder'
+import { ROLE } from '../../../../domain/user'
 import { userBuilder } from '../../../../domain/user/tests/userBuilder'
 import { NotFoundError, RoleError } from '../../../errors'
 import { UserFixture, createUserFixture } from '../../../user/usecase/tests/user.fixture'
@@ -26,9 +27,9 @@ describe('Update Invoice', () => {
 
     const invoiceToUpdate = invoices.find(invoice => invoice.id === 'invoice-test').data
 
-    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(100).buildGoogleUser()])
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(ROLE.USER).buildGoogleUser()])
 
-    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 100 })
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: ROLE.USER })
 
     invoiceFixture.givenInvoiceExists(invoices)
 
@@ -52,9 +53,9 @@ describe('Update Invoice', () => {
 
     const invoiceToUpdate = invoices.find(invoice => invoice.id === 'invoice-test').data
 
-    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(100).buildGoogleUser()])
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(ROLE.USER).buildGoogleUser()])
 
-    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 100 })
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: ROLE.USER })
 
     invoiceFixture.givenInvoiceExists(invoices)
 
@@ -78,9 +79,9 @@ describe('Update Invoice', () => {
 
     const invoiceToUpdate = invoices.find(invoice => invoice.id === 'invoice-test').data
 
-    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(100).buildGoogleUser()])
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(ROLE.USER).buildGoogleUser()])
 
-    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 100 })
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: ROLE.USER })
 
     invoiceFixture.givenInvoiceExists(invoices)
 
@@ -104,9 +105,9 @@ describe('Update Invoice', () => {
 
     const invoiceToUpdate = invoiceBuilder().withId('not-exists').getProps()
 
-    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(100).buildGoogleUser()])
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(ROLE.USER).buildGoogleUser()])
 
-    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 100 })
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: ROLE.USER })
 
     invoiceFixture.givenInvoiceExists(invoices)
 
@@ -130,9 +131,9 @@ describe('Update Invoice', () => {
 
     const invoiceToUpdate = invoices.find(invoice => invoice.id === 'invoice-test').data
 
-    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(100).buildGoogleUser()])
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(ROLE.USER).buildGoogleUser()])
 
-    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 100 })
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: ROLE.USER })
 
     invoiceFixture.givenInvoiceExists(invoices)
 
@@ -156,9 +157,9 @@ describe('Update Invoice', () => {
 
     const invoiceToUpdate = invoices.find(invoice => invoice.id === 'invoice-test').data
 
-    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(200).buildGoogleUser()])
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(ROLE.MODERATOR).buildGoogleUser()])
 
-    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 200 })
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: ROLE.MODERATOR })
 
     invoiceFixture.givenInvoiceExists(invoices)
 
@@ -182,9 +183,9 @@ describe('Update Invoice', () => {
 
     const invoiceToUpdate = invoices.find(invoice => invoice.id === 'invoice-test').data
 
-    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(300).buildGoogleUser()])
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(ROLE.ADMIN).buildGoogleUser()])
 
-    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 300 })
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: ROLE.ADMIN })
 
     invoiceFixture.givenInvoiceExists(invoices)
 

@@ -1,4 +1,5 @@
 import { invoiceBuilder } from '../../../../domain/invoice/tests/invoiceBuilder'
+import { ROLE } from '../../../../domain/user'
 import { userBuilder } from '../../../../domain/user/tests/userBuilder'
 import { RoleError } from '../../../errors'
 import { UserFixture, createUserFixture } from '../../../user/usecase/tests/user.fixture'
@@ -22,9 +23,9 @@ describe('get all invoices', () => {
       invoiceBuilder().withId('test-3').build(),
     ]
 
-    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(200).buildGoogleUser()])
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(ROLE.MODERATOR).buildGoogleUser()])
 
-    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 200 })
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: ROLE.MODERATOR })
 
     invoiceFixture.givenInvoiceExists([
       invoiceBuilder().build(),
@@ -44,9 +45,9 @@ describe('get all invoices', () => {
       invoiceBuilder().withId('test-3').build(),
     ]
 
-    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(100).buildGoogleUser()])
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(ROLE.USER).buildGoogleUser()])
 
-    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 100 })
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: ROLE.USER })
 
     invoiceFixture.givenInvoiceExists(invoices)
 
@@ -56,9 +57,9 @@ describe('get all invoices', () => {
   })
 
   test('should return all owned invoices only', async () => {
-    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(100).buildGoogleUser()])
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(ROLE.USER).buildGoogleUser()])
 
-    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 100 })
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: ROLE.USER })
 
     invoiceFixture.givenInvoiceExists([
       invoiceBuilder().withOwner('test-id').build(),

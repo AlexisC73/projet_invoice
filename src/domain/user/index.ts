@@ -68,7 +68,7 @@ export class User {
   }
 }
 
-const ROLE = {
+export const ROLE = {
   BAN: 0,
   USER: 100,
   MODERATOR: 200,
