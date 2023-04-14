@@ -32,7 +32,7 @@ export const invoiceToMongoInvoice = (invoice: Invoice): MongoInvoice => {
   mongoInvoice.sender = invoice.data.sender
   mongoInvoice.buyer = invoice.data.buyer
   mongoInvoice.products = invoice.data.products
-  mongoInvoice._id = new ObjectId(invoice.data.id) as any
+  mongoInvoice._id = new ObjectId(invoice.id) as any
   return mongoInvoice
 }
 
@@ -52,6 +52,6 @@ export const userToMongoUser = (user: User): MongoUser => {
   mongoUser.password = user.data.password
   mongoUser.linkedAccounts = user.data.linkedAccounts
   mongoUser.role = user.data.role
-  mongoUser._id = new ObjectId(user.data.id) as any
+  mongoUser._id = new ObjectId(user.id) as any
   return mongoUser
 }
