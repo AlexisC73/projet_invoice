@@ -1,5 +1,4 @@
 import { invoiceBuilder } from '../../../../domain/invoice/tests/invoiceBuilder'
-import { InMemoryInvoiceRepository } from '../../../../infrastructure/in-memory.invoice.repository'
 import { InvoiceFixture, createInvoiceFixture } from './invoice.fixture'
 
 describe('Update invoice status', () => {
@@ -11,7 +10,6 @@ describe('Update invoice status', () => {
   test('should update the invoice status', async () => {
     const invoice = invoiceBuilder().withStatus('pending')
 
-    const invoiceRepository = new InMemoryInvoiceRepository()
     fixture.givenInvoiceExists(invoice.build())
 
     await fixture.whenUpdateStatus(invoice.getProps().id, 'paid')
