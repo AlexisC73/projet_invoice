@@ -1,13 +1,9 @@
-import { userRepository } from '../../../../config'
 import { Invoice } from '../../../../domain/invoice'
 import { InMemoryInvoiceRepository } from '../../../../infrastructure/in-memory.invoice.repository'
 import { InMemoryUserRepository } from '../../../../infrastructure/in-memory.user.repository'
 import { JWTTokenService } from '../../../../infrastructure/jwt-token-service'
-import { InvoiceRepository } from '../../../invoice.repository'
-import { TokenService } from '../../../token-service'
-import { UserRepository } from '../../../user.repository'
 import { DeleteInvoiceCommand, DeleteInvoiceUsecase } from '../delete-invoice.usecase'
-import { GetAllInvoicesUsecase } from '../get-all-invoices.usecase'
+import { GetAllInvoicesCommand, GetAllInvoicesUsecase } from '../get-all-invoices.usecase'
 import { GetOneInvoiceUsecase } from '../get-one-usecase'
 import { PostInvoiceCommand, PostInvoiceUsecase } from '../post-invoice.usecase'
 import { UpdateInvoiceCommand, UpdateInvoiceUsecase } from '../update-invoice.usecase'
@@ -64,9 +60,9 @@ export const createInvoiceFixture = ({
         thrownError = error
       }
     },
-    whenGetAllInvoices: async (token: string) => {
+    whenGetAllInvoices: async ({ token, onlyOwned }: GetAllInvoicesCommand) => {
       try {
-        return await getAllInvoicesUsecase.handle(token)
+        return await getAllInvoicesUsecase.handle({ token, onlyOwned })
       } catch (error: any) {
         thrownError = error
       }
@@ -76,6 +72,13 @@ export const createInvoiceFixture = ({
         return await getOneInvoiceUsecase.handle(id)
       } catch (err: any) {
         thrownError = err
+      }
+    },
+    whenGetOwnedInvoices: async (params: GetAllInvoicesCommand) => {
+      try {
+        return await getAllInvoicesUsecase.handle(params)
+      } catch (error: any) {
+        thrownError = error
       }
     },
     thenInvoiceShouldBe: async (expectedInvoice: Invoice) => {

@@ -29,6 +29,10 @@ export class InMemoryInvoiceRepository implements InvoiceRepository {
     return Promise.resolve(this.invoices.find(invoice => invoice.id === id))
   }
 
+  getAllByUserId(userId: string): Promise<Invoice[]> {
+    return Promise.resolve(this.invoices.filter(invoice => invoice.owner === userId))
+  }
+
   async delete(id: string): Promise<void> {
     this.invoices = this.invoices.filter(invoice => invoice.id !== id)
     return Promise.resolve()

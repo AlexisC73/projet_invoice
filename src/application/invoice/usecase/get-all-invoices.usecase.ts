@@ -11,13 +11,25 @@ export class GetAllInvoicesUsecase {
     private readonly userRepository: UserRepository
   ) {}
 
-  async handle(userToken: string): Promise<Invoice['data'][]> {
-    const token: Token = this.tokenService.decode(userToken)
-    const user = await this.userRepository.findOneById(token.id)
-    if (!user || user.role < 200) {
-      throw new RoleError("You don't have permission to do this")
+  async handle({ token, onlyOwned }: GetAllInvoicesCommand): Promise<Invoice['data'][]> {
+    const userToken: Token = this.tokenService.decode(token)
+    const user = await this.userRepository.findOneById(userToken.id)
+    if (!user) {
+      throw new RoleError('There is a problem with your token. Please log in again.')
+    }
+    if (onlyOwned) {
+      const invoices = await this.invoiceRepository.getAllByUserId(user.id)
+      return invoices.map(invoice => invoice.data)
+    }
+    if (user.role < 200) {
+      throw new RoleError('You do not have permission to access this resource.')
     }
     const invoices = await this.invoiceRepository.getAll()
     return invoices.map(invoice => invoice.data)
   }
+}
+
+export type GetAllInvoicesCommand = {
+  token: string
+  onlyOwned?: boolean
 }

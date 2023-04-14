@@ -17,7 +17,6 @@ import { Token } from '../../application/token-service'
 import { MongoUserRepository } from '../mongo-user.repository'
 import { MongoUser } from '../../entity/User'
 import { userBuilder } from '../../domain/user/tests/userBuilder'
-import { RoleError, TooLongError } from '../../application/errors'
 
 describe('integration mongodb', () => {
   let composeOptions: IDockerComposeOptions

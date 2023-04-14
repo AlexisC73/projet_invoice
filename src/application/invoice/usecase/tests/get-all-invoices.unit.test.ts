@@ -28,7 +28,7 @@ describe('get all invoices', () => {
 
     invoiceFixture.givenInvoiceExists(invoices)
 
-    const allInvoices = await invoiceFixture.whenGetAllInvoices(userFixture.getToken())
+    const allInvoices = await invoiceFixture.whenGetAllInvoices({ token: userFixture.getToken() })
 
     expect(allInvoices).toEqual(invoices.map(invoice => invoice.data))
   })
@@ -46,8 +46,27 @@ describe('get all invoices', () => {
 
     invoiceFixture.givenInvoiceExists(invoices)
 
-    const allInvoices = await invoiceFixture.whenGetAllInvoices(userFixture.getToken())
+    const allInvoices = await invoiceFixture.whenGetAllInvoices({ token: userFixture.getToken() })
 
     invoiceFixture.thenErrorShouldBe(RoleError)
+  })
+
+  test('should return all owned invoices only', async () => {
+    userFixture.givenUserExist([userBuilder().withId('test-id').withRole(100).buildGoogleUser()])
+
+    userFixture.givenUserIsLoggedIn({ id: 'test-id', role: 100 })
+
+    invoiceFixture.givenInvoiceExists([
+      invoiceBuilder().withOwner('test-id').build(),
+      invoiceBuilder().withOwner('not-owned').withId('test-2').build(),
+      invoiceBuilder().withOwner('test-id').withId('test-3').build(),
+    ])
+
+    const allInvoices = await invoiceFixture.whenGetAllInvoices({ token: userFixture.getToken(), onlyOwned: true })
+
+    expect(allInvoices).toEqual([
+      invoiceBuilder().withOwner('test-id').build().data,
+      invoiceBuilder().withOwner('test-id').withId('test-3').build().data,
+    ])
   })
 })

@@ -5,4 +5,5 @@ export interface InvoiceRepository {
   findById(id: string): Promise<Invoice | null>
   delete(id: string): Promise<void>
   getAll(): Promise<Invoice[]>
+  getAllByUserId(userId: string): Promise<Invoice[]>
 }
