@@ -98,17 +98,23 @@ describe('integration mongodb', () => {
     await userRepository.save(userToMongoUser(existingUser.buildGoogleUser()))
 
     const mongoInvoiceId = new ObjectId().toString() as any
-    const existingInvoice = invoiceBuilder().withId(mongoInvoiceId).withOwner(mongoUserId).withDescription('test-1')
-    await invoiceRepository.save(invoiceToMongoInvoice(existingInvoice.build()))
+    const existingInvoice = invoiceBuilder()
+      .withId(mongoInvoiceId)
+      .withOwner(mongoUserId)
+      .withDescription('test-1')
+      .build()
+    await invoiceRepository.save(invoiceToMongoInvoice(existingInvoice))
 
-    const updatedInvoice = existingInvoice.withDescription('test-2').getProps()
     await updateInvoiceUsecase.handle({
-      invoiceToUpdate: updatedInvoice,
+      invoiceToUpdate: {
+        id: existingInvoice.id,
+        description: 'test-2',
+      },
       token: tokenService.createConnectToken({ id: mongoUserId, role: ROLE.USER }),
     })
 
     const inDbInvoice = await invoiceRepository.findOne({ where: { _id: new ObjectId(mongoInvoiceId) as any } })
-    expect(updatedInvoice).toEqual(mongoInvoiceToInvoice(inDbInvoice).data)
+    expect({ ...existingInvoice.data, description: 'test-2' }).toEqual(mongoInvoiceToInvoice(inDbInvoice).data)
 
     const inDbInvoices = await invoiceRepository.find()
     expect(inDbInvoices.length).toEqual(1)
