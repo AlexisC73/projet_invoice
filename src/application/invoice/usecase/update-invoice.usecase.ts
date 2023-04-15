@@ -25,14 +25,14 @@ export class UpdateInvoiceUsecase {
     const { date, dueDate, description, currency, contact, sender, buyer, products } = invoiceToUpdate
     const updatedInvoice = Invoice.fromData({
       ...invoice.data,
-      date,
-      dueDate,
-      description,
-      currency: currency || invoice.currency,
-      contact,
-      sender,
-      buyer,
-      products,
+      date: date ?? invoice.date,
+      dueDate: dueDate ?? invoice.dueDate,
+      description: description ?? invoice.description,
+      currency: currency ?? invoice.currency,
+      contact: contact ?? invoice.contact,
+      sender: sender ?? invoice.sender,
+      buyer: buyer ?? invoice.buyer,
+      products: products ?? invoice.products,
     })
     await this.invoiceRepository.save(updatedInvoice)
   }
@@ -41,17 +41,17 @@ export class UpdateInvoiceUsecase {
 export type UpdateInvoiceCommand = {
   invoiceToUpdate: {
     id: string
-    date: string
-    dueDate: string
-    description: string
+    date?: string
+    dueDate?: string
+    description?: string
     currency?: string
-    contact: string
-    sender: Address['data']
-    buyer: {
+    contact?: string
+    sender?: Address['data']
+    buyer?: {
       name: string
       address: Address['data']
     }
-    products: Product['data'][]
+    products?: Product['data'][]
   }
   token: string
 }

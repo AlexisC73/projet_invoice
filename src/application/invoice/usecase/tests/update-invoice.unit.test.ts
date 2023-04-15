@@ -17,10 +17,15 @@ describe('Update Invoice', () => {
     })
   })
 
-  test('should update an existing invoice', async () => {
+  test('should update an existing invoice with the given argument', async () => {
     const invoices = [
       invoiceBuilder().build(),
-      invoiceBuilder().withOwner('test-id').withDescription('desc-test').withId('invoice-test').build(),
+      invoiceBuilder()
+        .withOwner('test-id')
+        .withDescription('desc-test')
+        .withContact('old contact')
+        .withId('invoice-test')
+        .build(),
       invoiceBuilder().withId('test-3').build(),
     ]
 
@@ -34,7 +39,7 @@ describe('Update Invoice', () => {
 
     await invoiceFixture.whenUserUpdateInvoice({
       invoiceToUpdate: {
-        ...invoiceToUpdate,
+        id: invoiceToUpdate.id,
         contact: 'new contact',
       },
       token: userFixture.getToken(),
@@ -43,10 +48,15 @@ describe('Update Invoice', () => {
     invoiceFixture.thenInvoiceShouldBe(Invoice.fromData({ ...invoiceToUpdate, contact: 'new contact' }))
   })
 
-  test('should keep current currency if not defined in command', async () => {
+  test('should not update if no changed in updated invoice', async () => {
     const invoices = [
       invoiceBuilder().build(),
-      invoiceBuilder().withOwner('test-id').withDescription('desc-test').withId('invoice-test').build(),
+      invoiceBuilder()
+        .withOwner('test-id')
+        .withDescription('desc-test')
+        .withContact('old contact')
+        .withId('invoice-test')
+        .build(),
       invoiceBuilder().withId('test-3').build(),
     ]
 
@@ -60,19 +70,23 @@ describe('Update Invoice', () => {
 
     await invoiceFixture.whenUserUpdateInvoice({
       invoiceToUpdate: {
-        ...invoiceToUpdate,
-        currency: undefined,
+        id: invoiceToUpdate.id,
       },
       token: userFixture.getToken(),
     })
 
-    invoiceFixture.thenInvoiceShouldBe(Invoice.fromData(invoiceToUpdate))
+    invoiceFixture.thenInvoiceShouldBe(Invoice.fromData({ ...invoiceToUpdate }))
   })
 
-  test('should update usd to eur', async () => {
+  test('should update an existing invoice with the given argument', async () => {
     const invoices = [
       invoiceBuilder().build(),
-      invoiceBuilder().withOwner('test-id').withDescription('desc-test').withId('invoice-test').build(),
+      invoiceBuilder()
+        .withOwner('test-id')
+        .withDescription('desc-test')
+        .withCurrency('USD')
+        .withId('invoice-test')
+        .build(),
       invoiceBuilder().withId('test-3').build(),
     ]
 
@@ -98,7 +112,12 @@ describe('Update Invoice', () => {
   test('should throw if invoice not exists', async () => {
     const invoices = [
       invoiceBuilder().build(),
-      invoiceBuilder().withOwner('test-id').withDescription('desc-test').withId('invoice-test').build(),
+      invoiceBuilder()
+        .withOwner('test-id')
+        .withDescription('desc-test')
+        .withContact('old contact')
+        .withId('invoice-test')
+        .build(),
       invoiceBuilder().withId('test-3').build(),
     ]
 
@@ -124,7 +143,12 @@ describe('Update Invoice', () => {
   test('should throw if user not owner', async () => {
     const invoices = [
       invoiceBuilder().build(),
-      invoiceBuilder().withOwner('not-owner').withDescription('desc-test').withId('invoice-test').build(),
+      invoiceBuilder()
+        .withOwner('not-owner')
+        .withDescription('desc-test')
+        .withContact('old contact')
+        .withId('invoice-test')
+        .build(),
       invoiceBuilder().withId('test-3').build(),
     ]
 
@@ -150,7 +174,12 @@ describe('Update Invoice', () => {
   test('should not throw if moderator not owner', async () => {
     const invoices = [
       invoiceBuilder().build(),
-      invoiceBuilder().withOwner('not-owner').withDescription('desc-test').withId('invoice-test').build(),
+      invoiceBuilder()
+        .withOwner('not-owner')
+        .withDescription('desc-test')
+        .withContact('old contact')
+        .withId('invoice-test')
+        .build(),
       invoiceBuilder().withId('test-3').build(),
     ]
 
@@ -176,7 +205,12 @@ describe('Update Invoice', () => {
   test('should not throw if admin not owner', async () => {
     const invoices = [
       invoiceBuilder().build(),
-      invoiceBuilder().withOwner('not-owner').withDescription('desc-test').withId('invoice-test').build(),
+      invoiceBuilder()
+        .withOwner('not-owner')
+        .withDescription('desc-test')
+        .withContact('old contact')
+        .withId('invoice-test')
+        .build(),
       invoiceBuilder().withId('test-3').build(),
     ]
 
