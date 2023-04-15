@@ -3,7 +3,7 @@ import { InMemoryUserRepository } from '../../../../infrastructure/in-memory.use
 import { JWTTokenService } from '../../../../infrastructure/jwt-token-service'
 import { Token } from '../../../token-service'
 import { ConnectGoogleUserUsecase } from '../connect-google-user.usecase'
-import { CreateGoogleUserUsecase } from '../create-google-user.usecase'
+import { CreateGoogleUserCommand, CreateGoogleUserUsecase } from '../create-google-user.usecase'
 
 export const createUserFixture = () => {
   const userRepository = new InMemoryUserRepository()
@@ -22,11 +22,12 @@ export const createUserFixture = () => {
     givenUserIsLoggedIn: ({ id, role }: { id: string; role: number }) => {
       connectToken = tokenService.createConnectToken({ id, role })
     },
-    whenUserSignupWithGoogle: async (params: { id: string; googleId: string }) => {
+    whenUserSignupWithGoogle: async (params: CreateGoogleUserCommand) => {
       try {
         await createGoogleUserUsecase.handle({
           id: 'test-id',
           googleId: params.googleId,
+          email: params.email,
         })
       } catch (err: any) {
         thrownError = err

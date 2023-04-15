@@ -59,8 +59,8 @@ export class User {
     return new User(id, email, password, role, {})
   }
 
-  static fromGoogle(id: string, googleId: string, role: number) {
-    return new User(id, null, null, role, { google: { id: googleId } })
+  static fromGoogle(id: string, googleId: string, role: number, email: string | null) {
+    return new User(id, email, null, role, { google: { id: googleId } })
   }
 
   static fromData(data: User['data']) {

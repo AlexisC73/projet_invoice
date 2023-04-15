@@ -17,14 +17,18 @@ export const googleAuth = async (req, res) => {
 
   try {
     const { id: googleId } = req.user
-    const existUser = await userRepository.findOneByGoogleId(googleId)
+    const email = req.user.emails.filter(email => email.verified)[0].value
+    let existUser = await userRepository.findOneByGoogleId(googleId)
 
     if (!existUser) {
       await createGoogleUser.handle({
         googleId,
         id: new ObjectId().toString() as any,
+        email,
       })
     }
+
+    existUser = await userRepository.findOneByGoogleId(googleId)
     if (existUser.IsBanned) {
       throw new AuthError("You're banned")
     }

@@ -50,12 +50,14 @@ describe('integration mongodb', () => {
     const userId = new ObjectId().toString() as any
     const savedUser = userBuilder()
       .withId(userId)
+      .withEmail('test@test.fr')
       .withLinkedAccounts({ google: { id: 'google-id' } })
       .buildGoogleUser()
 
     await createGoogleUserUsecase.handle({
       id: userId,
-      googleId: 'google-id',
+      googleId: savedUser.linkedAccounts.google.id,
+      email: savedUser.email,
     })
 
     const inDbUser = await userRepository.findOne({ where: { _id: new ObjectId(userId) as any } })

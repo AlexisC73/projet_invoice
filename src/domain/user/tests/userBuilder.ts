@@ -19,6 +19,6 @@ export const userBuilder = ({
     withRole: (role: number) => userBuilder({ ...props, role }),
     withLinkedAccounts: (linkedAccounts: LinkedAccounts) => userBuilder({ ...props, linkedAccounts }),
     buildEmailPasswordUser: () => User.fromEmailPassword(id, email, password, role),
-    buildGoogleUser: () => User.fromGoogle(id, linkedAccounts.google.id, role),
+    buildGoogleUser: () => User.fromGoogle(id, linkedAccounts.google.id, role, email),
   }
 }
