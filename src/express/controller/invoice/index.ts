@@ -1,12 +1,13 @@
 import { ObjectId } from 'mongodb'
-import { PostInvoiceCommand, PostInvoiceUsecase } from '../../../application/invoice/usecase/post-invoice.usecase'
 import { invoiceRepository, tokenService, userRepository } from '../../../config'
-import { UpdateInvoiceStatusUsecase } from '../../../application/invoice/usecase/update-status.usecase'
-import { UpdateInvoiceUsecase } from '../../../application/invoice/usecase/update-invoice.usecase'
-import { DeleteInvoiceUsecase } from '../../../domain/invoice/usecases/delete-invoice.usecase'
-import { GetAllInvoicesUsecase } from '../../../application/invoice/usecase/get-all-invoices.usecase'
-import { GetOneInvoiceUsecase } from '../../../application/invoice/usecase/get-one-usecase'
+
 import { Invoice } from '../../../domain/invoice/invoice'
+import { UpdateInvoiceStatusUsecase } from '../../../domain/invoice/usecases/update-status.usecase'
+import { UpdateInvoiceUsecase } from '../../../domain/invoice/usecases/update-invoice.usecase'
+import { DeleteInvoiceUsecase } from '../../../domain/invoice/usecases/delete-invoice.usecase'
+import { GetAllInvoicesUsecase } from '../../../domain/invoice/usecases/get-all-invoices.usecase'
+import { GetOneInvoiceUsecase } from '../../../domain/invoice/usecases/get-one-usecase'
+import { PostInvoiceCommand, PostInvoiceUsecase } from '../../../domain/invoice/usecases/post-invoice.usecase'
 
 export const updateStatus = async (req, res) => {
   const updateInvoiceStatusUsecase = new UpdateInvoiceStatusUsecase(invoiceRepository, userRepository, tokenService)
