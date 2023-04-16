@@ -1,12 +1,12 @@
-import { ConnectGoogleUserUsecase } from '../../../application/user/usecase/connect-google-user.usecase'
+import { ConnectGoogleUserUsecase } from '../../../domain/user/usecases/connect-google-user.usecase'
 import { MongoUserRepository } from '../../../infrastructure/mongo-user.repository'
 import { MongoUser } from '../../../entity/User'
 import { AppDataSource } from '../../../data-source'
 import { JWTTokenService } from '../../../infrastructure/jwt-token-service'
 import { CreateGoogleUserUsecase } from '../../../application/user/usecase/create-google-user.usecase'
 import { ObjectId } from 'mongodb'
-import { User } from '../../../domain/user'
-import { AuthError, NotFoundError } from '../../../application/errors'
+import { User } from '../../../domain/user/user'
+import { AuthError, NotFoundError } from '../../../domain/errors'
 
 export const googleAuth = async (req, res) => {
   const typeormUserRepository = AppDataSource.getRepository(MongoUser)

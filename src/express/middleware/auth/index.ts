@@ -1,4 +1,4 @@
-import { AuthError, NotFoundError } from '../../../application/errors'
+import { AuthError, NotFoundError } from '../../../domain/errors'
 import { userRepository } from '../../../config'
 import { JWTTokenService } from '../../../infrastructure/jwt-token-service'
 

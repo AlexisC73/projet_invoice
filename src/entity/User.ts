@@ -1,5 +1,5 @@
 import { Entity, Column, ObjectIdColumn, ObjectID } from 'typeorm'
-import { User } from '../domain/user'
+import { User } from '../domain/user/user'
 
 @Entity()
 export class MongoUser implements Omit<User['data'], 'id'> {

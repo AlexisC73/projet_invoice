@@ -1,14 +1,14 @@
 import { DataSource } from 'typeorm'
 import * as path from 'path'
 import { ObjectId } from 'mongodb'
-import { mongoUserToUser } from '../utils'
+import { mongoUserToUser } from '../../utils'
 import DockerCompose, { IDockerComposeOptions } from 'docker-compose'
 import { MongoUser } from '../../entity/User'
 import { MongoUserRepository } from '../mongo-user.repository'
-import { CreateGoogleUserUsecase } from '../../application/user/usecase/create-google-user.usecase'
 import { userBuilder } from '../../domain/user/tests/userBuilder'
-import { ConnectGoogleUserUsecase } from '../../application/user/usecase/connect-google-user.usecase'
+import { ConnectGoogleUserUsecase } from '../../domain/user/usecases/connect-google-user.usecase'
 import { JWTTokenService } from '../jwt-token-service'
+import { CreateGoogleUserUsecase } from '../../domain/user/usecases/create-google-user.usecase'
 
 describe('integration mongodb', () => {
   let composeOptions: IDockerComposeOptions

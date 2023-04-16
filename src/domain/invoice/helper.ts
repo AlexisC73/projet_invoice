@@ -1,4 +1,4 @@
-import { CurrencyError, EmptyError, InvalidDateError, StatusError, TooLongError } from '../../application/errors'
+import { CurrencyError, EmptyError, InvalidDateError, StatusError, TooLongError } from '../errors'
 
 export class StringText {
   private constructor(private readonly _value: string | null) {}

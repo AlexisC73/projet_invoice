@@ -3,10 +3,10 @@ import { PostInvoiceCommand, PostInvoiceUsecase } from '../../../application/inv
 import { invoiceRepository, tokenService, userRepository } from '../../../config'
 import { UpdateInvoiceStatusUsecase } from '../../../application/invoice/usecase/update-status.usecase'
 import { UpdateInvoiceUsecase } from '../../../application/invoice/usecase/update-invoice.usecase'
-import { DeleteInvoiceUsecase } from '../../../application/invoice/usecase/delete-invoice.usecase'
+import { DeleteInvoiceUsecase } from '../../../domain/invoice/usecases/delete-invoice.usecase'
 import { GetAllInvoicesUsecase } from '../../../application/invoice/usecase/get-all-invoices.usecase'
 import { GetOneInvoiceUsecase } from '../../../application/invoice/usecase/get-one-usecase'
-import { Invoice } from '../../../domain/invoice'
+import { Invoice } from '../../../domain/invoice/invoice'
 
 export const updateStatus = async (req, res) => {
   const updateInvoiceStatusUsecase = new UpdateInvoiceStatusUsecase(invoiceRepository, userRepository, tokenService)

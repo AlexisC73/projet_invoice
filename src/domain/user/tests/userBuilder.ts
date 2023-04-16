@@ -1,4 +1,4 @@
-import { LinkedAccounts, User } from '..'
+import { LinkedAccounts, User } from '../user'
 
 export const userBuilder = ({
   id = 'test-id',

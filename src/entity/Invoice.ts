@@ -1,5 +1,5 @@
 import { Entity, Column, ObjectIdColumn, ObjectID } from 'typeorm'
-import { Address, Invoice, Product } from '../domain/invoice'
+import { Address, Invoice, Product } from '../domain/invoice/invoice'
 
 @Entity()
 export class MongoInvoice implements Omit<Invoice['data'], 'id'> {

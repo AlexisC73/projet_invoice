@@ -1,8 +1,8 @@
 import { Repository } from 'typeorm'
-import { UserRepository } from '../application/user.repository'
-import { User } from '../domain/user'
+import { UserRepository } from '../domain/user/user.repository'
+import { User } from '../domain/user/user'
 import { MongoUser } from '../entity/User'
-import { userToMongoUser } from './utils'
+import { userToMongoUser } from '../utils'
 import { ObjectId } from 'mongodb'
 
 export class MongoUserRepository implements UserRepository {

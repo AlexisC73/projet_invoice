@@ -1,5 +1,6 @@
 import * as jwt from 'jsonwebtoken'
-import { Token, TokenService } from '../application/token-service'
+import { TokenService } from '../domain/token/token.service'
+import { Token } from '../domain/token/token'
 
 export class JWTTokenService implements TokenService {
   constructor(private readonly secretKey: string) {}
