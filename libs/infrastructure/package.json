@@ -1,0 +1,29 @@
+{
+  "name": "@invoice/infrastructure",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "jest --testMatch=\"**/*.test.ts\" --runInBand",
+    "build": "tsc",
+    "build:libs": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "preserveSymlinks": true,
+  "license": "ISC",
+  "dependencies": {
+    "@invoice/domain": "workspace:^",
+    "docker-compose": "^0.23.19",
+    "jsonwebtoken": "^9.0.0",
+    "mongodb": "^4.13.0",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.3.11"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.4.0",
+    "@types/jsonwebtoken": "^9.0.0",
+    "jest": "^29.4.1",
+    "ts-jest": "^29.0.5"
+  }
+}
