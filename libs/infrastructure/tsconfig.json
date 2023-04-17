@@ -1,16 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ESNext",
+    "composite": true,
     "module": "commonjs",
     "moduleResolution": "node",
-    "lib": ["es2017", "dom"],
     "sourceMap": true,
     "outDir": "./dist",
     "rootDir": "./src",
     "baseUrl": ".",
-    "declaration": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "declaration": true
   },
-  "exclude": ["node_modules", "dist", "**/tests/**/*"]
+  "exclude": ["node_modules/", "dist/", "**/tests/**/*"]
 }
