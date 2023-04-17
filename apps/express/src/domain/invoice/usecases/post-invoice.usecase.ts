@@ -1,9 +1,7 @@
-import { Invoice } from '@invoice/shared/dist/domain/invoice'
+import { Address, Invoice, Product } from '@invoice/shared/src/domain/invoice'
 import { Token } from '../../token/token'
 import { TokenService } from '../../token/token.service'
 import { InvoiceRepository } from '../invoice.repository'
-import { Address } from '@invoice/shared/dist/domain/address'
-import { Product } from '@invoice/shared/dist/domain/product'
 
 export class PostInvoiceUsecase {
   constructor(private invoiceRepository: InvoiceRepository, private readonly tokenService: TokenService) {}

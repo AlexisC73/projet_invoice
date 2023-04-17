@@ -1,9 +1,8 @@
+import { Invoice } from '@invoice/shared/src/domain/invoice'
 import { TokenService } from '../../token/token.service'
 import { UserRepository } from '../../user/user.repository'
-import { Invoice, Errors } from '@invoice/shared'
 import { InvoiceRepository } from '../invoice.repository'
-
-const { NotFoundError, RoleError } = Errors
+import { NotFoundError, RoleError } from '@invoice/shared/src/domain/errors'
 
 export class GetOneInvoiceUsecase {
   constructor(

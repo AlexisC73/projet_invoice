@@ -1,13 +1,13 @@
 import { ObjectId } from 'mongodb'
 import { invoiceRepository, tokenService, userRepository } from '../../../config'
 
-import { Invoice } from '../../../domain/invoice/invoice'
 import { UpdateInvoiceStatusUsecase } from '../../../domain/invoice/usecases/update-status.usecase'
 import { UpdateInvoiceUsecase } from '../../../domain/invoice/usecases/update-invoice.usecase'
 import { DeleteInvoiceUsecase } from '../../../domain/invoice/usecases/delete-invoice.usecase'
 import { GetAllInvoicesUsecase } from '../../../domain/invoice/usecases/get-all-invoices.usecase'
 import { GetOneInvoiceUsecase } from '../../../domain/invoice/usecases/get-one-usecase'
 import { PostInvoiceCommand, PostInvoiceUsecase } from '../../../domain/invoice/usecases/post-invoice.usecase'
+import { Invoice } from '@invoice/shared/src/domain/invoice'
 
 export const updateStatus = async (req, res) => {
   const updateInvoiceStatusUsecase = new UpdateInvoiceStatusUsecase(invoiceRepository, userRepository, tokenService)

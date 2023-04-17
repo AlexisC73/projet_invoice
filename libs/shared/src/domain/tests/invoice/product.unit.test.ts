@@ -1,5 +1,5 @@
 import { EmptyError, TooLongError } from '../../errors'
-import { Product } from '../../product'
+import { Product } from '../../invoice'
 import { productBuilder } from './invoiceBuilder'
 
 describe('product', () => {

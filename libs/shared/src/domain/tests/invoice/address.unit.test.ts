@@ -1,4 +1,4 @@
-import { Address } from '../../address'
+import { Address } from '../../invoice'
 import { EmptyError, TooLongError } from '../../errors'
 import { addressBuilder } from './invoiceBuilder'
 

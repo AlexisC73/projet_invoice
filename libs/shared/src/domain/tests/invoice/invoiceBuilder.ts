@@ -1,6 +1,4 @@
-import { Address } from '../../address'
-import { Invoice } from '../../invoice'
-import { Product } from '../../product'
+import { Invoice, Address, Product } from '../../invoice'
 
 const _date = new Date('2023-04-23T22:00:00.000Z').toISOString()
 const _dueDate = new Date('2023-06-15T22:00:00.000Z').toISOString()

@@ -5,8 +5,8 @@ import { AppDataSource } from '../../../data-source'
 import { JWTTokenService } from '../../../infrastructure/jwt-token-service'
 import { ObjectId } from 'mongodb'
 import { User } from '../../../domain/user/user'
-import { AuthError, NotFoundError } from '../../../domain/errors'
 import { CreateGoogleUserUsecase } from '../../../domain/user/usecases/create-google-user.usecase'
+import { AuthError, NotFoundError } from '@invoice/shared/src/domain/errors'
 
 export const googleAuth = async (req, res) => {
   const typeormUserRepository = AppDataSource.getRepository(MongoUser)

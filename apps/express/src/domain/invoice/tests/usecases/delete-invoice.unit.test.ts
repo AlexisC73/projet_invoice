@@ -1,9 +1,9 @@
+import { invoiceBuilder } from '@invoice/shared/src/domain/tests/invoice/invoiceBuilder'
 import { UserFixture, createUserFixture } from '../../../user/tests/user.fixture'
 import { userBuilder } from '../../../user/tests/userBuilder'
 import { ROLE } from '../../../user/user'
 import { InvoiceFixture, createInvoiceFixture } from '../invoice.fixture'
-import { invoiceBuilder } from '@invoice/shared/src/domain/tests/invoice/invoiceBuilder'
-import { RoleError } from '@invoice/shared/dist/domain/errors'
+import { RoleError } from '@invoice/shared/src/domain/errors'
 
 describe('Delete invoice', () => {
   let invoiceFixture: InvoiceFixture

@@ -2,7 +2,7 @@ import { ROLE } from '../../user/user'
 import { InvoiceRepository } from '../invoice.repository'
 import { UserRepository } from '../../user/user.repository'
 import { TokenService } from '../../token/token.service'
-import { NotFoundError, RoleError } from '@invoice/shared/dist/domain/errors'
+import { NotFoundError, RoleError } from '@invoice/shared/src/domain/errors'
 
 export class DeleteInvoiceUsecase {
   constructor(

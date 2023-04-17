@@ -1,7 +1,6 @@
 import { DataSource } from 'typeorm'
 import { MongoInvoice } from '../../entity/Invoice'
 import * as path from 'path'
-import { invoiceBuilder } from '@invoice/shared/dist/domain/tests/invoice/invoiceBuilder'
 import { ObjectId } from 'mongodb'
 import { MongoInvoiceRepository } from '../mongo.invoice.repository'
 import { invoiceToMongoInvoice, mongoInvoiceToInvoice, userToMongoUser } from '../../utils'
@@ -18,6 +17,7 @@ import { UpdateInvoiceStatusUsecase } from '../../domain/invoice/usecases/update
 import { GetAllInvoicesUsecase } from '../../domain/invoice/usecases/get-all-invoices.usecase'
 import { GetOneInvoiceUsecase } from '../../domain/invoice/usecases/get-one-usecase'
 import { Token } from '../../domain/token/token'
+import { invoiceBuilder } from '@invoice/shared/src/domain/tests/invoice/invoiceBuilder'
 
 describe('integration mongodb', () => {
   let composeOptions: IDockerComposeOptions

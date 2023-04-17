@@ -3,8 +3,8 @@ import { MongoInvoice } from '../entity/Invoice'
 import { ObjectId } from 'mongodb'
 import { mongoInvoiceToInvoice } from '../utils'
 import { InvoiceRepository } from '../domain/invoice/invoice.repository'
-import { Invoice } from '@invoice/shared/dist/domain/invoice'
-import { NotFoundError } from '@invoice/shared/dist/domain/errors'
+import { NotFoundError } from '@invoice/shared/src/domain/errors'
+import { Invoice } from '@invoice/shared/src/domain/invoice'
 
 export class MongoInvoiceRepository implements InvoiceRepository {
   constructor(private readonly mongoRepository: Repository<MongoInvoice>) {}

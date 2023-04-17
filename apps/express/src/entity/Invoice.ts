@@ -1,6 +1,4 @@
-import { Address } from '@invoice/shared/dist/domain/address'
-import { Invoice } from '@invoice/shared/dist/domain/invoice'
-import { Product } from '@invoice/shared/dist/domain/product'
+import { Address, Invoice, Product } from '@invoice/shared/src/domain/invoice'
 import { Entity, Column, ObjectIdColumn, ObjectID } from 'typeorm'
 
 @Entity()

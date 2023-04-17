@@ -1,4 +1,4 @@
-import { RoleError } from '@invoice/shared/dist/domain/errors'
+import { RoleError } from '@invoice/shared/src/domain/errors'
 import { UserFixture, createUserFixture } from '../../../user/tests/user.fixture'
 import { userBuilder } from '../../../user/tests/userBuilder'
 import { ROLE } from '../../../user/user'

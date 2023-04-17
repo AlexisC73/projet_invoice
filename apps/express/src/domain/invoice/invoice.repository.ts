@@ -1,4 +1,4 @@
-import { Invoice } from '@invoice/shared'
+import { Invoice } from "@invoice/shared/src/domain/invoice"
 
 export interface InvoiceRepository {
   save(invoice: Invoice): Promise<void>

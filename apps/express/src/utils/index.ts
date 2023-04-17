@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb'
 import { MongoInvoice } from '../entity/Invoice'
 import { User } from '../domain/user/user'
 import { MongoUser } from '../entity/User'
-import { Invoice } from '@invoice/shared/dist/domain/invoice'
+import { Invoice } from '@invoice/shared/src/domain/invoice'
 
 export const mongoInvoiceToInvoice = (mongoInvoice: MongoInvoice): Invoice => {
   return Invoice.fromData({
