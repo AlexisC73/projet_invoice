@@ -13,8 +13,8 @@ import * as fs from 'fs'
 import * as session from 'express-session'
 import * as passport from 'passport'
 
-import invoiceRoute from './express/route/invoice'
-import userRoute from './express/route/user'
+import invoiceRoute from './route/invoice'
+import userRoute from './route/user'
 
 AppDataSource.initialize()
   .then(_ => {

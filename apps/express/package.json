@@ -4,7 +4,8 @@
   "main": "./build/index.js",
   "license": "MIT",
   "dependencies": {
-    "@invoice/shared": "workspace:^",
+    "@invoice/domain": "workspace:^",
+    "@invoice/infrastructure": "workspace:^",
     "@types/bcrypt": "^5.0.0",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",
@@ -33,11 +34,6 @@
     "start:prod": "node -r ts-node/register/transpile-only -r tsconfig-paths/register ./build/index.js",
     "build": "tsc -p tsconfig.prod.json",
     "start:dev": "nodemon",
-    "test:unit": "jest",
-    "test": "jest --testMatch=\"**/*.test.ts\" --runInBand",
-    "test:integration": "jest --testMatch=\"**/*.integration.test.ts\" --runInBand",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
     "start": "ts-node src/index.ts",
     "typeorm": "typeorm-ts-node-commonjs"
   },
