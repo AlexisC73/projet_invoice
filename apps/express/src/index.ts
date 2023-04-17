@@ -3,7 +3,6 @@ dotenv.config()
 
 import * as express from 'express'
 import * as cors from 'cors'
-import { AppDataSource } from './data-source'
 import * as cookieParser from 'cookie-parser'
 
 import { createServer } from 'https'
@@ -15,12 +14,6 @@ import * as passport from 'passport'
 
 import invoiceRoute from './route/invoice'
 import userRoute from './route/user'
-
-AppDataSource.initialize()
-  .then(_ => {
-    console.log('Database connected')
-  })
-  .catch(error => console.log(error))
 
 const PORT = process.env.PORT || 5500
 
@@ -41,7 +34,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(
   session({
-    secret: 'cats',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     cookie: { secure: process.env.NODE_ENV === 'production' ? true : false },
     saveUninitialized: true,
