@@ -2,9 +2,9 @@ import { Repository } from 'typeorm'
 import { MongoInvoice } from '../entity/Invoice'
 import { ObjectId } from 'mongodb'
 import { mongoInvoiceToInvoice } from '../utils'
-import { InvoiceRepository } from '../domain/invoice/usecases/invoice.repository'
-import { Errors, Invoice } from '@invoice/shared'
-const { NotFoundError } = Errors
+import { InvoiceRepository } from '../domain/invoice/invoice.repository'
+import { Invoice } from '@invoice/shared/dist/domain/invoice'
+import { NotFoundError } from '@invoice/shared/dist/domain/errors'
 
 export class MongoInvoiceRepository implements InvoiceRepository {
   constructor(private readonly mongoRepository: Repository<MongoInvoice>) {}

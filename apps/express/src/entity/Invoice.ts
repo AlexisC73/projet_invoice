@@ -1,5 +1,7 @@
+import { Address } from '@invoice/shared/dist/domain/address'
+import { Invoice } from '@invoice/shared/dist/domain/invoice'
+import { Product } from '@invoice/shared/dist/domain/product'
 import { Entity, Column, ObjectIdColumn, ObjectID } from 'typeorm'
-import { Address, Invoice, Product } from '@invoice/shared'
 
 @Entity()
 export class MongoInvoice implements Omit<Invoice['data'], 'id'> {

@@ -1,11 +1,10 @@
-import { Errors, Invoice } from '@invoice/shared'
+import { Invoice } from '@invoice/shared/dist/domain/invoice'
 import { UserFixture, createUserFixture } from '../../../user/tests/user.fixture'
 import { userBuilder } from '../../../user/tests/userBuilder'
 import { ROLE } from '../../../user/user'
 import { InvoiceFixture, createInvoiceFixture } from '../invoice.fixture'
-import { invoiceBuilder } from '../invoiceBuilder'
-
-const { NotFoundError, RoleError } = Errors
+import { invoiceBuilder } from '@invoice/shared/src/domain/tests/invoice/invoiceBuilder'
+import { NotFoundError, RoleError } from '@invoice/shared/dist/domain/errors'
 
 describe('Update Invoice', () => {
   let invoiceFixture: InvoiceFixture

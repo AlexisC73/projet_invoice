@@ -1,6 +1,6 @@
 import { StringText } from '../helper'
 
-export default class Address {
+export class Address {
   constructor(
     private readonly _street: StringText,
     private readonly _city: StringText,

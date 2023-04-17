@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm'
 import { MongoInvoice } from '../../entity/Invoice'
 import * as path from 'path'
-import { invoiceBuilder } from '../../domain/invoice/tests/invoiceBuilder'
+import { invoiceBuilder } from '@invoice/shared/dist/domain/tests/invoice/invoiceBuilder'
 import { ObjectId } from 'mongodb'
 import { MongoInvoiceRepository } from '../mongo.invoice.repository'
 import { invoiceToMongoInvoice, mongoInvoiceToInvoice, userToMongoUser } from '../../utils'

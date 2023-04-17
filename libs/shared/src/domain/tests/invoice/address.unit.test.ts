@@ -1,7 +1,6 @@
-import { Errors, Address } from '@invoice/shared'
-import { addressBuilder } from '../invoiceBuilder'
-
-const { EmptyError, TooLongError } = Errors
+import { Address } from '../../address'
+import { EmptyError, TooLongError } from '../../errors'
+import { addressBuilder } from './invoiceBuilder'
 
 describe('Address', () => {
   describe('Rule: address street is required', () => {

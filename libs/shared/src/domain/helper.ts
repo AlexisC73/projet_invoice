@@ -24,7 +24,7 @@ export class StringText {
     maxLength?: number
     required?: boolean
   }) {
-    if (!_value || _value.trim().length <= 0) {
+    if (!_value || _value.trim().length <= 0 || typeof _value === 'undefined') {
       if (required) {
         throw new EmptyError(`${propertyName} is required`)
       }

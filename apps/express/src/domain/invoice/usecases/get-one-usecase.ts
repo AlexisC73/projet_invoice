@@ -1,7 +1,7 @@
 import { TokenService } from '../../token/token.service'
 import { UserRepository } from '../../user/user.repository'
 import { Invoice, Errors } from '@invoice/shared'
-import { InvoiceRepository } from './invoice.repository'
+import { InvoiceRepository } from '../invoice.repository'
 
 const { NotFoundError, RoleError } = Errors
 

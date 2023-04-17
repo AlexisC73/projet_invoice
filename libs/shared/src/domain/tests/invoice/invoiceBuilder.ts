@@ -1,4 +1,6 @@
-import { Address, Invoice, Product } from '@invoice/shared'
+import { Address } from '../../address'
+import { Invoice } from '../../invoice'
+import { Product } from '../../product'
 
 const _date = new Date('2023-04-23T22:00:00.000Z').toISOString()
 const _dueDate = new Date('2023-06-15T22:00:00.000Z').toISOString()
@@ -34,21 +36,39 @@ export const invoiceBuilder = ({
   }
   products?: Product['data'][]
 } = {}) => {
-  const props = { id, date, dueDate, description, status, contact, owner, sender, buyer, products, currency }
+  const props = {
+    id,
+    date,
+    dueDate,
+    description,
+    status,
+    contact,
+    owner,
+    sender,
+    buyer,
+    products,
+    currency,
+  }
   return {
     withId: (id: string) => invoiceBuilder({ ...props, id }),
     withDate: (date: string) => invoiceBuilder({ ...props, date }),
     withDueDate: (dueDate: string) => invoiceBuilder({ ...props, dueDate }),
-    withDescription: (description: string) => invoiceBuilder({ ...props, description }),
+    withDescription: (description: string) =>
+      invoiceBuilder({ ...props, description }),
     withCurrency: (currency: string) => invoiceBuilder({ ...props, currency }),
     withStatus: (status: string) => invoiceBuilder({ ...props, status }),
     withContact: (contact: string) => invoiceBuilder({ ...props, contact }),
     withOwner: (owner: string) => invoiceBuilder({ ...props, owner }),
-    withSender: (sender: Address['data']) => invoiceBuilder({ ...props, sender }),
-    withBuyer: (buyer: { name: string; address: Address['data'] }) => invoiceBuilder({ ...props, buyer }),
-    withBuyerName: (name: string) => invoiceBuilder({ ...props, buyer: { ...props.buyer, name } }),
-    withBuyerAddress: (address: Address['data']) => invoiceBuilder({ ...props, buyer: { ...props.buyer, address } }),
-    withProducts: (products: Product['data'][]) => invoiceBuilder({ ...props, products }),
+    withSender: (sender: Address['data']) =>
+      invoiceBuilder({ ...props, sender }),
+    withBuyer: (buyer: { name: string; address: Address['data'] }) =>
+      invoiceBuilder({ ...props, buyer }),
+    withBuyerName: (name: string) =>
+      invoiceBuilder({ ...props, buyer: { ...props.buyer, name } }),
+    withBuyerAddress: (address: Address['data']) =>
+      invoiceBuilder({ ...props, buyer: { ...props.buyer, address } }),
+    withProducts: (products: Product['data'][]) =>
+      invoiceBuilder({ ...props, products }),
     getPropsWithoutCurrency: () => {
       const { currency, ...rest } = props
       return rest
@@ -63,13 +83,22 @@ export const addressBuilder = ({
   city = 'city',
   zip = 'zip',
   country = 'country',
-}: { street?: string; city?: string; zip?: string; country?: string } = {}) => {
+}: {
+  street?: string | null
+  city?: string | null
+  zip?: string | null
+  country?: string | null
+} = {}) => {
   const props = { street, city, zip, country }
   return {
-    withStreet: (street: string) => addressBuilder({ ...props, street }),
-    withCity: (city: string) => addressBuilder({ ...props, city }),
-    withZip: (zip: string) => addressBuilder({ ...props, zip }),
-    withCountry: (country: string) => addressBuilder({ ...props, country }),
+    withStreet: (street: string | null | undefined) =>
+      addressBuilder({ ...props, street }),
+    withCity: (city: string | null | undefined) =>
+      addressBuilder({ ...props, city }),
+    withZip: (zip: string | null | undefined) =>
+      addressBuilder({ ...props, zip }),
+    withCountry: (country: string | null | undefined) =>
+      addressBuilder({ ...props, country }),
     getProps: () => props,
     build: () => Address.fromData(props),
   }
@@ -83,18 +112,20 @@ export const productBuilder = ({
   description = 'description',
 }: {
   id?: string
-  name?: string
+  name?: string | null
   quantity?: string
   unitPrice?: string
-  description?: string
+  description?: string | null
 } = {}) => {
   const props = { id, name, quantity, unitPrice, description }
   return {
     withId: (id: string) => productBuilder({ ...props, id }),
-    withName: (name: string) => productBuilder({ ...props, name }),
+    withName: (name: string | null) => productBuilder({ ...props, name }),
     withQuantity: (quantity: string) => productBuilder({ ...props, quantity }),
-    withUnitPrice: (unitPrice: string) => productBuilder({ ...props, unitPrice }),
-    withDescription: (description: string) => productBuilder({ ...props, description }),
+    withUnitPrice: (unitPrice: string) =>
+      productBuilder({ ...props, unitPrice }),
+    withDescription: (description: string | null) =>
+      productBuilder({ ...props, description }),
     getProps: () => props,
     build: () => Product.fromData(props),
   }

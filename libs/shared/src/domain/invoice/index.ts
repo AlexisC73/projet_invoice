@@ -1,9 +1,9 @@
-import Address from '../address'
+import { Address } from '../address'
 import { EmptyError } from '../errors'
 import { CurrencyText, DateText, StatusText, StringText } from '../helper'
-import Product from '../product'
+import { Product } from '../product'
 
-export default class Invoice {
+export class Invoice {
   constructor(
     private readonly _id: string,
     private readonly _date: DateText,

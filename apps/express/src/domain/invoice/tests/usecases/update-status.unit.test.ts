@@ -1,11 +1,9 @@
-import { Errors } from '@invoice/shared'
+import { RoleError } from '@invoice/shared/dist/domain/errors'
 import { UserFixture, createUserFixture } from '../../../user/tests/user.fixture'
 import { userBuilder } from '../../../user/tests/userBuilder'
 import { ROLE } from '../../../user/user'
 import { InvoiceFixture, createInvoiceFixture } from '../invoice.fixture'
-import { invoiceBuilder } from '../invoiceBuilder'
-
-const { RoleError } = Errors
+import { invoiceBuilder } from '@invoice/shared/src/domain/tests/invoice/invoiceBuilder'
 
 describe('Update invoice status', () => {
   let userFixture: UserFixture

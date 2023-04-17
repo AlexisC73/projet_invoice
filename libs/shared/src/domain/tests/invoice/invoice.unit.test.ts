@@ -1,8 +1,16 @@
-import { Errors } from '@invoice/shared'
-import { Invoice } from '@invoice/shared'
-import { addressBuilder, invoiceBuilder, productBuilder } from '../invoiceBuilder'
-
-const { CurrencyError, EmptyError, InvalidDateError, StatusError, TooLongError } = Errors
+import {
+  CurrencyError,
+  EmptyError,
+  InvalidDateError,
+  StatusError,
+  TooLongError,
+} from '../../errors'
+import { Invoice } from '../../invoice'
+import {
+  addressBuilder,
+  invoiceBuilder,
+  productBuilder,
+} from './invoiceBuilder'
 
 describe('Invoice', () => {
   test('should create an invoice', () => {
@@ -12,7 +20,9 @@ describe('Invoice', () => {
 
   describe("Rule: 'date' must be a valid date", () => {
     test('create invoice with valid date', () => {
-      const data = invoiceBuilder().withDate('2023-04-23T22:00:00.000Z').getProps()
+      const data = invoiceBuilder()
+        .withDate('2023-04-23T22:00:00.000Z')
+        .getProps()
       expect(Invoice.fromData(data).data).toEqual(data)
     })
 
@@ -24,7 +34,9 @@ describe('Invoice', () => {
 
   describe("Rule: 'dueDate' must be a valid date", () => {
     test('create invoice with valid dueDate', () => {
-      const data = invoiceBuilder().withDueDate('2023-04-23T22:00:00.000Z').getProps()
+      const data = invoiceBuilder()
+        .withDueDate('2023-04-23T22:00:00.000Z')
+        .getProps()
       expect(Invoice.fromData(data).data).toEqual(data)
     })
 
@@ -36,7 +48,9 @@ describe('Invoice', () => {
 
   describe('Rule: description can be null', () => {
     test('create invoice with empty description', () => {
-      const data = invoiceBuilder().withDescription(null).getProps()
+      const data = invoiceBuilder()
+        .withDescription(null as any)
+        .getProps()
       expect(Invoice.fromData(data).data).toEqual(data)
     })
 
@@ -76,7 +90,9 @@ describe('Invoice', () => {
     })
 
     test('create invoice with null currency', () => {
-      const data = invoiceBuilder().withCurrency(null).getProps()
+      const data = invoiceBuilder()
+        .withCurrency(null as any)
+        .getProps()
       expect(() => Invoice.fromData(data)).toThrow(CurrencyError)
     })
   })
@@ -98,14 +114,18 @@ describe('Invoice', () => {
     })
 
     test("should throw if 'status' is empty", () => {
-      const data = invoiceBuilder().withStatus(null).getProps()
+      const data = invoiceBuilder()
+        .withStatus(null as any)
+        .getProps()
       expect(() => Invoice.fromData(data)).toThrow(StatusError)
     })
   })
 
   describe('Rule: "contact" can not be null', () => {
     test('should throw if contact is empty', () => {
-      const data = invoiceBuilder().withContact(null).getProps()
+      const data = invoiceBuilder()
+        .withContact(null as any)
+        .getProps()
       expect(() => Invoice.fromData(data)).toThrow(EmptyError)
     })
 
@@ -129,7 +149,9 @@ describe('Invoice', () => {
 
   describe('Rule: buyer name can not be null', () => {
     test('should throw if buyer name is empty', () => {
-      const data = invoiceBuilder().withBuyerName(null).getProps()
+      const data = invoiceBuilder()
+        .withBuyerName(null as any)
+        .getProps()
       expect(() => Invoice.fromData(data)).toThrow(EmptyError)
     })
 
@@ -153,24 +175,32 @@ describe('Invoice', () => {
 
   describe('Rule: sender must be valid and can not be null', () => {
     test('should throw if sender is null', () => {
-      const data = invoiceBuilder().withSender(null).getProps()
+      const data = invoiceBuilder()
+        .withSender(null as any)
+        .getProps()
       expect(() => Invoice.fromData(data)).toThrow(EmptyError)
     })
 
     test('should use sender info if not null', () => {
-      const data = invoiceBuilder().withSender(addressBuilder().getProps()).getProps()
+      const data = invoiceBuilder()
+        .withSender(addressBuilder().getProps())
+        .getProps()
       expect(Invoice.fromData(data).sender).toEqual(addressBuilder().getProps())
     })
   })
 
   describe('Rule: buyer adress must be valid and can not be null', () => {
     test('should throw if sender is null', () => {
-      const data = invoiceBuilder().withBuyerAddress(null).getProps()
+      const data = invoiceBuilder()
+        .withBuyerAddress(null as any)
+        .getProps()
       expect(() => Invoice.fromData(data)).toThrow(EmptyError)
     })
 
     test('should use sender info if not null', () => {
-      const data = invoiceBuilder().withBuyerAddress(addressBuilder().getProps()).getProps()
+      const data = invoiceBuilder()
+        .withBuyerAddress(addressBuilder().getProps())
+        .getProps()
       expect(Invoice.fromData(data).sender).toEqual(addressBuilder().getProps())
     })
   })
@@ -182,8 +212,12 @@ describe('Invoice', () => {
     })
 
     test('should create invoice with products', () => {
-      const data = invoiceBuilder().withProducts([productBuilder().getProps()]).getProps()
-      expect(Invoice.fromData(data).products).toEqual([productBuilder().getProps()])
+      const data = invoiceBuilder()
+        .withProducts([productBuilder().getProps()])
+        .getProps()
+      expect(Invoice.fromData(data).products).toEqual([
+        productBuilder().getProps(),
+      ])
     })
   })
 })

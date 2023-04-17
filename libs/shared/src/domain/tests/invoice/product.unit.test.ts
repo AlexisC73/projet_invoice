@@ -1,8 +1,6 @@
-import { Errors } from '@invoice/shared'
-import { Product } from '@invoice/shared'
-import { productBuilder } from '../invoiceBuilder'
-
-const { EmptyError, TooLongError } = Errors
+import { EmptyError, TooLongError } from '../../errors'
+import { Product } from '../../product'
+import { productBuilder } from './invoiceBuilder'
 
 describe('product', () => {
   describe("Rule: 'name' can not be null", () => {

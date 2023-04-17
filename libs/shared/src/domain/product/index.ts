@@ -1,6 +1,6 @@
 import { StringText } from '../helper'
 
-export default class Product {
+export class Product {
   constructor(
     private readonly _id: string,
     private readonly _name: StringText,
