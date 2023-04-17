@@ -1,4 +1,4 @@
-# Projet invoice
+# Backend express app
 
 Steps to run this project:
 
