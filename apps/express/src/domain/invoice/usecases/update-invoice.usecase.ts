@@ -1,9 +1,9 @@
-
-import { NotFoundError, RoleError } from '../../errors'
 import { TokenService } from '../../token/token.service'
 import { UserRepository } from '../../user/user.repository'
-import { Address, Invoice, Product } from '../invoice'
+import { Address, Invoice, Product, Errors } from '@invoice/shared'
 import { InvoiceRepository } from './invoice.repository'
+
+const { NotFoundError, RoleError } = Errors
 
 export class UpdateInvoiceUsecase {
   constructor(

@@ -1,8 +1,10 @@
 import { ROLE } from '../../user/user'
-import { NotFoundError, RoleError } from '../../errors'
 import { InvoiceRepository } from './invoice.repository'
 import { UserRepository } from '../../user/user.repository'
 import { TokenService } from '../../token/token.service'
+import { Errors } from '@invoice/shared'
+
+const { NotFoundError, RoleError } = Errors
 
 export class DeleteInvoiceUsecase {
   constructor(

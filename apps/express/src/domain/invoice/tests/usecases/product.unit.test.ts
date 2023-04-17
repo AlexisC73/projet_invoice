@@ -1,7 +1,8 @@
-import { EmptyError, TooLongError } from "../../../errors"
-import { Product } from "../../invoice"
-import { productBuilder } from "../invoiceBuilder"
+import { Errors } from '@invoice/shared'
+import { Product } from '@invoice/shared'
+import { productBuilder } from '../invoiceBuilder'
 
+const { EmptyError, TooLongError } = Errors
 
 describe('product', () => {
   describe("Rule: 'name' can not be null", () => {

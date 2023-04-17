@@ -1,4 +1,10 @@
-import { CurrencyError, EmptyError, InvalidDateError, StatusError, TooLongError } from '../errors'
+import {
+  CurrencyError,
+  EmptyError,
+  InvalidDateError,
+  StatusError,
+  TooLongError,
+} from './errors'
 
 export class StringText {
   private constructor(private readonly _value: string | null) {}
@@ -13,7 +19,7 @@ export class StringText {
     maxLength,
     required,
   }: {
-    _value: string
+    _value: string | null
     propertyName: string
     maxLength?: number
     required?: boolean
@@ -25,7 +31,9 @@ export class StringText {
       return new StringText(null)
     }
     if (!!maxLength && _value.trim().length > maxLength) {
-      throw new TooLongError(`${propertyName} can not be longer than ${maxLength} characters`)
+      throw new TooLongError(
+        `${propertyName} can not be longer than ${maxLength} characters`
+      )
     }
     return new StringText(_value.trim())
   }
@@ -41,7 +49,9 @@ export class DateText {
   static fromString(_date: string) {
     const date = new Date(_date)
     if (isNaN(date.getTime())) {
-      throw new InvalidDateError("Date can't be parsed, please use YYYY-MM-DD format")
+      throw new InvalidDateError(
+        "Date can't be parsed, please use YYYY-MM-DD format"
+      )
     }
     return new DateText(date.toISOString())
   }

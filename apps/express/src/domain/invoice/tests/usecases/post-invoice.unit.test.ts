@@ -1,8 +1,7 @@
-import { UserFixture, createUserFixture } from "../../../user/tests/user.fixture"
-import { ROLE } from "../../../user/user"
-import { InvoiceFixture, createInvoiceFixture } from "../invoice.fixture"
-import { invoiceBuilder, productBuilder } from "../invoiceBuilder"
-
+import { UserFixture, createUserFixture } from '../../../user/tests/user.fixture'
+import { ROLE } from '../../../user/user'
+import { InvoiceFixture, createInvoiceFixture } from '../invoice.fixture'
+import { invoiceBuilder, productBuilder } from '../invoiceBuilder'
 
 describe('Post Invoice', () => {
   let invoiceFixture: InvoiceFixture

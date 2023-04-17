@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { Invoice } from '../domain/invoice/invoice'
+import { Invoice } from '@invoice/shared'
 import { MongoInvoice } from '../entity/Invoice'
 import { User } from '../domain/user/user'
 import { MongoUser } from '../entity/User'

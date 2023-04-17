@@ -1,10 +1,11 @@
-import { RoleError } from "../../../errors"
-import { UserFixture, createUserFixture } from "../../../user/tests/user.fixture"
-import { userBuilder } from "../../../user/tests/userBuilder"
-import { ROLE } from "../../../user/user"
-import { InvoiceFixture, createInvoiceFixture } from "../invoice.fixture"
-import { invoiceBuilder } from "../invoiceBuilder"
+import { Errors } from '@invoice/shared'
+import { UserFixture, createUserFixture } from '../../../user/tests/user.fixture'
+import { userBuilder } from '../../../user/tests/userBuilder'
+import { ROLE } from '../../../user/user'
+import { InvoiceFixture, createInvoiceFixture } from '../invoice.fixture'
+import { invoiceBuilder } from '../invoiceBuilder'
 
+const { RoleError } = Errors
 
 describe('Delete invoice', () => {
   let invoiceFixture: InvoiceFixture

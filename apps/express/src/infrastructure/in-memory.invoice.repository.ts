@@ -1,4 +1,4 @@
-import { Invoice } from '../domain/invoice/invoice'
+import { Invoice } from '@invoice/shared'
 import { InvoiceRepository } from '../domain/invoice/usecases/invoice.repository'
 
 export class InMemoryInvoiceRepository implements InvoiceRepository {

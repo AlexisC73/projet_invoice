@@ -1,9 +1,9 @@
-
 import { TokenService } from '../../token/token.service'
-import { NotFoundError, RoleError } from "../../errors"
-import { UserRepository } from "../../user/user.repository"
-import { Invoice } from "../invoice"
-import { InvoiceRepository } from "./invoice.repository"
+import { UserRepository } from '../../user/user.repository'
+import { Invoice, Errors } from '@invoice/shared'
+import { InvoiceRepository } from './invoice.repository'
+
+const { NotFoundError, RoleError } = Errors
 
 export class GetOneInvoiceUsecase {
   constructor(

@@ -1,11 +1,11 @@
-import { NotFoundError, RoleError } from "../../../errors"
-import { UserFixture, createUserFixture } from "../../../user/tests/user.fixture"
-import { userBuilder } from "../../../user/tests/userBuilder"
-import { ROLE } from "../../../user/user"
-import { Invoice } from "../../invoice"
-import { InvoiceFixture, createInvoiceFixture } from "../invoice.fixture"
-import { invoiceBuilder } from "../invoiceBuilder"
+import { Errors, Invoice } from '@invoice/shared'
+import { UserFixture, createUserFixture } from '../../../user/tests/user.fixture'
+import { userBuilder } from '../../../user/tests/userBuilder'
+import { ROLE } from '../../../user/user'
+import { InvoiceFixture, createInvoiceFixture } from '../invoice.fixture'
+import { invoiceBuilder } from '../invoiceBuilder'
 
+const { NotFoundError, RoleError } = Errors
 
 describe('Update Invoice', () => {
   let invoiceFixture: InvoiceFixture

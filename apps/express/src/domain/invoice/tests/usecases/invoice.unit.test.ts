@@ -1,6 +1,8 @@
-import { CurrencyError, EmptyError, InvalidDateError, StatusError, TooLongError } from '../../../errors'
-import { Invoice } from '../../invoice'
+import { Errors } from '@invoice/shared'
+import { Invoice } from '@invoice/shared'
 import { addressBuilder, invoiceBuilder, productBuilder } from '../invoiceBuilder'
+
+const { CurrencyError, EmptyError, InvalidDateError, StatusError, TooLongError } = Errors
 
 describe('Invoice', () => {
   test('should create an invoice', () => {

@@ -1,6 +1,8 @@
-import { NotFoundError } from '../../errors'
+import { Errors } from '@invoice/shared'
 import { TokenService } from '../../token/token.service'
 import { UserRepository } from '../user.repository'
+
+const { NotFoundError } = Errors
 
 export class ConnectGoogleUserUsecase {
   constructor(private readonly userRepository: UserRepository, private readonly tokenService: TokenService) {}

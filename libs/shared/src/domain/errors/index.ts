@@ -53,3 +53,14 @@ export class AuthError extends Error {
     this.name = 'AuthError'
   }
 }
+
+export default {
+  InvalidDateError,
+  TooLongError,
+  CurrencyError,
+  StatusError,
+  EmptyError,
+  NotFoundError,
+  RoleError,
+  AuthError,
+}

@@ -1,6 +1,6 @@
 import { Token } from '../../token/token'
 import { TokenService } from '../../token/token.service'
-import { Address, Invoice, Product } from '../invoice'
+import { Address, Invoice, Product } from '@invoice/shared'
 import { InvoiceRepository } from './invoice.repository'
 
 export class PostInvoiceUsecase {

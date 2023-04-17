@@ -2,7 +2,7 @@ import { InMemoryInvoiceRepository } from '../../../infrastructure/in-memory.inv
 import { InMemoryUserRepository } from '../../../infrastructure/in-memory.user.repository'
 import { JWTTokenService } from '../../../infrastructure/jwt-token-service'
 import { DeleteInvoiceCommand, DeleteInvoiceUsecase } from '../usecases/delete-invoice.usecase'
-import { Invoice } from '../invoice'
+import { Invoice } from '@invoice/shared'
 import { PostInvoiceCommand, PostInvoiceUsecase } from '../usecases/post-invoice.usecase'
 import { UpdateInvoiceCommand, UpdateInvoiceUsecase } from '../usecases/update-invoice.usecase'
 import { UpdateInvoiceStatusUsecase, UpdateStatusCommand } from '../usecases/update-status.usecase'
