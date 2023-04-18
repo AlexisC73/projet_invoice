@@ -10,5 +10,3 @@ Steps to run the backend:
 4. Run `pnpm -r build:libs`
 5. Run `pnpm build:server` that will build the express app
 6. Run `pnpm start:server`
-
-When previous steps are done, you can run the backend with the `npm run start:server` command from the root folder.
