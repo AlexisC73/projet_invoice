@@ -9,7 +9,11 @@ describe('create google user', () => {
   })
 
   test("should create a user with google's id", async () => {
-    await userFixture.whenUserSignupWithGoogle({ id: 'test-id', googleId: 'google-id', email: 'test@test.fr' })
+    await userFixture.whenUserSignupWithGoogle({
+      id: 'test-id',
+      googleId: 'google-id',
+      email: 'test@test.fr',
+    })
 
     userFixture.thenUserShouldBe(
       userBuilder()

@@ -1,4 +1,4 @@
-import { Address } from '../../invoice'
+import { Address } from '..'
 import { EmptyError, TooLongError } from '../../errors'
 import { addressBuilder } from './invoiceBuilder'
 
@@ -7,7 +7,7 @@ describe('Address', () => {
     test('should throw if address street is empty', () => {
       const data = addressBuilder()
         .withStreet(null as any)
-        .getProps()
+        .getProps() as any
       expect(() => Address.fromData(data)).toThrow(EmptyError)
     })
   })

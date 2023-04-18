@@ -1,10 +1,11 @@
-import { PrismaClient } from '@invoice/domain'
+import { PrismaClient, User } from '@invoice/domain'
 import { exec } from 'child_process'
 import { promisify } from 'util'
-import { PrismaUserRepository } from '../prisma-user.repository'
-import { usecases } from '@invoice/domain'
+import { PrismaUserRepository } from '../user-repository/prisma-user.repository'
+import { UserUsecase } from '@invoice/domain'
 import { ObjectId } from 'mongodb'
-import { userBuilder } from '@invoice/domain/src/user/tests/userBuilder'
+import { userBuilder } from '@invoice/domain'
+import { JWTTokenService } from '../token-service/jwt/jwt-token-service'
 import * as dotenv from 'dotenv'
 
 const asyncExec = promisify(exec)
@@ -42,7 +43,7 @@ describe('prisma user repo', () => {
 
   test('should add a user', async () => {
     const userRepository = new PrismaUserRepository(prismaClient)
-    const createGoogleUserUsecase = new usecases.CreateGoogleUserUsecase(
+    const createGoogleUserUsecase = new UserUsecase.CreateGoogleUserUsecase(
       userRepository
     )
 
@@ -57,6 +58,33 @@ describe('prisma user repo', () => {
       googleId: savedUser.data.linkedAccounts.google.id,
       id: savedUser.data.id,
     })
+
+    const inDbUser = await userRepository.findOneById(userId)
+    expect(inDbUser?.data).toEqual(savedUser.data)
+  })
+
+  test('should connect a user', async () => {
+    const userRepository = new PrismaUserRepository(prismaClient)
+    const tokenService = new JWTTokenService('secret')
+    const connectGoogleUserUsecase = new UserUsecase.ConnectGoogleUserUsecase(
+      userRepository,
+      tokenService
+    )
+
+    const userId = new ObjectId().toString() as any
+    const savedUser = userBuilder()
+      .withId(userId)
+      .withLinkedAccounts({ google: { id: 'google-id' } })
+      .buildGoogleUser()
+
+    await userRepository.save(User.fromData(savedUser.data))
+
+    const token = await connectGoogleUserUsecase.handle({
+      googleId: savedUser.data.linkedAccounts.google.id,
+    })
+
+    const decodedToken = tokenService.decode(token)
+    expect(decodedToken?.id).toEqual(userId)
 
     const inDbUser = await userRepository.findOneById(userId)
     expect(inDbUser?.data).toEqual(savedUser.data)

@@ -1,4 +1,4 @@
-import { LinkedAccounts, User } from '..'
+import { LinkedAccounts, User } from '../'
 
 export const userBuilder = ({
   id = 'test-id',
@@ -17,7 +17,7 @@ export const userBuilder = ({
   role?: number
   linkedAccounts?: LinkedAccounts
 } = {}) => {
-  const props = { id, email, password, linkedAccounts }
+  const props = { id, email, password, linkedAccounts, role }
   return {
     withId: (id: string) => userBuilder({ ...props, id }),
     withEmail: (email: string) => userBuilder({ ...props, email }),
@@ -27,7 +27,8 @@ export const userBuilder = ({
       userBuilder({ ...props, linkedAccounts }),
     buildEmailPasswordUser: () =>
       User.fromEmailPassword(id, email, password, role),
-    buildGoogleUser: () =>
-      User.fromGoogle(id, linkedAccounts.google.id, role, email),
+    buildGoogleUser: () => {
+      return User.fromGoogle(id, linkedAccounts.google.id, role, email)
+    },
   }
 }

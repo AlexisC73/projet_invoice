@@ -1,6 +1,6 @@
 import { Invoice } from '../..'
 import { NotFoundError, RoleError } from '../../../errors'
-import { invoiceBuilder } from '../../../tests/invoice/invoiceBuilder'
+import { invoiceBuilder } from '../../tests/invoiceBuilder'
 import {
   UserFixture,
   createUserFixture,

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "build:libs": "tsc",
-    "build:w": "tsc --watch"
+    "build:libs:w": "tsc --watch"
   },
   "keywords": [],
   "author": "",

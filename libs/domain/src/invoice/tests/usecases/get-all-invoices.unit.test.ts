@@ -1,5 +1,5 @@
 import { RoleError } from '../../../errors'
-import { invoiceBuilder } from '../../../tests/invoice/invoiceBuilder'
+import { invoiceBuilder } from '../../tests/invoiceBuilder'
 import {
   UserFixture,
   createUserFixture,
