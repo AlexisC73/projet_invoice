@@ -6,9 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:server": "cd ./apps/express && npm run start:dev",
+    "build:server": "cd ./apps/express && npm run build",
     "start:server": "cd ./apps/express && npm run start:prod",
     "test:server": "cd ./apps/express && npm run test",
-    "dev:next": "cd ./apps/next && npm run dev"
+    "dev:next": "cd ./apps/next && npm run dev",
+    "prisma:generate": "cd ./libs/domain && npx prisma generate"
   },
   "keywords": [],
   "author": "",
