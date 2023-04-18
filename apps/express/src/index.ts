@@ -25,7 +25,7 @@ const option = process.env.NODE_ENV === 'production' && {
 }
 
 const corsOrigin = {
-  origin: ['http://localhost:3000', 'https://invoice.alexis-comte.com'],
+  origin: process.env.NODE_ENV === 'production' ? ['https://invoice.alexis-comte.com'] : ['http://localhost:3000'],
   credentials: true,
 }
 
@@ -49,8 +49,8 @@ app.use('/user', userRoute)
 
 process.env.NODE_ENV === 'production'
   ? createServer(option, app).listen(PORT, () => {
-      console.log('Server started on port =>', PORT)
+      console.log('Server started in production mode on port =>', PORT)
     })
   : app.listen(PORT, () => {
-      console.log('Server started on port =>', PORT)
+      console.log('Server started on development mode on port =>', PORT)
     })
