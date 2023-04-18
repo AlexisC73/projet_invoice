@@ -5,7 +5,7 @@
   "main": "./dist",
   "scripts": {
     "test": "jest",
-    "build:libs": "tsc",
+    "build": "tsc",
     "build:libs:w": "tsc --watch"
   },
   "keywords": [],

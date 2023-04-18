@@ -6,7 +6,6 @@
   "scripts": {
     "test": "jest --testMatch=\"**/*.test.ts\" --runInBand",
     "build": "tsc",
-    "build:libs": "tsc",
     "build:libs:w": "tsc --watch",
     "start:dev": "ts-node -r tsconfig-paths/register src/index.ts"
   },
