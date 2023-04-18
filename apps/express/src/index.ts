@@ -1,5 +1,7 @@
 import * as dotenv from 'dotenv-safe'
-dotenv.config()
+import path = require('path')
+const envPath = path.join(__dirname, '../../../.env')
+dotenv.config({ path: envPath })
 
 import * as express from 'express'
 import * as cors from 'cors'
