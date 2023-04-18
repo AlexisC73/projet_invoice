@@ -24,8 +24,9 @@ import {
 } from '../usecases/get-one-usecase'
 import { Invoice } from '..'
 import { InMemoryUserRepository } from '../../user/tests/in-memory.user.repository'
-import { InMemoryInvoiceRepository } from '../../user/tests/in-memory.invoice.repository'
+import { InMemoryInvoiceRepository } from './in-memory.invoice.repository'
 import { StubTokenService } from '../../user/tests/stub-token-service'
+import { FakeIdGenerator } from '../../id/tests/fake-id.generator'
 
 export const createInvoiceFixture = ({
   userRepository = new InMemoryUserRepository(),
@@ -36,9 +37,11 @@ export const createInvoiceFixture = ({
   tokenService?: any
   invoiceRepository?: any
 } = {}) => {
+  const idGenerator = new FakeIdGenerator()
   const postInvoiceUsecase = new PostInvoiceUsecase(
     invoiceRepository,
-    tokenService
+    tokenService,
+    idGenerator
   )
   const updateInvoiceUsecase = new UpdateInvoiceUsecase(
     invoiceRepository,

@@ -1,12 +1,14 @@
 import { Invoice, Product, Address } from '..'
+import { IdGenerator } from '../../id/id.generator'
 import { Token } from '../../token/token'
 import { TokenService } from '../../token/token.service'
 import { InvoiceRepository } from '../invoice.repository'
 
 export class PostInvoiceUsecase {
   constructor(
-    private invoiceRepository: InvoiceRepository,
-    private readonly tokenService: TokenService
+    private readonly invoiceRepository: InvoiceRepository,
+    private readonly tokenService: TokenService,
+    private readonly idGenerator: IdGenerator
   ) {}
 
   async handle(
@@ -15,7 +17,7 @@ export class PostInvoiceUsecase {
   ): Promise<void> {
     const currentUser: Token = this.tokenService.decode(token)
     const invoice: Invoice = Invoice.fromData({
-      id: postInvoiceCommand.id,
+      id: this.idGenerator.generate(postInvoiceCommand.id),
       date: postInvoiceCommand.date,
       dueDate: postInvoiceCommand.dueDate,
       description: postInvoiceCommand.description,
@@ -36,7 +38,7 @@ export class PostInvoiceUsecase {
 }
 
 export type PostInvoiceCommand = {
-  id: string
+  id?: string
   date: string
   dueDate: string
   description: string | null

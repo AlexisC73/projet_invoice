@@ -18,6 +18,7 @@ import { InvoiceRepository } from './invoice/invoice.repository'
 import { Invoice } from './invoice'
 import { Token } from './token/token'
 import { TokenService } from './token/token.service'
+import { IdGenerator } from './id/id.generator'
 
 export const UserUsecase = {
   CreateGoogleUserUsecase,
@@ -46,4 +47,5 @@ export {
   Invoice,
   Token,
   TokenService,
+  IdGenerator,
 }

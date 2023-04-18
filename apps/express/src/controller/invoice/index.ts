@@ -1,5 +1,4 @@
-import { ObjectId } from 'mongodb'
-import { invoiceRepository, tokenService, userRepository } from '../../config'
+import { idGenerator, invoiceRepository, tokenService, userRepository } from '../../config'
 import { UpdateInvoiceUsecase } from '@invoice/domain/dist/invoice/usecases/update-invoice.usecase'
 import { DeleteInvoiceUsecase } from '@invoice/domain/dist/invoice/usecases/delete-invoice.usecase'
 import { GetAllInvoicesUsecase } from '@invoice/domain/dist/invoice/usecases/get-all-invoices.usecase'
@@ -75,12 +74,12 @@ export const getOneById = async (req, res) => {
 }
 
 export const add = async (req, res) => {
-  const postInvoiceUsecase = new PostInvoiceUsecase(invoiceRepository, tokenService)
+  const postInvoiceUsecase = new PostInvoiceUsecase(invoiceRepository, tokenService, idGenerator)
   try {
     const { invoice }: { invoice: Invoice['data'] } = req.body
+    const { id, ...invoiceBody } = invoice
     const postInvoiceCommand: PostInvoiceCommand = {
-      ...invoice,
-      id: new ObjectId().toString() as any,
+      ...invoiceBody,
     }
     if (!!invoice.status && invoice.status === 'draft') {
       postInvoiceCommand.saveAsDraft = true

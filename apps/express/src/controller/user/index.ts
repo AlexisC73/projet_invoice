@@ -1,13 +1,12 @@
-import { ObjectId } from 'mongodb'
 import { ConnectGoogleUserUsecase } from '@invoice/domain/dist/user/usecases/connect-google-user.usecase'
 import { CreateGoogleUserUsecase } from '@invoice/domain/dist/user/usecases/create-google-user.usecase'
-import { tokenService, userRepository } from '../../config'
+import { idGenerator, tokenService, userRepository } from '../../config'
 import { AuthError, NotFoundError } from '@invoice/domain/dist/errors'
 import { User } from '@invoice/domain/dist/user'
 
 export const googleAuth = async (req, res) => {
   const connectGoogleUserUsecase = new ConnectGoogleUserUsecase(userRepository, tokenService)
-  const createGoogleUserUsecase = new CreateGoogleUserUsecase(userRepository)
+  const createGoogleUserUsecase = new CreateGoogleUserUsecase(userRepository, idGenerator)
 
   try {
     const { id: googleId } = req.user
@@ -18,7 +17,6 @@ export const googleAuth = async (req, res) => {
     if (!existUser) {
       await createGoogleUserUsecase.handle({
         googleId,
-        id: new ObjectId().toString() as any,
         email,
       })
     }

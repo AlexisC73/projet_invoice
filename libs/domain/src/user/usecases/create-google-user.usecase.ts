@@ -1,12 +1,16 @@
 import { User } from '..'
+import { IdGenerator } from '../../id/id.generator'
 import { UserRepository } from '../user.repository'
 
 export class CreateGoogleUserUsecase {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly idGenerator: IdGenerator
+  ) {}
 
   async handle(command: CreateGoogleUserCommand): Promise<void> {
     const user = User.fromGoogle(
-      command.id,
+      this.idGenerator.generate(command.id),
       command.googleId,
       100,
       command.email
@@ -17,7 +21,7 @@ export class CreateGoogleUserUsecase {
 }
 
 export interface CreateGoogleUserCommand {
-  id: string
+  id?: string
   googleId: string
   email: string
 }

@@ -1,7 +1,4 @@
-import {
-  invoiceBuilder,
-  productBuilder,
-} from '../../tests/invoiceBuilder'
+import { invoiceBuilder, productBuilder } from '../../tests/invoiceBuilder'
 import {
   UserFixture,
   createUserFixture,

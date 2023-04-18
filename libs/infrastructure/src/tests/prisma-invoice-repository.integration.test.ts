@@ -10,6 +10,7 @@ import { exec } from 'child_process'
 import { promisify } from 'util'
 import { PrismaUserRepository } from '../user-repository/prisma-user.repository'
 import { PrismaInvoiceRepository } from '../invoice-repository/prisma.invoice.repository'
+import { MongoIdGenerator } from '../id-generator/mongo-id.generator'
 import { ObjectId } from 'mongodb'
 import { JWTTokenService } from '../token-service/jwt/jwt-token-service'
 import * as dotenv from 'dotenv'
@@ -50,10 +51,12 @@ describe('prisma user repo', () => {
   test('should add invoice for a user', async () => {
     const userRepository = new PrismaUserRepository(prismaClient)
     const invoiceRepository = new PrismaInvoiceRepository(prismaClient)
+    const mongoIdGenerator = new MongoIdGenerator()
     const tokenService = new JWTTokenService('secret')
     const postInvoiceUsecase = new InvoiceUsecase.PostInvoiceUsecase(
       invoiceRepository,
-      tokenService
+      tokenService,
+      mongoIdGenerator
     )
 
     const userId = new ObjectId().toString() as any

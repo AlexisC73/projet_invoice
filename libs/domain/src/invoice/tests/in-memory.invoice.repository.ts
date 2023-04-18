@@ -1,5 +1,5 @@
-import { Invoice } from '../../invoice'
-import { InvoiceRepository } from '../../invoice/invoice.repository'
+import { Invoice } from '..'
+import { InvoiceRepository } from '../invoice.repository'
 
 export class InMemoryInvoiceRepository implements InvoiceRepository {
   private invoices: Invoice[] = []

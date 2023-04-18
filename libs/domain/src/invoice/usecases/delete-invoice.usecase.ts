@@ -3,6 +3,7 @@ import { InvoiceRepository } from '../invoice.repository'
 import { UserRepository } from '../../user/user.repository'
 import { TokenService } from '../../token/token.service'
 import { NotFoundError, RoleError } from '../../errors'
+import { IdGenerator } from '../../id/id.generator'
 
 export class DeleteInvoiceUsecase {
   constructor(

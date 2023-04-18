@@ -5,6 +5,7 @@ import { PrismaUserRepository } from '../user-repository/prisma-user.repository'
 import { ObjectId } from 'mongodb'
 import { JWTTokenService } from '../token-service/jwt/jwt-token-service'
 import * as dotenv from 'dotenv'
+import { MongoIdGenerator } from '../id-generator/mongo-id.generator'
 
 const asyncExec = promisify(exec)
 
@@ -41,8 +42,10 @@ describe('prisma user repo', () => {
 
   test('should add a user', async () => {
     const userRepository = new PrismaUserRepository(prismaClient)
+    const idGenerator = new MongoIdGenerator()
     const createGoogleUserUsecase = new UserUsecase.CreateGoogleUserUsecase(
-      userRepository
+      userRepository,
+      idGenerator
     )
 
     const userId = new ObjectId().toString() as any

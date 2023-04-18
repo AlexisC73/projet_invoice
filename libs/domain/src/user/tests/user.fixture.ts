@@ -7,11 +7,16 @@ import {
 } from '../usecases/create-google-user.usecase'
 import { InMemoryUserRepository } from './in-memory.user.repository'
 import { StubTokenService } from './stub-token-service'
+import { FakeIdGenerator } from '../../id/tests/fake-id.generator'
 
 export const createUserFixture = () => {
   const userRepository = new InMemoryUserRepository()
   const tokenService = new StubTokenService()
-  const createGoogleUserUsecase = new CreateGoogleUserUsecase(userRepository)
+  const idGenerator = new FakeIdGenerator()
+  const createGoogleUserUsecase = new CreateGoogleUserUsecase(
+    userRepository,
+    idGenerator
+  )
   const connectGoogleUserUsecase = new ConnectGoogleUserUsecase(
     userRepository,
     tokenService
