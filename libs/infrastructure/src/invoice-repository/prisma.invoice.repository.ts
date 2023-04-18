@@ -1,6 +1,6 @@
 import { PrismaClient } from '@invoice/domain'
-import { InvoiceRepository } from '@invoice/domain/dist/invoice/invoice.repository'
-import { Invoice } from '@invoice/domain/dist/invoice'
+import { InvoiceRepository } from '@invoice/domain'
+import { Invoice } from '@invoice/domain'
 
 export class PrismaInvoiceRepository implements InvoiceRepository {
   constructor(private readonly prisma: PrismaClient) {}

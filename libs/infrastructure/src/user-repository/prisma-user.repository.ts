@@ -1,6 +1,9 @@
-import { LinkedAccounts, User } from '@invoice/domain'
-import { UserRepository } from '@invoice/domain'
-import { PrismaClient } from '@invoice/domain'
+import {
+  LinkedAccounts,
+  User,
+  UserRepository,
+  PrismaClient,
+} from '@invoice/domain'
 
 export class PrismaUserRepository implements UserRepository {
   constructor(private readonly prisma: PrismaClient) {}

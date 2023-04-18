@@ -1,5 +1,4 @@
-import { Token } from '@invoice/domain/dist/token/token'
-import { TokenService } from '@invoice/domain/dist/token/token.service'
+import { TokenService, Token } from '@invoice/domain'
 import * as jwt from 'jsonwebtoken'
 
 export class JWTTokenService implements TokenService {

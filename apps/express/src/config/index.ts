@@ -1,6 +1,4 @@
-import { PrismaInvoiceRepository } from '@invoice/infrastructure/src/invoice-repository/prisma.invoice.repository'
-import { PrismaUserRepository } from '@invoice/infrastructure/src/user-repository/prisma-user.repository'
-import { JWTTokenService } from '@invoice/infrastructure/src/token-service/jwt/jwt-token-service'
+import { PrismaInvoiceRepository, PrismaUserRepository, JWTTokenService } from '@invoice/infrastructure'
 import { PrismaClient } from '@invoice/domain'
 
 export const prisma = new PrismaClient()

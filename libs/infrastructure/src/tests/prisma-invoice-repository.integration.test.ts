@@ -4,13 +4,13 @@ import {
   ROLE,
   User,
   invoiceBuilder,
+  userBuilder,
 } from '@invoice/domain'
 import { exec } from 'child_process'
 import { promisify } from 'util'
 import { PrismaUserRepository } from '../user-repository/prisma-user.repository'
 import { PrismaInvoiceRepository } from '../invoice-repository/prisma.invoice.repository'
 import { ObjectId } from 'mongodb'
-import { userBuilder } from '@invoice/domain/src/user/tests/userBuilder'
 import { JWTTokenService } from '../token-service/jwt/jwt-token-service'
 import * as dotenv from 'dotenv'
 

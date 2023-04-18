@@ -1,10 +1,8 @@
-import { PrismaClient, User } from '@invoice/domain'
+import { PrismaClient, User, UserUsecase, userBuilder } from '@invoice/domain'
 import { exec } from 'child_process'
 import { promisify } from 'util'
 import { PrismaUserRepository } from '../user-repository/prisma-user.repository'
-import { UserUsecase } from '@invoice/domain'
 import { ObjectId } from 'mongodb'
-import { userBuilder } from '@invoice/domain'
 import { JWTTokenService } from '../token-service/jwt/jwt-token-service'
 import * as dotenv from 'dotenv'
 
