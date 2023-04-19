@@ -1,6 +1,5 @@
 import { PlusIcon } from '@/assets/icons'
 import ArrowDown from '@/assets/icons/arrow-down'
-import ArrowRight from '@/assets/icons/arrow-right'
 import ArrowUp from '@/assets/icons/arrow-up'
 import Header from '@/components/Header/Header'
 import { useState } from 'react'
