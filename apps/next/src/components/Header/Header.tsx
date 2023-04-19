@@ -20,9 +20,16 @@ export default function Header() {
           <Image
             src={avatar}
             alt='avatar'
+            width={32}
+            height={32}
+            className='rounded-full mx-6 lg:mx-0 my-6 lg:hidden'
+          />
+          <Image
+            src={avatar}
+            alt='avatar'
             width={40}
             height={40}
-            className='rounded-full mx-6 lg:mx-0 my-6'
+            className='rounded-full mx-6 lg:mx-0 my-6 max-lg:hidden'
           />
         </div>
       </div>
