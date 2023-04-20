@@ -3,7 +3,7 @@ import ArrowDown from '@/assets/icons/arrow-down'
 import ArrowUp from '@/assets/icons/arrow-up'
 import { useState } from 'react'
 
-export default function InvoiceHeaderBar() {
+export default function FilterBar() {
   const [filterOpen, setFilterOpen] = useState(false)
 
   return (

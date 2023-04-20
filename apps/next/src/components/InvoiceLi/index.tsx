@@ -1,4 +1,5 @@
 import ArrowRight from '@/assets/icons/arrow-right'
+import InvoiceStatus from '../InvoiceStatus'
 
 export default function InvoiceLi() {
   return (
@@ -14,13 +15,9 @@ export default function InvoiceLi() {
         2021
       </p>
       <div className='row-span-2 flex mt-[23px] justify-end sm:mt-0 sm:mr-[17px] sm:order-5'>
-        <div className='flex items-center px-[30px] gap-[8px] text-[#33D69F] bg-[#33D69F11] rounded-[6px] h-10'>
-          <div className='dot w-[8px] h-[8px] rounded-full bg-[#33D69F]'></div>
-          <p className='text-[0.9375rem] mt-[1px] tracking-[-0.015625rem] font-bold'>
-            Paid
-          </p>
-        </div>
+        <InvoiceStatus status='paid' />
       </div>
+
       <p className='font-bold text-[0.9375rem] tracking-[-0.015625rem] mt-[7px] sm:order-4 sm:mt-[3px]'>
         £ 1,800.90
       </p>

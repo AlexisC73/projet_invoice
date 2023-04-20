@@ -1,6 +1,6 @@
+import GoBackButton from '@/components/GoBackButton'
 import Header from '@/components/Header/Header'
-import InvoiceHeaderBar from '@/components/InvoiceHeaderBar'
-import InvoiceLi from '@/components/InvoiceLi'
+import InvoiceHeader from '@/components/InvoiceHeader'
 
 export default function Home() {
   return (
@@ -8,8 +8,8 @@ export default function Home() {
       <Header />
       <section id='content' className='flex-1'>
         <div className='p-6 lg:p-0 lg:pt-6 w-full lg:max-w-[730px] lg:mx-auto'>
-          <InvoiceHeaderBar />
-          <InvoiceLi />
+          <GoBackButton />
+          <InvoiceHeader />
         </div>
       </section>
     </main>
