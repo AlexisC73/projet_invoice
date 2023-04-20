@@ -7,7 +7,7 @@ export default function InvoiceHeaderBar() {
   const [filterOpen, setFilterOpen] = useState(false)
 
   return (
-    <div className='flex justify-between items-center lg:max-w-[730px] pt-[37px] w-full lg:mx-auto'>
+    <div className='flex justify-between items-center lg:pt-[37px]'>
       <div className='flex flex-col py-[5px]'>
         <strong className='text-[1.5rem] text-[#0C0E16] tracking-[-0.046875rem] lg:text-[36px] lg:tracking-[-1.13px]'>
           Invoices
