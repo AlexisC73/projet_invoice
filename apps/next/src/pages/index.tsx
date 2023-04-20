@@ -8,8 +8,10 @@ export default function Home() {
       <Header />
       <section id='content' className='flex-1'>
         <div className='p-6 lg:p-0 lg:pt-6 w-full lg:max-w-[730px] lg:mx-auto'>
-          <GoBackButton />
-          <InvoiceHeader />
+          <div className='pt-8'>
+            <GoBackButton />
+            <InvoiceHeader />
+          </div>
         </div>
       </section>
     </main>
