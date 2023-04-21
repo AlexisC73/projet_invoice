@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 export default function Header() {
   return (
-    <header className='bg-[#373B53] h-[72px] w-full flex justify-between lg:absolute lg:left-0 lg:flex-col lg:h-screen lg:w-[103px] lg:rounded-tr-[20px] lg:rounded-br-[20px]'>
+    <header className='bg-[#373B53] h-[72px] w-full flex justify-between lg:fixed lg:left-0 lg:flex-col lg:h-screen lg:w-[103px] lg:rounded-tr-[20px] lg:rounded-br-[20px]'>
       <div className='logo text-[72px] lg:hidden'>
         <HeaderIcon />
       </div>
