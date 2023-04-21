@@ -1,4 +1,4 @@
-import ActionButton from '../ActionButton'
+import ActionButton from '../ui/ActionButton'
 import InvoiceStatus from '../InvoiceStatus'
 
 export default function InvoiceHeader() {
