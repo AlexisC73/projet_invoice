@@ -129,6 +129,9 @@ importers:
 
   apps/next:
     dependencies:
+      '@invoice/domain':
+        specifier: workspace:^
+        version: link:../../libs/domain
       '@types/node':
         specifier: 18.15.11
         version: 18.15.11
