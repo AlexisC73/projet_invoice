@@ -36,7 +36,7 @@ export default function ProductLi({ product }: { product: Product['data'] }) {
             ).toFixed(2)}
           </p>
         </div>
-        <div className='mt-[42px] ml-[5px]'>
+        <div className='mt-[42px] mx-auto'>
           <DeleteIcon />
         </div>
       </div>

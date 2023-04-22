@@ -25,7 +25,7 @@ export default function Home() {
             </FormTitle>
           </div>
         </div>
-        <div className='flex-1 sm:overflow-y-scroll sm:mt-[17px] xl:mt-[40px]'>
+        <div className='flex-1 sm:overflow-y-scroll overflow-x-hidden sm:mt-[17px] xl:mt-[40px]'>
           <FullForm invoice={invoice} />
         </div>
 
