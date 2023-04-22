@@ -1,8 +1,14 @@
-export default function ActionButton({ action }: { action: string }) {
+export default function ActionButton({
+  action,
+  type,
+}: {
+  action: string
+  type: 'primary' | 'secondary' | 'default'
+}) {
   const tint =
-    action.toLowerCase() === 'mark as paid'
+    type === 'primary'
       ? 'bg-[#7C5DFA] text-white'
-      : action.toLowerCase() === 'delete'
+      : type === 'secondary'
       ? 'bg-[#ec5757] text-white'
       : 'bg-[#f9fafe] text-[#7E88C3]'
   return (
