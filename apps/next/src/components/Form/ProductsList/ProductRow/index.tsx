@@ -4,7 +4,7 @@ import { DeleteIcon } from '@/assets/icons'
 
 export default function ProductRow({ product }: { product: Product['data'] }) {
   return (
-    <tr className='grid grid-cols-desktop_product gap-[16px] text-left'>
+    <tr className='grid xl:grid-cols-desktop_product sm:grid-cols-tablet_product gap-[16px] text-left'>
       <th>
         <Input
           name={`product-name-${product.id}`}
@@ -31,9 +31,9 @@ export default function ProductRow({ product }: { product: Product['data'] }) {
         </p>
       </th>
       <th>
-        <div className='mt-[15px] ml-[10px]'>
+        <button className='mt-[15px] ml-[10px]'>
           <DeleteIcon />
-        </div>
+        </button>
       </th>
     </tr>
   )

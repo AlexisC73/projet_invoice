@@ -19,7 +19,7 @@ export default function ProductsList({
       </ul>
       <table className='hidden sm:flex mt-[13px] flex-col'>
         <thead className='flex'>
-          <tr className='grid grid-cols-desktop_product gap-[16px] text-left'>
+          <tr className='grid xl:grid-cols-desktop_product sm:grid-cols-tablet_product gap-[16px] text-left w-full'>
             <th className='text-[13px] tracking-[-0.1px] font-medium text-[#7E88C3]'>
               Item Name
             </th>

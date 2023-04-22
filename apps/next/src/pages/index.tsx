@@ -13,7 +13,7 @@ export default function Home() {
       <section id='content' className='flex-1'>
         <div className='p-6 xl:p-0 xl:pt-6 w-full xl:max-w-[730px] xl:mx-auto'></div>
       </section>
-      <div className='absolute xl:fixed top-[72px] sm:top-0 left-0 right-0 bg-white w-full sm:w-4/5 xl:w-[720px] xl:pt-[33px] xl:pl-[158px] sm:pl-[30px] sm:pt-[34px] sm:pr-[18px] sm:h-screen flex flex-col rounded-br-[20px] rounded-tr-[20px]'>
+      <div className='absolute xl:fixed top-[72px] sm:top-0 left-0 right-0 bg-white w-full sm:w-4/5 sm:min-w-[640px] xl:w-[720px] xl:pt-[33px] xl:pl-[158px] sm:pl-[30px] sm:pt-[34px] sm:pr-[18px] sm:h-screen flex flex-col rounded-br-[20px] rounded-tr-[20px]'>
         <div className='sm:hidden pt-6 px-6'>
           <GoBackButton />
         </div>
