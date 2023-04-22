@@ -6,7 +6,7 @@ import { DeleteIcon } from '@/assets/icons'
 export default function ProductLi({ product }: { product: Product['data'] }) {
   return (
     <li className='flex flex-col'>
-      <div className='flex flex-col gap-[12px]'>
+      <div className='flex flex-col gap-[13px]'>
         <Label name={`product-name-${product.id}`}>Item Name</Label>
         <Input
           name={`product-name-${product.id}`}
