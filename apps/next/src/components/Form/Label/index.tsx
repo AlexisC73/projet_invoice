@@ -7,7 +7,7 @@ export default function Label({
   return (
     <label
       htmlFor={name}
-      className='text-[13px] tracking-[-0.1px] font-medium text-[#7E88C3]'
+      className='text-[0.8125rem] tracking-[-0.00625rem] font-medium text-[#7E88C3]'
     >
       {children}
     </label>

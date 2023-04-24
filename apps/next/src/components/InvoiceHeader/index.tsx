@@ -3,9 +3,9 @@ import InvoiceStatus from '../InvoiceStatus'
 
 export default function InvoiceHeader() {
   return (
-    <div className='mt-[27px] bg-white flex rounded-lg items-center sm:px-2 sm:pr-8 sm:justify-between'>
-      <div className='flex flex-1 items-center justify-between p-6 pb-[27px] sm:pb-[24px] sm:max-w-[206px]'>
-        <p className='text-[13px] text-[#858BB2] tracking-[-0.1px] mt-[2px]'>
+    <div className='mt-[1.6875rem] bg-white flex rounded-lg items-center sm:px-2 sm:pr-8 sm:justify-between'>
+      <div className='flex flex-1 items-center justify-between p-6 pb-[1.6875rem] sm:pb-[1.5rem] sm:max-w-[12.875rem]'>
+        <p className='text-[0.8125rem] text-[#858BB2] tracking-[-0.00625rem] mt-[0.125rem]'>
           Status
         </p>
         <InvoiceStatus status='pending' />

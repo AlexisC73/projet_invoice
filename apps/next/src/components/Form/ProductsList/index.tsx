@@ -9,38 +9,38 @@ export default function ProductsList({
 }) {
   return (
     <div>
-      <p className='text-[18px] font-bold tracking-[-0.38px] text-[#777F98]'>
+      <p className='text-[1.125rem] font-bold tracking-[-0.02375rem] text-[#777F98]'>
         Item List
       </p>
-      <ul className='mt-[23px] flex flex-col gap-[47px] sm:hidden'>
+      <ul className='mt-[1.4375rem] flex flex-col gap-[2.9375rem] sm:hidden'>
         {products.map((product) => (
           <ProductLi product={product} />
         ))}
       </ul>
-      <table className='hidden sm:flex mt-[13px] flex-col'>
+      <table className='hidden sm:flex mt-[0.8125rem] flex-col'>
         <thead className='flex'>
-          <tr className='grid xl:grid-cols-desktop_product sm:grid-cols-tablet_product gap-[16px] text-left w-full'>
-            <th className='text-[13px] tracking-[-0.1px] font-medium text-[#7E88C3]'>
+          <tr className='grid xl:grid-cols-desktop_product sm:grid-cols-tablet_product gap-[1rem] text-left w-full'>
+            <th className='text-[0.8125rem] tracking-[-0.00625rem] font-medium text-[#7E88C3]'>
               Item Name
             </th>
-            <th className='text-[13px] tracking-[-0.1px] font-medium text-[#7E88C3]'>
+            <th className='text-[0.8125rem] tracking-[-0.00625rem] font-medium text-[#7E88C3]'>
               Qty.
             </th>
-            <th className='text-[13px] tracking-[-0.1px] font-medium text-[#7E88C3]'>
+            <th className='text-[0.8125rem] tracking-[-0.00625rem] font-medium text-[#7E88C3]'>
               Price
             </th>
-            <th className='text-[13px] tracking-[-0.1px] font-medium text-[#7E88C3]'>
+            <th className='text-[0.8125rem] tracking-[-0.00625rem] font-medium text-[#7E88C3]'>
               Total
             </th>
           </tr>
         </thead>
-        <tbody className='flex flex-col py-[11px] gap-y-[15px]'>
+        <tbody className='flex flex-col py-[0.6875rem] gap-y-[0.9375rem]'>
           {products.map((product) => (
             <ProductRow product={product} />
           ))}
         </tbody>
       </table>
-      <button className='text-[15px] tracking-[-0.25px] font-bold text-[#7E88C3] w-full bg-[#F9FAFE] mt-[47px] pt-[15px] pb-[11px] rounded-3xl sm:mt-[6px]'>
+      <button className='text-[0.9375rem] tracking-[-0.015625rem] font-bold text-[#7E88C3] w-full bg-[#F9FAFE] mt-[2.9375rem] pt-[0.9375rem] pb-[0.6875rem] rounded-3xl sm:mt-[0.375rem]'>
         + Add New Item
       </button>
     </div>

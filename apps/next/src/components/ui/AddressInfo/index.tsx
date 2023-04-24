@@ -7,7 +7,7 @@ export default function AddressInfo({
   address: Address['data']
   align?: 'left' | 'right'
 }) {
-  const className = `text-[#7E88C3] text-[0.8125rem] leading-[19px] ${
+  const className = `text-[#7E88C3] text-[0.8125rem] leading-[1.1875rem] ${
     align === 'right' ? 'sm:text-right' : ''
   }`
   return (

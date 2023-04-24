@@ -22,12 +22,14 @@ export default function InvoiceStatus({
   return (
     <div
       className={
-        `flex items-center justify-center w-[104px] gap-[8px] rounded-[6px] h-10 ` +
+        `flex items-center justify-center w-[6.5rem] gap-[0.5rem] rounded-[0.375rem] h-10 ` +
         container
       }
     >
-      <div className={`dot w-[8px] h-[8px] rounded-full ` + dotColor}></div>
-      <p className='text-[0.9375rem] mt-[1px] tracking-[-0.015625rem] font-bold'>
+      <div
+        className={`dot w-[0.5rem] h-[0.5rem] rounded-full ` + dotColor}
+      ></div>
+      <p className='text-[0.9375rem] mt-[0.0625rem] tracking-[-0.015625rem] font-bold'>
         {statusText}
       </p>
     </div>

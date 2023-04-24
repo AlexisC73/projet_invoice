@@ -4,7 +4,7 @@ import { DeleteIcon } from '@/assets/icons'
 
 export default function ProductRow({ product }: { product: Product['data'] }) {
   return (
-    <tr className='grid xl:grid-cols-desktop_product sm:grid-cols-tablet_product gap-[16px] text-left'>
+    <tr className='grid xl:grid-cols-desktop_product sm:grid-cols-tablet_product gap-[1rem] text-left'>
       <th>
         <Input
           name={`product-name-${product.id}`}
@@ -24,14 +24,14 @@ export default function ProductRow({ product }: { product: Product['data'] }) {
         />
       </th>
       <th>
-        <p className='text-[15px] tracking-[-0.25px] font-bold text-[#888EB0] mt-[14px]'>
+        <p className='text-[0.9375rem] tracking-[-0.015625rem] font-bold text-[#888EB0] mt-[0.875rem]'>
           {(
             parseFloat(product.unitPrice) * parseFloat(product.quantity)
           ).toFixed(2)}
         </p>
       </th>
       <th>
-        <button className='mt-[15px] ml-[10px]'>
+        <button className='mt-[0.9375rem] ml-[0.625rem]'>
           <DeleteIcon />
         </button>
       </th>

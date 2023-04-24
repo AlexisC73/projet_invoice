@@ -11,7 +11,7 @@ export default function Input({
     <div>
       <input
         id={name}
-        className='w-full text-[15px] tracking-[-0.25px] font-bold leading-[15px] pl-[10px] sm:pl-[19px] pt-[17px] pb-[15px] border rounded-[4px]'
+        className='w-full text-[0.9375rem] tracking-[-0.015625rem] font-bold leading-[0.9375rem] pl-[0.625rem] sm:pl-[1.1875rem] pt-[1.0625rem] pb-[0.9375rem] border rounded-[0.25rem]'
         type='text'
         value={defaultValue || ''}
       ></input>
