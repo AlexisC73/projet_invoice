@@ -1,5 +1,5 @@
 import ArrowRight from '@/assets/icons/arrow-right'
-import InvoiceStatus from '../InvoiceStatus'
+import InvoiceStatus from '../ui/InvoiceStatus'
 
 export default function InvoiceLi() {
   return (

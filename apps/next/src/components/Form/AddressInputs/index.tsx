@@ -2,7 +2,7 @@ import Input from '@/components/Form/Input'
 import Label from '@/components/Form/Label'
 import { Address } from '@invoice/domain'
 
-export default function AddressInput({
+export default function AddressInputs({
   target,
   address,
 }: {

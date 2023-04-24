@@ -1,5 +1,5 @@
 import ActionButton from '../ui/ActionButton'
-import InvoiceStatus from '../InvoiceStatus'
+import InvoiceStatus from '../ui/InvoiceStatus'
 
 export default function InvoiceHeader() {
   return (
@@ -11,9 +11,9 @@ export default function InvoiceHeader() {
         <InvoiceStatus status='pending' />
       </div>
       <div className='hidden sm:flex gap-2'>
-        <ActionButton action='edit' />
-        <ActionButton action='delete' />
-        <ActionButton action='Mark as Paid' />
+        <ActionButton type='default' action='edit' />
+        <ActionButton action='delete' type='secondary' />
+        <ActionButton action='Mark as Paid' type='primary' />
       </div>
     </div>
   )

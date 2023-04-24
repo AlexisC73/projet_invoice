@@ -1,5 +1,5 @@
 import { Invoice } from '@invoice/domain'
-import AddressInfo from '../ui/AddressInfo'
+import AddressInfo from './AddressInfo'
 import ProductTable from '../ProductTable/ProductTable'
 import ProductMobile from '../ProductTable/TableMobile'
 

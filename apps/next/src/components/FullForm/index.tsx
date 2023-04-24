@@ -1,10 +1,7 @@
 import { Invoice } from '@invoice/domain/dist'
 import DatePickerInput from '../Form/DatePickerInput'
 import FormSectionTitle from '../Form/FormSectionTitle'
-import FormTitle from '../Form/FormTitle'
-import ActionButton from '../ui/ActionButton'
-import GoBackButton from '../ui/GoBackButton'
-import AddressInput from './AddressInput'
+import AddressInputs from '../Form/AddressInputs'
 import Label from '../Form/Label'
 import Input from '../Form/Input'
 import PaymentTermsSelect from '../Form/PaymentTermsSelect'
@@ -15,7 +12,7 @@ export default function FullForm({ invoice }: { invoice: Invoice['data'] }) {
     <div className='flex-1 px-6 sm:px-6 xl:pl-0'>
       <div id='from' className='flex flex-col gap-[1.125rem]'>
         <FormSectionTitle>Bill From</FormSectionTitle>
-        <AddressInput target='sender' address={invoice.sender} />
+        <AddressInputs target='sender' address={invoice.sender} />
       </div>
       <div
         id='to'
@@ -30,7 +27,7 @@ export default function FullForm({ invoice }: { invoice: Invoice['data'] }) {
           <Label name='buyerEmail'>Client's Email</Label>
           <Input name='buyerEmail' defaultValue={invoice.contact} />
         </div>
-        <AddressInput target='buyer' address={invoice.buyer.address} />
+        <AddressInputs target='buyer' address={invoice.buyer.address} />
         <div className='mt-[1.25rem] sm:grid sm:grid-cols-2 sm:mt-[1.6875rem] gap-x-[1.4375rem]'>
           <div className='flex flex-col gap-[0.125rem]'>
             <Label name='date'>Invoice Date</Label>
