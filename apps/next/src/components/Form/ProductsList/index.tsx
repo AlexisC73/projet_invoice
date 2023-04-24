@@ -34,7 +34,11 @@ export default function ProductsList({
       </p>
       <ul className='mt-[1.4375rem] flex flex-col gap-[2.9375rem] sm:hidden'>
         {displayedProducts.map((product) => (
-          <ProductLi key={product.id} product={product} />
+          <ProductLi
+            key={product.id}
+            product={product}
+            onUpdate={handleUpdate}
+          />
         ))}
       </ul>
       <table className='hidden sm:flex mt-[0.8125rem] flex-col'>
