@@ -15,9 +15,9 @@ export default function Header() {
         <DekstopHeaderIcon />
       </div>
       <div className='flex items-center xl:flex-col xl:gap-8'>
-        <div className='text-[1.25rem] mx-6'>
+        <button className='text-[1.25rem] mx-6'>
           <MoonIcon />
-        </div>
+        </button>
 
         <div className='border-l-[0.0625rem] h-full flex items-center border-[#494E6E] xl:w-full xl:justify-center xl:border-l-0 xl:border-t-[0.0625rem]'>
           <Image

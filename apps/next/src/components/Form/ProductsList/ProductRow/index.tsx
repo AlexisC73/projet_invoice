@@ -2,7 +2,24 @@ import { Product } from '@invoice/domain'
 import Input from '../../Input'
 import { DeleteIcon } from '@/assets/icons'
 
-export default function ProductRow({ product }: { product: Product['data'] }) {
+export default function ProductRow({
+  product,
+  onDelete,
+  onUpdate,
+}: {
+  product: Product['data']
+  onDelete: (id: string) => void
+  onUpdate: (id: string, updatedProduct: Product['data']) => void
+}) {
+  const handleUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    const [_, type, id] = name.split('-')
+
+    onUpdate(id, {
+      ...product,
+      [type]: value,
+    })
+  }
   return (
     <tr className='grid xl:grid-cols-desktop_product sm:grid-cols-tablet_product gap-[1rem] text-left'>
       <th>
@@ -15,12 +32,14 @@ export default function ProductRow({ product }: { product: Product['data'] }) {
         <Input
           name={`product-quantity-${product.id}`}
           defaultValue={product.quantity}
+          onChange={handleUpdate}
         />
       </th>
       <th>
         <Input
-          name={`product-price-${product.id}`}
+          name={`product-unitPrice-${product.id}`}
           defaultValue={parseFloat(product.unitPrice).toFixed(2)}
+          onChange={handleUpdate}
         />
       </th>
       <th>
@@ -31,7 +50,10 @@ export default function ProductRow({ product }: { product: Product['data'] }) {
         </p>
       </th>
       <th>
-        <button className='mt-[0.9375rem] ml-[0.625rem]'>
+        <button
+          onClick={() => onDelete(product.id)}
+          className='mt-[0.9375rem] ml-[0.625rem]'
+        >
           <DeleteIcon />
         </button>
       </th>

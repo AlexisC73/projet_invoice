@@ -1,22 +1,21 @@
 import HeaderLayout from '@/Layout/HeaderLayout'
-import FilterBar from '@/components/FilterBar'
-import InvoiceLi from '@/components/InvoiceLi'
+import SideInvoiceForm from '@/components/Form/SideInvoiceForm'
 import data from '@/data/invoices.json'
 
 export default function Home() {
   const invoices = data
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const data = Object.fromEntries(formData.entries())
+
+    console.log(data)
+  }
+
   return (
     <HeaderLayout>
-      <FilterBar
-        invoiceLength={invoices.length}
-        onNewInvoiceButtonClick={() => console.log('ok')}
-      />
-      <ul className='flex flex-col gap-4'>
-        {invoices.map((invoice) => (
-          <InvoiceLi key={invoice.id} invoice={invoice} />
-        ))}
-      </ul>
+      <SideInvoiceForm onSubmit={handleSubmit} invoice={invoices[0]} />
     </HeaderLayout>
   )
 }
