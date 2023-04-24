@@ -1,7 +1,6 @@
-import { PlusIcon } from '@/assets/icons'
-import ArrowDown from '@/assets/icons/arrow-down'
-import ArrowUp from '@/assets/icons/arrow-up'
 import { useState } from 'react'
+import NewInvoiceButton from './NewInvoiceButton'
+import FilterMenu from './FilterMenu'
 
 export default function FilterBar({
   invoiceLength,
@@ -21,38 +20,8 @@ export default function FilterBar({
         <SubTitleCountInvoice invoiceLength={invoiceLength} />
       </div>
       <div className='flex justify-center items-center gap-[1.0625rem] xl:gap-[2.3125rem] cursor-pointer'>
-        <button
-          onClick={() => {
-            setFilterOpen((filter) => !filter)
-          }}
-          className={`mt-[0.125rem] flex items-center ${
-            filterOpen
-              ? 'gap-[0.125rem] xl:gap-[0.3125rem]'
-              : 'gap-[0.6875rem] xl:gap-[0.875rem]'
-          }`}
-        >
-          <p>
-            <strong className='text-[0.9375rem] tracking-[-0.015625rem]'>
-              Filter
-              <span className='hidden sm:inline'> by status</span>
-            </strong>
-          </p>
-          <div className='text-[#7C5DFA]'>
-            {filterOpen ? <ArrowUp /> : <ArrowDown />}
-          </div>
-        </button>
-        <button
-          onClick={onNewInvoiceButtonClick}
-          className='flex items-center justify-center bg-[#7C5DFA] p-[0.375rem] xl:p-2 xl:pr-[1.125rem] pr-[0.99rem] rounded-3xl gap-2 sm:gap-4'
-        >
-          <span className='h-8 w-8 flex items-center justify-center bg-white rounded-full'>
-            <PlusIcon />
-          </span>
-          <p className='mt-[0.125rem] xl:mt-[0.25rem] font-bold text-[0.9375rem] tracking-[-0.015625rem] text-[#fff]'>
-            New
-            <span className='hidden sm:inline'> Invoice</span>
-          </p>
-        </button>
+        <FilterMenu />
+        <NewInvoiceButton onNewInvoiceButtonClick={onNewInvoiceButtonClick} />
       </div>
     </div>
   )

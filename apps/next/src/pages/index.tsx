@@ -5,6 +5,7 @@ import data from '@/data/invoices.json'
 
 export default function Home() {
   const invoices = data
+
   return (
     <HeaderLayout>
       <FilterBar
