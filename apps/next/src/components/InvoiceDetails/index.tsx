@@ -2,14 +2,7 @@ import { Invoice } from '@invoice/domain'
 import AddressInfo from './AddressInfo'
 import ProductTable from '../ProductTable/ProductTable'
 import ProductMobile from '../ProductTable/TableMobile'
-
-const formatDate = (date: string) => {
-  const dateObj = new Date(date)
-  const monght = dateObj.toLocaleDateString('en-US', {
-    month: 'short',
-  })
-  return `${dateObj.getDate()} ${monght} ${dateObj.getFullYear()}`
-}
+import { formatDate } from '@/utils'
 
 export default function InvoiceDetails({
   invoice,

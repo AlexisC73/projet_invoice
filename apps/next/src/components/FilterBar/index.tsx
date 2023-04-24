@@ -3,7 +3,13 @@ import ArrowDown from '@/assets/icons/arrow-down'
 import ArrowUp from '@/assets/icons/arrow-up'
 import { useState } from 'react'
 
-export default function FilterBar() {
+export default function FilterBar({
+  invoiceLength,
+  onNewInvoiceButtonClick,
+}: {
+  invoiceLength: number
+  onNewInvoiceButtonClick: () => void
+}) {
   const [filterOpen, setFilterOpen] = useState(false)
 
   return (
@@ -12,13 +18,10 @@ export default function FilterBar() {
         <strong className='text-[1.5rem] text-[#0C0E16] tracking-[-0.046875rem] xl:text-[2.25rem] xl:tracking-[-0.070625rem]'>
           Invoices
         </strong>
-        <span className='text-[0.8125rem] mt-[-0.375rem] text-[#888EB0]'>
-          <span className='hidden xl:inline'>There are </span>7
-          <span className='hidden xl:inline'> total</span> invoices
-        </span>
+        <SubTitleCountInvoice invoiceLength={invoiceLength} />
       </div>
       <div className='flex justify-center items-center gap-[1.0625rem] xl:gap-[2.3125rem] cursor-pointer'>
-        <div
+        <button
           onClick={() => {
             setFilterOpen((filter) => !filter)
           }}
@@ -37,8 +40,11 @@ export default function FilterBar() {
           <div className='text-[#7C5DFA]'>
             {filterOpen ? <ArrowUp /> : <ArrowDown />}
           </div>
-        </div>
-        <button className='flex items-center justify-center bg-[#7C5DFA] p-[0.375rem] xl:p-2 xl:pr-[1.125rem] pr-[0.99rem] rounded-3xl gap-2 sm:gap-4'>
+        </button>
+        <button
+          onClick={onNewInvoiceButtonClick}
+          className='flex items-center justify-center bg-[#7C5DFA] p-[0.375rem] xl:p-2 xl:pr-[1.125rem] pr-[0.99rem] rounded-3xl gap-2 sm:gap-4'
+        >
           <span className='h-8 w-8 flex items-center justify-center bg-white rounded-full'>
             <PlusIcon />
           </span>
@@ -49,5 +55,21 @@ export default function FilterBar() {
         </button>
       </div>
     </div>
+  )
+}
+
+const SubTitleCountInvoice = ({ invoiceLength }: { invoiceLength: number }) => {
+  return (
+    <span className='text-[0.8125rem] mt-[-0.375rem] text-[#888EB0]'>
+      <span className='hidden xl:inline'>
+        {invoiceLength > 1 ? 'There are' : 'There is'}{' '}
+      </span>
+      {invoiceLength}
+      {invoiceLength > 1 && (
+        <span className='hidden xl:inline'> total</span>
+      )}{' '}
+      invoice
+      {invoiceLength > 1 ? 's' : ''}
+    </span>
   )
 }

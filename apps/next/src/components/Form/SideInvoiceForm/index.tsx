@@ -1,10 +1,14 @@
-import FullForm from '@/components/FullForm'
+import FullInvoiceForm from '@/components/Form/SideInvoiceForm/FullInvoiceForm'
 import GoBackButton from '@/components/ui/GoBackButton'
 import FormTitle from '../FormTitle'
 import ActionButton from '@/components/ui/ActionButton'
 import { Invoice } from '@invoice/domain'
 
-export default function SideForm({ invoice }: { invoice: Invoice['data'] }) {
+export default function SideInvoiceForm({
+  invoice,
+}: {
+  invoice: Invoice['data']
+}) {
   return (
     <div className='absolute xl:fixed top-[4.5rem] sm:top-0 left-0 right-0 bg-white w-full sm:w-4/5 sm:min-w-[40rem] xl:w-[45rem] xl:pt-[2.0625rem] xl:pl-[9.875rem] sm:pl-[1.875rem] sm:pt-[2.125rem] sm:pr-[1.125rem] sm:h-screen flex flex-col rounded-br-[1.25rem] rounded-tr-[1.25rem]'>
       <div className='sm:hidden pt-6 px-6'>
@@ -19,7 +23,7 @@ export default function SideForm({ invoice }: { invoice: Invoice['data'] }) {
         </div>
       </div>
       <div className='flex-1 sm:overflow-y-scroll overflow-x-hidden sm:mt-[1.0625rem] xl:mt-[2.5rem]'>
-        <FullForm invoice={invoice} />
+        <FullInvoiceForm invoice={invoice} />
       </div>
 
       <div className='flex justify-end pt-[1.3125rem] gap-[0.5rem] pb-[1.375rem] px-6 sm:pt-[2.375rem] sm:pr-[2.5rem]'>

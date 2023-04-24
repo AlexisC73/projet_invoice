@@ -1,13 +1,17 @@
 import { Invoice } from '@invoice/domain/dist'
-import DatePickerInput from '../Form/DatePickerInput'
-import FormSectionTitle from '../Form/FormSectionTitle'
-import AddressInputs from '../Form/AddressInputs'
-import Label from '../Form/Label'
-import Input from '../Form/Input'
-import PaymentTermsSelect from '../Form/PaymentTermsSelect'
-import ProductsList from '../Form/ProductsList'
+import DatePickerInput from '../../DatePickerInput'
+import FormSectionTitle from '../../FormSectionTitle'
+import AddressInputs from '../../AddressInputs'
+import Label from '../../Label'
+import Input from '../../Input'
+import PaymentTermsSelect from '../../PaymentTermsSelect'
+import ProductsList from '../../ProductsList'
 
-export default function FullForm({ invoice }: { invoice: Invoice['data'] }) {
+export default function FullInvoiceForm({
+  invoice,
+}: {
+  invoice: Invoice['data']
+}) {
   return (
     <div className='flex-1 px-6 sm:px-6 xl:pl-0'>
       <div id='from' className='flex flex-col gap-[1.125rem]'>
