@@ -23,14 +23,14 @@ export default function Home() {
 
       <ul className='mt-10 flex flex-col gap-[15px]'>
         {invoices.map((invoice) => (
-          <InvoiceLi invoice={invoice} />
+          <InvoiceLi key={invoice.id} invoice={invoice} />
         ))}
       </ul>
 
       {isFormOpen && (
         <SideInvoiceForm
           onCancel={() => setIsFormOpen(false)}
-          invoice={invoices[0]}
+          defaultInvoice={invoices[0]}
           onSubmit={handleSubmitAddInvoice}
         />
       )}

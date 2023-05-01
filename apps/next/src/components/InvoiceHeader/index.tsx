@@ -4,8 +4,14 @@ import InvoiceStatus from '../ui/InvoiceStatus'
 
 export default function InvoiceHeader({
   invoice,
+  onEditAction,
+  onDeleteAction,
+  onMarkAsPaidAction,
 }: {
   invoice: Invoice['data']
+  onEditAction: () => void
+  onDeleteAction: () => void
+  onMarkAsPaidAction: () => void
 }) {
   return (
     <div className='mt-[1.6875rem] bg-white flex rounded-lg items-center sm:px-2 sm:pr-8 sm:justify-between'>
@@ -18,23 +24,17 @@ export default function InvoiceHeader({
       <div className='hidden sm:flex gap-2'>
         <ActionButton
           style='default'
-          clickAction={() => {
-            console.log('Not implements')
-          }}
+          clickAction={onEditAction}
           action='edit'
         />
         <ActionButton
-          clickAction={() => {
-            console.log('Not implements')
-          }}
+          clickAction={onDeleteAction}
           action='delete'
           type='button'
           style='secondary'
         />
         <ActionButton
-          clickAction={() => {
-            console.log('Not implements')
-          }}
+          clickAction={onMarkAsPaidAction}
           action='Mark as Paid'
           type='button'
           style='primary'

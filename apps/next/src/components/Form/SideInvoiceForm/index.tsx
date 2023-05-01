@@ -4,11 +4,11 @@ import FormTitle from '../FormTitle'
 import { Invoice } from '@invoice/domain'
 
 export default function SideInvoiceForm({
-  invoice,
+  defaultInvoice,
   onSubmit,
   onCancel,
 }: {
-  invoice: Invoice['data']
+  defaultInvoice: Invoice['data']
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
   onCancel: () => void
 }) {
@@ -21,7 +21,7 @@ export default function SideInvoiceForm({
         <div className='mt-[1.25rem] sm:mt-[4.9375rem] sm:pl-[0.0625rem] xl:mt-0 xl:pl-0'>
           <FormTitle>
             Edit <span className='text-[#888EB0]'>#</span>
-            {invoice.id}
+            {defaultInvoice.id}
           </FormTitle>
         </div>
       </div>
@@ -29,7 +29,7 @@ export default function SideInvoiceForm({
         <FullInvoiceForm
           onCancel={onCancel}
           onSubmit={onSubmit}
-          invoice={invoice}
+          invoice={defaultInvoice}
         />
       </div>
     </div>
