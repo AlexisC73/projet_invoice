@@ -2,10 +2,12 @@ export default function ActionButton({
   action,
   style,
   type = 'button',
+  clickAction,
 }: {
   action: string
   style: 'primary' | 'secondary' | 'default'
   type?: 'button' | 'submit'
+  clickAction: (e: any) => void
 }) {
   const tint =
     style === 'primary'
@@ -16,6 +18,7 @@ export default function ActionButton({
   return (
     <button
       type={type}
+      onClick={clickAction}
       className={
         `text-[0.9375rem] tracking-[-0.015625] font-bold px-6 h-12 rounded-3xl ` +
         tint

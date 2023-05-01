@@ -1,21 +1,39 @@
 import HeaderLayout from '@/Layout/HeaderLayout'
+import FilterBar from '@/components/FilterBar'
 import SideInvoiceForm from '@/components/Form/SideInvoiceForm'
+import InvoiceLi from '@/components/InvoiceLi'
 import data from '@/data/invoices.json'
+import { FormEvent, useState } from 'react'
 
 export default function Home() {
   const invoices = data
+  const [isFormOpen, setIsFormOpen] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitAddInvoice = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const data = Object.fromEntries(formData.entries())
-
-    console.log(data)
+    setIsFormOpen(false)
   }
 
   return (
     <HeaderLayout>
-      <SideInvoiceForm onSubmit={handleSubmit} invoice={invoices[0]} />
+      <FilterBar
+        invoiceLength={invoices.length}
+        onNewInvoiceButtonClick={() => setIsFormOpen(true)}
+      />
+
+      <ul className='mt-10 flex flex-col gap-[15px]'>
+        {invoices.map((invoice) => (
+          <InvoiceLi invoice={invoice} />
+        ))}
+      </ul>
+
+      {isFormOpen && (
+        <SideInvoiceForm
+          onCancel={() => setIsFormOpen(false)}
+          invoice={invoices[0]}
+          onSubmit={handleSubmitAddInvoice}
+        />
+      )}
     </HeaderLayout>
   )
 }

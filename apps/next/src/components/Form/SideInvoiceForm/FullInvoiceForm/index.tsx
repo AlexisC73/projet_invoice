@@ -7,14 +7,15 @@ import Input from '../../Input'
 import PaymentTermsSelect from '../../PaymentTermsSelect'
 import ProductsList from '../../ProductsList'
 import ActionButton from '@/components/ui/ActionButton'
-import { useEffect } from 'react'
 
 export default function FullInvoiceForm({
   invoice,
   onSubmit,
+  onCancel,
 }: {
   invoice: Invoice['data']
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
+  onCancel: () => void
 }) {
   return (
     <form onSubmit={onSubmit} className='flex-1 px-6 sm:px-6 xl:pl-0'>
@@ -55,8 +56,13 @@ export default function FullInvoiceForm({
         <ProductsList products={invoice.products} />
       </div>
       <div className='flex justify-end pt-[1.3125rem] gap-[0.5rem] pb-[1.375rem] px-6 sm:pt-[2.375rem] sm:pr-[2.5rem]'>
-        <ActionButton action='Cancel' style='default' />
-        <ActionButton action='Save Changes' style='primary' type='submit' />
+        <ActionButton clickAction={onCancel} action='Cancel' style='default' />
+        <ActionButton
+          clickAction={onSubmit}
+          action='Save Changes'
+          style='primary'
+          type='submit'
+        />
       </div>
     </form>
   )
