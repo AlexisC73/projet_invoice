@@ -3,6 +3,7 @@ import FilterBar from '@/components/FilterBar'
 import SideInvoiceForm from '@/components/Form/SideInvoiceForm'
 import InvoiceLi from '@/components/InvoiceLi'
 import data from '@/data/invoices.json'
+import { createPostInvoiceCommand } from '@/utils'
 import { FormEvent, useState } from 'react'
 
 export default function Home() {
@@ -11,6 +12,8 @@ export default function Home() {
 
   const handleSubmitAddInvoice = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const postInvoiceCommand = createPostInvoiceCommand(formData)
     setIsFormOpen(false)
   }
 

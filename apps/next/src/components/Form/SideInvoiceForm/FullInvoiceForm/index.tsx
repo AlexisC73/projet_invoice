@@ -57,12 +57,7 @@ export default function FullInvoiceForm({
       </div>
       <div className='flex justify-end pt-[1.3125rem] gap-[0.5rem] pb-[1.375rem] px-6 sm:pt-[2.375rem] sm:pr-[2.5rem]'>
         <ActionButton clickAction={onCancel} action='Cancel' style='default' />
-        <ActionButton
-          clickAction={onSubmit}
-          action='Save Changes'
-          style='primary'
-          type='submit'
-        />
+        <ActionButton action='Save Changes' style='primary' type='submit' />
       </div>
     </form>
   )

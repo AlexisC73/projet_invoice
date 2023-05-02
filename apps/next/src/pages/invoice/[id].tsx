@@ -3,16 +3,30 @@ import { useRouter } from 'next/router'
 import data from '@/data/invoices.json'
 import InvoiceHeader from '@/components/InvoiceHeader'
 import { Invoice } from '@invoice/domain'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import InvoiceDetails from '@/components/InvoiceDetails'
 import GoBackButton from '@/components/ui/GoBackButton'
 import SideInvoiceForm from '@/components/Form/SideInvoiceForm'
+import { createUpdateInvoiceCommand } from '@/utils'
 
 export default function InvoicePage() {
   const { id } = useRouter().query
   const [invoice, setInvoice] = useState<Invoice['data']>()
   const [isLoading, setIsLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
+
+  const handleSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      if (!id) return
+      e.preventDefault()
+      const formData = new FormData(e.currentTarget)
+      const updateInvoiceCommand = createUpdateInvoiceCommand(id as string)(
+        formData
+      )
+      setIsEditing(false)
+    },
+    [id]
+  )
 
   useEffect(() => {
     if (!id) {
@@ -45,7 +59,7 @@ export default function InvoicePage() {
       {isEditing && (
         <SideInvoiceForm
           onCancel={() => setIsEditing(false)}
-          onSubmit={() => setIsEditing(false)}
+          onSubmit={handleSubmit}
           defaultInvoice={invoice}
         />
       )}

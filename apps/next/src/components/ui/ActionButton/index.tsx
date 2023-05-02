@@ -7,7 +7,7 @@ export default function ActionButton({
   action: string
   style: 'primary' | 'secondary' | 'default'
   type?: 'button' | 'submit'
-  clickAction: (e: any) => void
+  clickAction?: (e: any) => void
 }) {
   const tint =
     style === 'primary'
