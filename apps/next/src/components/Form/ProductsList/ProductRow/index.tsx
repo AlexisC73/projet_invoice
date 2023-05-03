@@ -43,7 +43,7 @@ export default function ProductRow({
         />
       </th>
       <th>
-        <p className='text-[0.9375rem] tracking-[-0.015625rem] font-bold text-[#888EB0] mt-[0.875rem]'>
+        <p className='text-[0.9375rem] tracking-[-0.015625rem] font-bold text-[#888EB0] dark:text-[#DFE3FA] mt-[0.875rem]'>
           {(
             parseFloat(product.unitPrice) * parseFloat(product.quantity)
           ).toFixed(2)}

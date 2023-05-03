@@ -44,16 +44,16 @@ export default function ProductsList({
       <table className='hidden sm:flex mt-[0.8125rem] flex-col'>
         <thead className='flex'>
           <tr className='grid xl:grid-cols-desktop_product sm:grid-cols-tablet_product gap-[1rem] text-left w-full'>
-            <th className='text-[0.8125rem] tracking-[-0.00625rem] font-medium text-[#7E88C3]'>
+            <th className='text-[0.8125rem] tracking-[-0.00625rem] font-medium text-[#7E88C3] dark:text-[#DFE3FA]'>
               Item Name
             </th>
-            <th className='text-[0.8125rem] tracking-[-0.00625rem] font-medium text-[#7E88C3]'>
+            <th className='text-[0.8125rem] tracking-[-0.00625rem] font-medium text-[#7E88C3] dark:text-[#DFE3FA]'>
               Qty.
             </th>
-            <th className='text-[0.8125rem] tracking-[-0.00625rem] font-medium text-[#7E88C3]'>
+            <th className='text-[0.8125rem] tracking-[-0.00625rem] font-medium text-[#7E88C3] dark:text-[#DFE3FA]'>
               Price
             </th>
-            <th className='text-[0.8125rem] tracking-[-0.00625rem] font-medium text-[#7E88C3]'>
+            <th className='text-[0.8125rem] tracking-[-0.00625rem] font-medium text-[#7E88C3] dark:text-[#DFE3FA]'>
               Total
             </th>
           </tr>
@@ -71,7 +71,7 @@ export default function ProductsList({
       </table>
       <button
         type='button'
-        className='text-[0.9375rem] tracking-[-0.015625rem] font-bold text-[#7E88C3] w-full bg-[#F9FAFE] mt-[2.9375rem] pt-[0.9375rem] pb-[0.6875rem] rounded-3xl sm:mt-[0.375rem]'
+        className='text-[0.9375rem] dark:bg-[#252945] dark:text-white tracking-[-0.015625rem] font-bold text-[#7E88C3] w-full bg-[#F9FAFE] mt-[2.9375rem] pt-[0.9375rem] pb-[0.6875rem] rounded-3xl sm:mt-[0.375rem]'
         onClick={() => {
           setDisplayProducts((prev) => [...prev, generateNewEmptyProduct()])
         }}
