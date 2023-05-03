@@ -15,7 +15,7 @@ export default function FilterMenu() {
           : 'gap-[0.6875rem] xl:gap-[0.875rem]'
       }`}
     >
-      <p className='text-[0.9375rem] tracking-[-0.015625rem] font-bold'>
+      <p className='text-[0.9375rem] tracking-[-0.015625rem] font-bold dark:text-white'>
         <span className='sm:hidden'>Filter</span>
         <span className='hidden sm:inline'>Filter by status</span>
       </p>

@@ -14,7 +14,7 @@ export default function ActionButton({
       ? 'bg-[#7C5DFA] text-white'
       : style === 'secondary'
       ? 'bg-[#ec5757] text-white'
-      : 'bg-[#f9fafe] text-[#7E88C3]'
+      : 'bg-[#f9fafe] text-[#7E88C3] dark:text-white dark:bg-[#252945]'
   return (
     <button
       type={type}
