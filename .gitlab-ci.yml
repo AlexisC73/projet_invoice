@@ -1,0 +1,10 @@
+stages:
+  - test
+
+test_job:
+  stage: test
+  image: node
+  script:
+    - npm install -g pnpm
+    - pnpm install
+    - pnpm test
