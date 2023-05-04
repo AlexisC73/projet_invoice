@@ -6,7 +6,7 @@
   "scripts": {
     "test:unit": "cd ./libs/domain && npm run test",
     "test:integration": "cd ./libs/infrastructure && npm run test",
-    "test": "npm run test:unit && npm run test:integration",
+    "test": "pnpm -r --parallel test",
     "build:libs": "cd ./libs/domain && npm run build && cd ../infrastructure && npm run build",
     "build:server": "cd ./apps/express && npm run build",
     "start:server": "cd ./apps/express && npm run start:prod",
