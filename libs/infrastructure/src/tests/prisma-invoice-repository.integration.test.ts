@@ -21,7 +21,9 @@ describe('prisma user repo', () => {
   let prismaClient: PrismaClient
 
   beforeAll(async () => {
-    dotenv.config()
+    if (process.env.REPOSITORY !== 'gitlab') {
+      dotenv.config()
+    }
 
     prismaClient = new PrismaClient({
       datasources: {
