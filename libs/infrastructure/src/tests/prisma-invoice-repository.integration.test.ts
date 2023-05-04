@@ -33,9 +33,12 @@ describe('prisma user repo', () => {
       },
     })
 
-    await asyncExec(
-      `set DATABASE_URL=${process.env.DATABASE_URL} && npx prisma generate --schema=../domain/prisma/schema.prisma`
-    )
+    const command =
+      process.env.REPOSITORY === 'gitlab'
+        ? `DATABASE_URL=${process.env.DATABASE_URL} && npx prisma generate --schema=../domain/prisma/schema.prisma`
+        : `set DATABASE_URL=${process.env.DATABASE_URL} && npx prisma generate --schema=../domain/prisma/schema.prisma`
+
+    await asyncExec(command)
     return prismaClient.$connect()
   }, 10000)
 
