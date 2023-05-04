@@ -7,6 +7,7 @@ test_job:
   script:
     - npm install -g pnpm
     - pnpm install
-    - pnpm build:libs
     - pnpm prisma:generate
+    - pnpm build:libs
+    - pnpm install
     - pnpm test
