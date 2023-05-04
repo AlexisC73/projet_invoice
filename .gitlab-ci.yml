@@ -5,6 +5,9 @@ test_job:
   stage: test
   image: debian
   before_script:
+    - apt-get update
+    - apt-get install
+    - apt-get install -y curl
     - curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
     - apt-get insall -y nodejs
   script:
