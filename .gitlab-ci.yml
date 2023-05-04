@@ -3,15 +3,10 @@ stages:
 
 test_job:
   stage: test
-  image: debian
-  before_script:
-    - apt-get update
-    - apt-get install
-    - apt-get install -y curl
-    - curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-    - apt-get install -y nodejs
+  image: node
   script:
     - npm install -g pnpm
+    - npm install -g prisma
     - pnpm install
     - pnpm prisma:generate
     - pnpm build:libs
