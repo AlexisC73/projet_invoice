@@ -3,11 +3,12 @@ import FilterBar from '@/components/FilterBar'
 import SideInvoiceForm from '@/components/Form/SideInvoiceForm'
 import InvoiceLi from '@/components/InvoiceLi'
 import data from '@/data/invoices.json'
+import { useAppSelector } from '@/hooks/redux'
 import { createPostInvoiceCommand } from '@/utils'
 import { FormEvent, useState } from 'react'
 
 export default function Home() {
-  const invoices = data
+  const invoices = useAppSelector((state) => state.invoices)
   const [isFormOpen, setIsFormOpen] = useState(false)
 
   const handleSubmitAddInvoice = (e: FormEvent<HTMLFormElement>) => {

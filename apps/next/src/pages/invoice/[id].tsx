@@ -1,18 +1,18 @@
 import HeaderLayout from '@/Layout/HeaderLayout'
 import { useRouter } from 'next/router'
-import data from '@/data/invoices.json'
 import InvoiceHeader from '@/components/InvoiceHeader'
-import { Invoice } from '@invoice/domain'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import InvoiceDetails from '@/components/InvoiceDetails'
 import GoBackButton from '@/components/ui/GoBackButton'
 import SideInvoiceForm from '@/components/Form/SideInvoiceForm'
 import { createUpdateInvoiceCommand } from '@/utils'
+import { useAppSelector } from '@/hooks/redux'
 
 export default function InvoicePage() {
   const { id } = useRouter().query
-  const [invoice, setInvoice] = useState<Invoice['data']>()
-  const [isLoading, setIsLoading] = useState(true)
+  const invoice = useAppSelector((state) =>
+    state.invoices.find((i) => i.id === id)
+  )
   const [isEditing, setIsEditing] = useState(false)
 
   const handleSubmit = useCallback(
@@ -27,20 +27,6 @@ export default function InvoicePage() {
     },
     [id]
   )
-
-  useEffect(() => {
-    if (!id) {
-      return
-    }
-    const invoices: Invoice['data'][] = data
-    const invoiceInfo = invoices.filter((invoice) => invoice.id === id)[0]
-    setInvoice(invoiceInfo)
-    setIsLoading(false)
-  }, [id])
-
-  if (isLoading) {
-    return <div>Implement a loading</div>
-  }
 
   if (!invoice) {
     return <div>Implement not found invoice</div>

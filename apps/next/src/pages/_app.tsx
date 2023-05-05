@@ -1,7 +1,9 @@
 import ThemeCtx from '@/context/theme'
+import { store } from '@/store/store'
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { useEffect, useState } from 'react'
+import { Provider } from 'react-redux'
 
 export default function App({ Component, pageProps }: AppProps) {
   const [darkMode, setDarkMode] = useState(false)
@@ -26,7 +28,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <ThemeCtx.Provider value={themeCtx}>
-      <Component {...pageProps} />
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
     </ThemeCtx.Provider>
   )
 }
