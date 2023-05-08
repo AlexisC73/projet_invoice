@@ -24,6 +24,7 @@ export const updateInvoice = async (req, res) => {
   try {
     const { id } = req.params
     const { invoice: invoiceToUpdate } = req.body
+    console.log(invoiceToUpdate)
     await updateInvoiceUsecase.handle({ invoiceToUpdate: { ...invoiceToUpdate, id }, token: req.token })
     res.status(200).send()
   } catch (error) {
@@ -77,9 +78,8 @@ export const add = async (req, res) => {
   const postInvoiceUsecase = new PostInvoiceUsecase(invoiceRepository, tokenService, idGenerator)
   try {
     const { invoice }: { invoice: Invoice['data'] } = req.body
-    const { id, ...invoiceBody } = invoice
     const postInvoiceCommand: PostInvoiceCommand = {
-      ...invoiceBody,
+      ...invoice,
     }
     if (!!invoice.status && invoice.status === 'draft') {
       postInvoiceCommand.saveAsDraft = true

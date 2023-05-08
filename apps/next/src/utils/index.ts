@@ -103,3 +103,32 @@ const getProducts = (data: { [k: string]: FormDataEntryValue }) => {
   })
   return products
 }
+
+export const createEmptyInvoice = (): Invoice['data'] => {
+  return {
+    id: '',
+    date: '',
+    dueDate: '',
+    contact: '',
+    currency: '',
+    owner: '',
+    status: '',
+    description: '',
+    sender: {
+      city: '',
+      country: '',
+      zip: '',
+      street: '',
+    },
+    buyer: {
+      name: '',
+      address: {
+        city: '',
+        country: '',
+        zip: '',
+        street: '',
+      },
+    },
+    products: [],
+  }
+}

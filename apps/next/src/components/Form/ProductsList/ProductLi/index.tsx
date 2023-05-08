@@ -53,7 +53,7 @@ export default function ProductLi({
             ).toFixed(2)}
           </p>
         </div>
-        <button className='mt-[2.625rem] mx-auto'>
+        <button type='button' className='mt-[2.625rem] mx-auto'>
           <DeleteIcon />
         </button>
       </div>

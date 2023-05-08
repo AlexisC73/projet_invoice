@@ -52,6 +52,7 @@ export default function ProductRow({
       <th>
         <button
           onClick={() => onDelete(product.id)}
+          type='button'
           className='mt-[0.9375rem] ml-[0.625rem]'
         >
           <DeleteIcon />

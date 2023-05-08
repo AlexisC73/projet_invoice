@@ -2,20 +2,33 @@ import HeaderLayout from '@/Layout/HeaderLayout'
 import FilterBar from '@/components/FilterBar'
 import SideInvoiceForm from '@/components/Form/SideInvoiceForm'
 import InvoiceLi from '@/components/InvoiceLi'
-import data from '@/data/invoices.json'
-import { useAppSelector } from '@/hooks/redux'
-import { createPostInvoiceCommand } from '@/utils'
+import {
+  useGetAllOwnedInvoicesQuery,
+  usePostNewInvoiceMutation,
+} from '@/store/invoice.api'
+import { createEmptyInvoice, createPostInvoiceCommand } from '@/utils'
 import { FormEvent, useState } from 'react'
 
 export default function Home() {
-  const invoices = useAppSelector((state) => state.invoices)
+  const { data: invoices, isLoading } = useGetAllOwnedInvoicesQuery()
   const [isFormOpen, setIsFormOpen] = useState(false)
+  const [postInvoice, { isLoading: postInvoiceLoading }] =
+    usePostNewInvoiceMutation()
 
   const handleSubmitAddInvoice = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     const postInvoiceCommand = createPostInvoiceCommand(formData)
+    postInvoiceCommand.date = new Date().toISOString()
+    postInvoiceCommand.dueDate = new Date().toISOString()
+    postInvoice(postInvoiceCommand)
     setIsFormOpen(false)
+  }
+
+  if (isLoading) return <div>Loading...</div>
+
+  if (!invoices) {
+    return <div>Implement error with result</div>
   }
 
   return (
@@ -34,7 +47,7 @@ export default function Home() {
       {isFormOpen && (
         <SideInvoiceForm
           onCancel={() => setIsFormOpen(false)}
-          defaultInvoice={invoices[0]}
+          defaultInvoice={createEmptyInvoice()}
           onSubmit={handleSubmitAddInvoice}
         />
       )}
