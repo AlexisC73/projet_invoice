@@ -8,9 +8,11 @@ export const invoiceApi = createApi({
     baseUrl: 'http://localhost:5500',
     credentials: 'include',
   }),
+  tagTypes: ['Invoice'],
   endpoints: (builder) => ({
     getAllOwnedInvoices: builder.query<Invoice[], void>({
       query: () => `/invoice/owned`,
+      providesTags: ['Invoice'],
     }),
     postNewInvoice: builder.mutation<void, PostInvoiceCommand>({
       query: (body) => ({
@@ -18,6 +20,7 @@ export const invoiceApi = createApi({
         method: 'POST',
         body: { invoice: body },
       }),
+      invalidatesTags: ['Invoice'],
     }),
     editInvoice: builder.mutation<
       void,
@@ -28,9 +31,11 @@ export const invoiceApi = createApi({
         method: 'PUT',
         body: { invoice: body },
       }),
+      invalidatesTags: ['Invoice'],
     }),
     getSelectedInvoices: builder.query<Invoice, string>({
       query: (id) => `/invoice/${id}`,
+      providesTags: ['Invoice'],
     }),
   }),
 })

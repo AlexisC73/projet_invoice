@@ -16,13 +16,15 @@ export default function ProductMobile({
             <td>
               <p className='dark:text-white'>{product.name}</p>
               <p className='mt-[0.0625rem] dark:text-[#888EB0] text-[#7E88C3]'>
-                {product.quantity} x £ {product.unitPrice}.00
+                {product.quantity} x £ {Number(product.unitPrice).toFixed(2)}
               </p>
             </td>
             <td>
               <p className='pr-[0.1875rem] dark:text-white'>
-                £ {parseInt(product.unitPrice) * parseInt(product.quantity)}
-                .00
+                £
+                {Number(
+                  parseInt(product.unitPrice) * parseInt(product.quantity)
+                ).toFixed(2)}
               </p>
             </td>
           </tr>

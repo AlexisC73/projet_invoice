@@ -38,10 +38,13 @@ export default function ProductTable({
               {product.quantity}
             </td>
             <td className='col-span-2 text-right dark:text-[#DFE3FA] pr-[0.625rem]'>
-              £ {product.unitPrice}.00
+              £ {Number(product.unitPrice).toFixed(2)}
             </td>
             <td className='col-span-2 text-right text-black dark:text-white'>
-              £ 400.00
+              £{' '}
+              {Number(
+                Number(product.quantity) * Number(product.unitPrice)
+              ).toFixed(2)}
             </td>
           </tr>
         ))}
