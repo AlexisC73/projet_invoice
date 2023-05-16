@@ -4,12 +4,13 @@ import { useState } from 'react'
 
 export default function FilterMenu() {
   const [filterOpen, setFilterOpen] = useState(false)
+
   return (
     <button
       onClick={() => {
-        setFilterOpen((filter) => !filter)
+        setFilterOpen((prev) => !prev)
       }}
-      className={`mt-[0.125rem] flex items-center ${
+      className={`mt-[0.125rem] flex items-center relative ${
         filterOpen
           ? 'gap-[0.125rem] xl:gap-[0.3125rem]'
           : 'gap-[0.6875rem] xl:gap-[0.875rem]'

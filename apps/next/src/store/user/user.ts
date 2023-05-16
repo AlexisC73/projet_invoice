@@ -41,6 +41,7 @@ const userSlice = createSlice({
       })
       .addCase(isConnected.rejected, (state, action) => {
         state.status = 'error'
+        state.user = null
         if (action.error.message) {
           state.error = action.error.message
         }

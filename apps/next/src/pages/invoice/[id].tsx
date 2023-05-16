@@ -12,8 +12,8 @@ import {
 } from '@/store/api/invoice.api'
 
 export default function InvoicePage() {
-  const id: string = useRouter().query.id as string
-  const { data: invoice, isLoading } = useGetSelectedInvoicesQuery(id as string)
+  const id = useRouter().query.id as string
+  const { data: invoice, isLoading } = useGetSelectedInvoicesQuery(id)
   const [isEditing, setIsEditing] = useState(false)
   const [updateInvoice] = useEditInvoiceMutation()
 
@@ -22,9 +22,7 @@ export default function InvoicePage() {
       if (!id) return
       e.preventDefault()
       const formData = new FormData(e.currentTarget)
-      const updateInvoiceCommand = createUpdateInvoiceCommand(id as string)(
-        formData
-      )
+      const updateInvoiceCommand = createUpdateInvoiceCommand(id)(formData)
       const date = new Date().toString()
       updateInvoice({
         body: {
