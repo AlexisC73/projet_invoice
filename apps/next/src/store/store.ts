@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { invoiceApi } from './invoice.api'
+import { invoiceApi } from './api/invoice.api'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
+import userReducer from './user/user'
 
 export const store = configureStore({
   reducer: {
+    user: userReducer,
     [invoiceApi.reducerPath]: invoiceApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -12,6 +14,4 @@ export const store = configureStore({
 
 setupListeners(store.dispatch)
 
-// export type RootState = ReturnType<typeof store.getState>
-
-// export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>

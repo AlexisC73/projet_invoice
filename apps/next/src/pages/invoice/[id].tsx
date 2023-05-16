@@ -9,7 +9,7 @@ import { createUpdateInvoiceCommand } from '@/utils'
 import {
   useEditInvoiceMutation,
   useGetSelectedInvoicesQuery,
-} from '@/store/invoice.api'
+} from '@/store/api/invoice.api'
 
 export default function InvoicePage() {
   const id: string = useRouter().query.id as string

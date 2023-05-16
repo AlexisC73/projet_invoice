@@ -46,6 +46,6 @@ export const getMe = async (req, res) => {
     const { id } = req.currentUser as User['data']
     res.status(200).json({ id })
   } catch (error) {
-    throw error
+    res.status(401).json({ error: error.message })
   }
 }
