@@ -9,7 +9,7 @@ export default function InvoiceList({ filter }: { filter: string[] }) {
   )
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return null
   }
 
   if (isError) {

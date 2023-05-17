@@ -1,11 +1,9 @@
 import FilterBar from '@/components/FilterBar'
-import {
-  useGetAllOwnedInvoicesQuery,
-  usePostNewInvoiceMutation,
-} from '../api/invoice.api'
+import { useGetAllOwnedInvoicesQuery } from '../api/invoice.api'
 import AddNewInvoiceForm from './AddNewInvoiceForm'
 import { createEmptyInvoiceData } from '@/utils'
 import { Dispatch, SetStateAction, useState } from 'react'
+import Spinner from '@/components/Spinner/Spinner'
 
 export default function InvoiceFilterBar({
   filter,
@@ -24,7 +22,7 @@ export default function InvoiceFilterBar({
   const [showAddNewInvoiceForm, setShowAddNewInvoiceForm] = useState(false)
 
   if (isLoading) {
-    return <div>Loading ...</div>
+    return <Spinner />
   }
 
   return (

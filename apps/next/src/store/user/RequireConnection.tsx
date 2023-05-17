@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 import { getUserState } from './user'
 import { PropsWithChildren } from 'react'
+import Spinner from '@/components/Spinner/Spinner'
 
 const RequireConnection: React.FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter()
@@ -14,9 +15,7 @@ const RequireConnection: React.FC<PropsWithChildren> = ({ children }) => {
     return <>{children}</>
   }
 
-  return (
-    <div className='flex h-full items-center justify-center'>Loading ...</div>
-  )
+  return <Spinner />
 }
 
 //TODO : add a loader

@@ -43,6 +43,7 @@ export default function FilterMenu({
         <ul
           className='absolute bg-white top-8 z-10'
           onClick={(e) => e.stopPropagation()}
+          onMouseLeave={() => setFilterOpen(false)}
         >
           {FILTERS.map((filter) => (
             <FilterItem
