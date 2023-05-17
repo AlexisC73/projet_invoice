@@ -104,7 +104,7 @@ const getProducts = (data: { [k: string]: FormDataEntryValue }) => {
   return products
 }
 
-export const createEmptyInvoice = (): Invoice['data'] => {
+export const createEmptyInvoiceData = (): Invoice['data'] => {
   return {
     id: '',
     date: '',

@@ -1,13 +1,17 @@
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import NewInvoiceButton from './NewInvoiceButton'
 import FilterMenu from './FilterMenu'
 
 export default function FilterBar({
   invoiceLength,
   onNewInvoiceButtonClick,
+  setFilter,
+  actualFilter,
 }: {
   invoiceLength: number
   onNewInvoiceButtonClick: () => void
+  setFilter: Dispatch<SetStateAction<string[]>>
+  actualFilter: string[]
 }) {
   const [filterOpen, setFilterOpen] = useState(false)
 
@@ -20,7 +24,7 @@ export default function FilterBar({
         <SubTitleCountInvoice invoiceLength={invoiceLength} />
       </div>
       <div className='flex justify-center items-center gap-[1.0625rem] xl:gap-[2.3125rem] cursor-pointer'>
-        <FilterMenu />
+        <FilterMenu actualFilter={actualFilter} setFilter={setFilter} />
         <NewInvoiceButton onNewInvoiceButtonClick={onNewInvoiceButtonClick} />
       </div>
     </div>
