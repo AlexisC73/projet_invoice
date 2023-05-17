@@ -5,6 +5,7 @@ import { Invoice } from '@invoice/domain'
 import { usePostNewInvoiceMutation } from '../api/invoice.api'
 import { FormEvent } from 'react'
 import { createPostInvoiceCommand } from '@/utils'
+import ActionButton from '@/components/ui/ActionButton'
 
 export default function AddNewInvoiceForm({
   defaultInvoice,
@@ -37,12 +38,34 @@ export default function AddNewInvoiceForm({
           <FormTitle>New Invoice</FormTitle>
         </div>
       </div>
-      <div className='flex-1 sm:overflow-y-scroll overflow-x-hidden sm:mt-[1.0625rem] xl:mt-[2.5rem]'>
-        <FullInvoiceForm
-          onCancel={closeForm}
+      <div className='flex-1 flex sm:mt-[1.0625rem] xl:mt-[2.5rem] pb-2 overflow-hidden'>
+        <form
           onSubmit={handleAddNewInvoice}
-          invoice={defaultInvoice}
-        />
+          className='flex-1 flex flex-col px-6 sm:px-6 xl:pl-0'
+        >
+          <FullInvoiceForm invoice={defaultInvoice} />
+          <div className='flex justify-between pt-[1.3125rem] gap-[0.5rem] pb-[1.375rem] px-6 sm:pt-[2.375rem] sm:pr-[2.5rem]'>
+            <ActionButton
+              clickAction={closeForm}
+              action='Cancel'
+              style='white'
+            />
+            <div className='flex gap-[0.5rem]'>
+              <ActionButton
+                clickAction={() => {
+                  console.log('save as draft à faire')
+                }}
+                action='Save as Draft'
+                style='black'
+              />
+              <ActionButton
+                action='Save & Send'
+                style='primary'
+                type='submit'
+              />
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   )

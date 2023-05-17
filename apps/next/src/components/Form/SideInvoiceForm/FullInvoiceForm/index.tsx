@@ -6,19 +6,14 @@ import Label from '../../Label'
 import Input from '../../Input'
 import PaymentTermsSelect from '../../PaymentTermsSelect'
 import ProductsList from '../../ProductsList'
-import ActionButton from '@/components/ui/ActionButton'
 
 export default function FullInvoiceForm({
   invoice,
-  onSubmit,
-  onCancel,
 }: {
   invoice: Invoice['data']
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
-  onCancel: () => void
 }) {
   return (
-    <form onSubmit={onSubmit} className='flex-1 px-6 sm:px-6 xl:pl-0'>
+    <div className='flex flex-1 flex-col overflow-y-scroll'>
       <div id='from' className='flex flex-col gap-[1.125rem]'>
         <FormSectionTitle>Bill From</FormSectionTitle>
         <AddressInputs target='sender' address={invoice.sender} />
@@ -55,10 +50,6 @@ export default function FullInvoiceForm({
       <div className='mt-[4.5rem] sm:mt-[2.3125rem]'>
         <ProductsList products={invoice.products} />
       </div>
-      <div className='flex justify-end pt-[1.3125rem] gap-[0.5rem] pb-[1.375rem] px-6 sm:pt-[2.375rem] sm:pr-[2.5rem]'>
-        <ActionButton clickAction={onCancel} action='Cancel' style='default' />
-        <ActionButton action='Save Changes' style='primary' type='submit' />
-      </div>
-    </form>
+    </div>
   )
 }
