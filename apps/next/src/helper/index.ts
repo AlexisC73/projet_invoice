@@ -26,7 +26,7 @@ export const InvoiceToInvoiceLiData = (invoice: Invoice): InvoiceLiData => {
 
   return {
     id: invoice.id,
-    shortId: shorterId(invoice.id, 4),
+    shortId: shorterId(invoice.id, 4).toUpperCase(),
     buyerName: invoice.buyer.name,
     dueDate: formatDate(invoice.dueDate),
     status: invoice.status,
